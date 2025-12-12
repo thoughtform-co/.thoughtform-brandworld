@@ -78,6 +78,77 @@ Once the MCP server is configured, the AI can access resources like:
 - `thoughtform://philosophy` — Design principles
 - `thoughtform://particles` — Particle system code
 
+### Example Prompts for Claude.ai
+
+Copy these prompts to quickly leverage the Thoughtform design system:
+
+**Getting Started:**
+```
+Read the Thoughtform design philosophy and summarize the key principles.
+```
+
+```
+Get the complete design tokens for Atlas and explain the color system.
+```
+
+**Building Components:**
+```
+Show me the Ledger WireframeBox component and create a similar container
+component for a settings panel.
+```
+
+```
+Get all Atlas components and create a new ProfileCard component that
+follows the same patterns and design tokens.
+```
+
+```
+Read the ParticleCanvas component and help me add a new particle behavior
+for a "pulse" effect.
+```
+
+**Generating Styles:**
+```
+Generate CSS custom properties for Ledger Dark mode.
+```
+
+```
+Get the typography tokens and create a Tailwind config that matches
+the Thoughtform type scale.
+```
+
+**Platform-Specific Work:**
+```
+I'm building a new page for Astrolabe. Get the Astrolabe design tokens
+and InstrumentPanel component, then help me create a dashboard layout.
+```
+
+```
+Read the Ledger StatCard and DataTable components. I need a new
+TransactionHistory component that displays recent financial activity.
+```
+
+```
+Get the Atlas EntityCard and ThreatBadge components. Create a variant
+for displaying organization entities instead of individual threats.
+```
+
+**Understanding the System:**
+```
+Compare the design tokens between Ledger Dark and Ledger Light modes.
+What are the key differences?
+```
+
+```
+Read the GlitchEffects component and explain how to add scanline
+effects to any component.
+```
+
+```
+Get the motion tokens and explain the timing curves available
+for animations.
+```
+
 ### Manual Import
 
 Copy `particles/core.js` into your project, or reference the tokens directly:
