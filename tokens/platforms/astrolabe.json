@@ -1,0 +1,37 @@
+{
+  "name": "Astrolabe",
+  "description": "Knowledge navigation instrument - brass sextant, star charts",
+  "mode": "dark",
+  "character": "Precise navigation instrument. Warm brass against night sky.",
+
+  "background": "void",
+  "text": "dawn",
+  "accent": "gold",
+
+  "css": {
+    "--background": "var(--void)",
+    "--surface": "var(--surface-0)",
+    "--text": "var(--dawn)",
+    "--text-muted": "var(--dawn-50)",
+    "--accent": "var(--gold)",
+    "--accent-dim": "var(--gold-40)",
+    "--border": "var(--dawn-08)"
+  },
+
+  "particles": {
+    "type": "axis-flow",
+    "primaryColor": "GOLD",
+    "behavior": "Flow along Vector I axes - diagonal bands of motion",
+    "trailAlpha": 0.1
+  },
+
+  "typography": {
+    "body": "sans",
+    "headings": "mono"
+  },
+
+  "layout": {
+    "style": "centered-reading-width",
+    "features": ["diagonal-clip-paths", "instrument-panel-bottom"]
+  }
+}

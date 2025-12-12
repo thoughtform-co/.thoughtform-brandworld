@@ -1,0 +1,106 @@
+{
+  "name": "Thoughtform Motion System",
+  "version": "1.0.0",
+  "description": "Timing, easing, and animation tokens. Instrument-like precision meets organic warmth.",
+
+  "timing": {
+    "quick": "150ms",
+    "standard": "250ms",
+    "deliberate": "400ms",
+    "dramatic": "600ms",
+    "note": "Use 'deliberate' for most UI. 'quick' for micro-interactions. 'dramatic' for page transitions."
+  },
+
+  "easing": {
+    "instrument": "cubic-bezier(0.19, 1, 0.22, 1)",
+    "note-instrument": "Expo ease-out. Snappy start, gentle settle. Like a brass instrument needle.",
+
+    "smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "note-smooth": "Material-style. For general UI transitions.",
+
+    "glitch": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+    "note-glitch": "Back ease-in-out. Overshoot for displacement effects.",
+
+    "linear": "linear",
+    "note-linear": "For continuous animations like particle flow."
+  },
+
+  "glitch": {
+    "intensity": {
+      "0": {
+        "name": "none",
+        "description": "Clean render. Primary content, reading.",
+        "scanlines": false,
+        "noise": false,
+        "displacement": 0,
+        "aberration": 0
+      },
+      "1": {
+        "name": "texture",
+        "description": "Background noise, subtle grain. Ambient atmosphere.",
+        "scanlines": false,
+        "noise": 0.02,
+        "displacement": 0,
+        "aberration": 0
+      },
+      "2": {
+        "name": "scanlines",
+        "description": "Horizontal line overlay. Processing, loading states.",
+        "scanlines": true,
+        "scanlineOpacity": 0.03,
+        "scanlineGap": 2,
+        "noise": 0.02,
+        "displacement": 0,
+        "aberration": 0
+      },
+      "3": {
+        "name": "displacement",
+        "description": "Pixel offset, brief stutter. Transitions, state changes.",
+        "scanlines": true,
+        "scanlineOpacity": 0.04,
+        "noise": 0.03,
+        "displacement": 3,
+        "aberration": 0
+      },
+      "4": {
+        "name": "aberration",
+        "description": "RGB split, chromatic shift. Errors, warnings, dramatic moments.",
+        "scanlines": true,
+        "scanlineOpacity": 0.05,
+        "noise": 0.04,
+        "displacement": 6,
+        "aberration": 2
+      }
+    },
+    "note": "Glitch intensity scale. Level 0-1 for content, 2 for loading, 3 for transitions, 4 for errors/drama."
+  },
+
+  "particles": {
+    "trail": {
+      "none": 1.0,
+      "short": 0.15,
+      "medium": 0.08,
+      "long": 0.04,
+      "note": "Trail alpha for clearWithTrail(). Lower = longer trails."
+    },
+    "breathe": {
+      "slow": 0.002,
+      "medium": 0.005,
+      "fast": 0.01,
+      "note": "Sine wave speed for breathing/pulsing animations."
+    }
+  },
+
+  "stagger": {
+    "tight": "30ms",
+    "normal": "50ms",
+    "relaxed": "80ms",
+    "dramatic": "120ms",
+    "note": "Delay between sequential element animations (e.g., list items appearing)."
+  },
+
+  "cssVariables": {
+    "dark": ":root {\n  --motion-quick: 150ms;\n  --motion-standard: 250ms;\n  --motion-deliberate: 400ms;\n  --motion-dramatic: 600ms;\n  --ease-instrument: cubic-bezier(0.19, 1, 0.22, 1);\n  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);\n  --ease-glitch: cubic-bezier(0.68, -0.55, 0.265, 1.55);\n}",
+    "note": "Copy-paste ready CSS variables for motion tokens."
+  }
+}

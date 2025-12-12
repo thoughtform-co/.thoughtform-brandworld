@@ -1,0 +1,60 @@
+{
+  "name": "Ledger Light",
+  "description": "Financial blueprint station - NASA mission planning, morning shift",
+  "mode": "light",
+  "character": "Engineering drawings on warm paper. Scientific instruments with teal markers.",
+
+  "background": "paper",
+  "text": "ink",
+  "accent": "teal",
+  "alert": "signal",
+  "secondary": "gold",
+
+  "css": {
+    "--background": "var(--paper)",
+    "--surface": "var(--paper-light)",
+    "--text": "var(--ink)",
+    "--text-muted": "var(--ink-50)",
+    "--accent": "var(--teal)",
+    "--accent-bright": "var(--teal-bright)",
+    "--alert": "var(--signal)",
+    "--border": "var(--ink-12)"
+  },
+
+  "particles": {
+    "type": "clustered-topology",
+    "primaryColor": "TEAL",
+    "secondaryColor": "GOLD",
+    "alertColor": "SIGNAL",
+    "behavior": "Clustered breathing - semantic expense clusters connected by flow lines",
+    "trailAlpha": 0.08,
+    "halos": true
+  },
+
+  "typography": {
+    "body": "body",
+    "headings": "mono",
+    "display": "display"
+  },
+
+  "layout": {
+    "style": "wireframe-boxes",
+    "features": ["corner-brackets", "diamond-markers", "blueprint-grid", "targeting-reticle"]
+  },
+
+  "components": {
+    "wireframeBox": {
+      "border": "1px solid var(--ink-12)",
+      "background": "var(--paper-light)",
+      "cornerBrackets": true
+    },
+    "marker": {
+      "shape": "rotated-square",
+      "size": "8px"
+    },
+    "gridOverlay": {
+      "size": "80px",
+      "color": "var(--ink-05)"
+    }
+  }
+}

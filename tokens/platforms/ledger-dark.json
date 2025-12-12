@@ -1,0 +1,38 @@
+{
+  "name": "Ledger Dark",
+  "description": "Financial terminal - Blade Runner corporate tech, night shift",
+  "mode": "dark",
+  "character": "Green phosphor screens in dim offices. Money flows as particle streams.",
+
+  "background": "void",
+  "text": "dawn",
+  "accent": "verde",
+
+  "css": {
+    "--background": "var(--void)",
+    "--surface": "var(--surface-0)",
+    "--text": "var(--dawn)",
+    "--text-muted": "var(--dawn-50)",
+    "--accent": "var(--verde)",
+    "--accent-glow": "var(--verde-glow)",
+    "--border": "var(--dawn-08)"
+  },
+
+  "particles": {
+    "type": "horizontal-flow",
+    "primaryColor": "VERDE_GLOW",
+    "behavior": "Flow left-to-right like money movement",
+    "trailAlpha": 0.05,
+    "scanlines": true
+  },
+
+  "typography": {
+    "body": "body",
+    "headings": "mono"
+  },
+
+  "layout": {
+    "style": "dashboard-full-bleed",
+    "features": ["scanline-effects", "status-lights", "dense-data"]
+  }
+}

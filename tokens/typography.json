@@ -1,0 +1,58 @@
+{
+  "name": "Thoughtform Typography System",
+  "version": "1.0.0",
+
+  "fonts": {
+    "mono": {
+      "family": "'PT Mono', ui-monospace, monospace",
+      "usage": "Headers, labels, navigation, data values",
+      "googleFonts": "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap"
+    },
+    "sans": {
+      "family": "'IBM Plex Sans', system-ui, sans-serif",
+      "usage": "Body text, descriptions",
+      "googleFonts": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap"
+    },
+    "body": {
+      "family": "'IBM Plex Mono', ui-monospace, monospace",
+      "usage": "Ledger body text, data interfaces",
+      "googleFonts": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
+    },
+    "display": {
+      "family": "'PP Neue Bit', 'PP Mondwest', ui-monospace, monospace",
+      "usage": "Hero numbers only",
+      "source": "local"
+    }
+  },
+
+  "scale": {
+    "2xs": "9px",
+    "xs": "10px",
+    "sm": "11px",
+    "base": "12px",
+    "md": "13px",
+    "lg": "14px",
+    "xl": "18px",
+    "2xl": "22px",
+    "3xl": "32px",
+    "hero": "48px",
+    "display": "120px"
+  },
+
+  "tracking": {
+    "tight": "-0.02em",
+    "normal": "0",
+    "wide": "0.05em",
+    "wider": "0.08em",
+    "widest": "0.1em",
+    "extreme": "0.12em"
+  },
+
+  "lineHeight": {
+    "tight": "1.0",
+    "snug": "1.1",
+    "normal": "1.4",
+    "relaxed": "1.6",
+    "loose": "1.7"
+  }
+}

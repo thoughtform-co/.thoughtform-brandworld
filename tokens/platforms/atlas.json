@@ -1,0 +1,58 @@
+{
+  "name": "Atlas",
+  "description": "Bestiary of Latent Space Denizens - scientific specimen archive",
+  "mode": "dark",
+  "character": "Victorian naturalist's study. Scientific specimens in glass cases.",
+
+  "background": "void",
+  "text": "dawn",
+  "accent": "gold",
+  "secondary": "dawn",
+
+  "css": {
+    "--background": "var(--void)",
+    "--surface": "var(--surface-0)",
+    "--text": "var(--dawn)",
+    "--text-muted": "var(--dawn-50)",
+    "--accent": "var(--gold)",
+    "--accent-dim": "var(--gold-40)",
+    "--border": "var(--dawn-08)"
+  },
+
+  "particles": {
+    "type": "radial-organic",
+    "primaryColor": "DAWN",
+    "secondaryColor": "GOLD",
+    "behavior": "Radiate organically from specimen center, like bioluminescence",
+    "trailAlpha": 0.15
+  },
+
+  "typography": {
+    "body": "sans",
+    "headings": "mono"
+  },
+
+  "entityCard": {
+    "aspectRatio": "4:5",
+    "width": "620px",
+    "sideColumns": "130px",
+    "header": "32px",
+    "footer": "140px"
+  },
+
+  "threatLevels": {
+    "benign": "#5B8A7A",
+    "cautious": "#7A7868",
+    "volatile": "#C17F59",
+    "existential": "#8B5A5A"
+  },
+
+  "visualizations": [
+    "phase-state",
+    "superposition",
+    "hallucination-index",
+    "latent-position",
+    "manifold-curvature",
+    "embedding-signature"
+  ]
+}

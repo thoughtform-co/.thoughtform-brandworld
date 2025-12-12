@@ -1,0 +1,37 @@
+{
+  "name": "Thoughtform Spacing System",
+  "version": "1.0.0",
+  "base": "4px",
+
+  "scale": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px",
+    "16": "64px"
+  },
+
+  "semantic": {
+    "gutter": "40px",
+    "panelPadding": "16px",
+    "cardPadding": "16px",
+    "sectionGap": "24px",
+    "componentGap": "16px",
+    "elementGap": "8px"
+  },
+
+  "particles": {
+    "GRID": 3,
+    "note": "All particle positions snap to 3px grid - DO NOT CHANGE"
+  },
+
+  "borders": {
+    "radius": "0px",
+    "note": "Zero border-radius everywhere - non-negotiable"
+  }
+}

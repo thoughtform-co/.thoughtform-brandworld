@@ -1,0 +1,114 @@
+{
+  "name": "Thoughtform Color System",
+  "version": "1.0.0",
+  "description": "Canonical color definitions for all Thoughtform platforms",
+
+  "void": {
+    "description": "Dark mode backgrounds - warm blacks, never pure black",
+    "base": "#050403",
+    "surface-0": "#0A0908",
+    "surface-1": "#0F0E0C",
+    "surface-2": "#141311",
+    "surface-3": "#1A1816"
+  },
+
+  "paper": {
+    "description": "Light mode backgrounds - warm off-whites",
+    "base": "#F0EFEC",
+    "warm": "#EAE8E3",
+    "light": "#F5F4F1"
+  },
+
+  "dawn": {
+    "description": "Dark mode text - aged paper, morning light",
+    "base": "#ECE3D6",
+    "rgb": "236, 227, 214",
+    "80": "rgba(236, 227, 214, 0.80)",
+    "70": "rgba(236, 227, 214, 0.70)",
+    "50": "rgba(236, 227, 214, 0.50)",
+    "40": "rgba(236, 227, 214, 0.40)",
+    "30": "rgba(236, 227, 214, 0.30)",
+    "15": "rgba(236, 227, 214, 0.15)",
+    "08": "rgba(236, 227, 214, 0.08)",
+    "04": "rgba(236, 227, 214, 0.04)"
+  },
+
+  "ink": {
+    "description": "Light mode text - warm black",
+    "base": "#3A3835",
+    "rgb": "58, 56, 53",
+    "70": "rgba(58, 56, 53, 0.70)",
+    "50": "rgba(58, 56, 53, 0.50)",
+    "30": "rgba(58, 56, 53, 0.30)",
+    "20": "rgba(58, 56, 53, 0.20)",
+    "12": "rgba(58, 56, 53, 0.12)",
+    "08": "rgba(58, 56, 53, 0.08)",
+    "05": "rgba(58, 56, 53, 0.05)"
+  },
+
+  "gold": {
+    "description": "Primary accent - brass, navigation instruments",
+    "base": "#CAA554",
+    "bright": "#E0BC6A",
+    "rgb": "202, 165, 84",
+    "70": "rgba(202, 165, 84, 0.70)",
+    "40": "rgba(202, 165, 84, 0.40)",
+    "30": "rgba(202, 165, 84, 0.30)",
+    "15": "rgba(202, 165, 84, 0.15)",
+    "10": "rgba(202, 165, 84, 0.10)",
+    "05": "rgba(202, 165, 84, 0.05)"
+  },
+
+  "verde": {
+    "description": "Ledger Dark - green CRT, Blade Runner",
+    "base": "#2B4E40",
+    "bright": "#3D7A5E",
+    "glow": "#5BA882",
+    "rgb": "43, 78, 64"
+  },
+
+  "teal": {
+    "description": "Ledger Light - hopeful technical green",
+    "base": "#3D8B7A",
+    "bright": "#4AA392",
+    "rgb": "61, 139, 122",
+    "50": "rgba(61, 139, 122, 0.50)",
+    "30": "rgba(61, 139, 122, 0.30)",
+    "15": "rgba(61, 139, 122, 0.15)",
+    "08": "rgba(61, 139, 122, 0.08)"
+  },
+
+  "signal": {
+    "description": "Alert accent - terracotta",
+    "base": "#B85C4A",
+    "rgb": "184, 92, 74"
+  },
+
+  "cardinal": {
+    "geometry": "#CAA554",
+    "alterity": "#ECE3D6",
+    "dynamics": "#5B8A7A"
+  },
+
+  "status": {
+    "dark": {
+      "healthy": "#5B8A7A",
+      "warning": "#C17F59",
+      "danger": "#8B5A5A",
+      "neutral": "#7A7868"
+    },
+    "light": {
+      "healthy": "#3D8B7A",
+      "warning": "#A69055",
+      "danger": "#B85C4A",
+      "neutral": "#7A7868"
+    }
+  },
+
+  "threat": {
+    "benign": "#5B8A7A",
+    "cautious": "#7A7868",
+    "volatile": "#C17F59",
+    "existential": "#8B5A5A"
+  }
+}
