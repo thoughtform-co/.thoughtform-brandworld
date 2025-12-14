@@ -1,0 +1,258 @@
+/**
+ * Navigation Grid - CSS Implementation
+ * 
+ * Standalone CSS for the Navigation Grid design primitive.
+ * Import this file and use the `.navigation-grid` class.
+ * 
+ * USAGE:
+ * ```html
+ * <div class="navigation-grid">
+ *   <div class="grid-corner grid-corner-tl"></div>
+ *   <div class="grid-corner grid-corner-tr"></div>
+ *   <div class="grid-corner grid-corner-bl"></div>
+ *   <div class="grid-corner grid-corner-br"></div>
+ *   <aside class="grid-rail grid-rail-left">...</aside>
+ *   <aside class="grid-rail grid-rail-right">...</aside>
+ * </div>
+ * ```
+ * 
+ * CSS Variables to customize:
+ * - --grid-color: Accent color (default: var(--gold))
+ * - --grid-color-50: 50% opacity variant
+ * - --corner-size: Corner bracket size (default: 40px)
+ * - --rail-width: Rail width (default: 60px)
+ * - --hud-padding: Padding from edges (default: 32px)
+ */
+
+.navigation-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Corner Brackets */
+.grid-corner {
+  position: absolute;
+  width: var(--corner-size, 40px);
+  height: var(--corner-size, 40px);
+  pointer-events: none;
+}
+
+.grid-corner::before,
+.grid-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--grid-color, var(--gold));
+}
+
+/* Top-left */
+.grid-corner-tl {
+  top: var(--hud-padding, 32px);
+  left: var(--hud-padding, 32px);
+}
+.grid-corner-tl::before {
+  top: 0;
+  left: 0;
+  width: var(--corner-size, 40px);
+  height: 2px;
+}
+.grid-corner-tl::after {
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: var(--corner-size, 40px);
+}
+
+/* Top-right */
+.grid-corner-tr {
+  top: var(--hud-padding, 32px);
+  right: var(--hud-padding, 32px);
+}
+.grid-corner-tr::before {
+  top: 0;
+  right: 0;
+  width: var(--corner-size, 40px);
+  height: 2px;
+}
+.grid-corner-tr::after {
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: var(--corner-size, 40px);
+}
+
+/* Bottom-left */
+.grid-corner-bl {
+  bottom: var(--hud-padding, 32px);
+  left: var(--hud-padding, 32px);
+}
+.grid-corner-bl::before {
+  bottom: 0;
+  left: 0;
+  width: var(--corner-size, 40px);
+  height: 2px;
+}
+.grid-corner-bl::after {
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  height: var(--corner-size, 40px);
+}
+
+/* Bottom-right */
+.grid-corner-br {
+  bottom: var(--hud-padding, 32px);
+  right: var(--hud-padding, 32px);
+}
+.grid-corner-br::before {
+  bottom: 0;
+  right: 0;
+  width: var(--corner-size, 40px);
+  height: 2px;
+}
+.grid-corner-br::after {
+  bottom: 0;
+  right: 0;
+  width: 2px;
+  height: var(--corner-size, 40px);
+}
+
+/* Vertical Rails */
+.grid-rail {
+  position: absolute;
+  top: calc(var(--hud-padding, 32px) + var(--corner-size, 40px) + 20px);
+  bottom: calc(var(--hud-padding, 32px) + var(--corner-size, 40px) + 20px);
+  width: var(--rail-width, 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-rail-left {
+  left: var(--hud-padding, 32px);
+}
+
+.grid-rail-right {
+  right: var(--hud-padding, 32px);
+}
+
+/* Faded vertical line */
+.grid-rail-left::before,
+.grid-rail-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--grid-color-50, rgba(202, 165, 84, 0.5)) 10%,
+    var(--grid-color-50, rgba(202, 165, 84, 0.5)) 90%,
+    transparent 100%
+  );
+}
+
+.grid-rail-left::before {
+  left: 0;
+}
+
+.grid-rail-right::before {
+  right: 0;
+}
+
+/* Scale with ticks */
+.rail-scale {
+  flex: 1;
+  position: relative;
+  width: 100%;
+}
+
+.scale-ticks {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.grid-rail-left .scale-ticks {
+  left: 0;
+}
+
+.grid-rail-right .scale-ticks {
+  right: 0;
+}
+
+/* Tick marks */
+.tick {
+  height: 1px;
+  background: var(--grid-color-50, rgba(202, 165, 84, 0.5));
+}
+
+.tick-major {
+  width: 20px;
+  background: var(--grid-color, var(--gold));
+}
+
+.tick-minor {
+  width: 10px;
+  background: var(--grid-color-50, rgba(202, 165, 84, 0.5));
+}
+
+.tick-label {
+  font-family: var(--font-data, 'IBM Plex Sans', monospace);
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--dawn-30, rgba(236, 227, 214, 0.3));
+  position: absolute;
+  white-space: nowrap;
+}
+
+.grid-rail-left .tick-label {
+  left: 24px;
+}
+
+.grid-rail-right .tick-label {
+  right: 24px;
+}
+
+/* Rail content */
+.rail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 12px);
+  margin-bottom: var(--space-lg, 24px);
+}
+
+.grid-rail-left .rail-content {
+  padding-left: 28px;
+}
+
+.grid-rail-right .rail-content {
+  padding-right: 28px;
+  align-items: flex-end;
+}
+
+/* Responsive: Tablet - hide rails */
+@media (max-width: 1100px) {
+  .grid-rail {
+    display: none;
+  }
+  
+  :root {
+    --corner-size: 30px;
+    --rail-width: 0;
+  }
+}
+
+/* Responsive: Mobile - smaller corners */
+@media (max-width: 600px) {
+  :root {
+    --corner-size: 24px;
+    --rail-width: 0;
+    --hud-padding: clamp(16px, 4vw, 32px);
+  }
+}
+

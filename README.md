@@ -20,7 +20,10 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 │   └── thoughtform-co-3d.md          # 3D scroll-driven particle system docs
 ├── components/
 │   ├── shared/
-│   │   └── ParticleCanvas.tsx        # Base particle component
+│   │   ├── ParticleCanvas.tsx        # Base particle component
+│   │   ├── NavigationGrid.tsx        # Navigation grid primitive component
+│   │   ├── NavigationGrid.md         # Navigation grid specification
+│   │   └── navigation-grid.css       # Navigation grid CSS implementation
 │   └── thoughtform-co/
 │       ├── NavigationCockpit.tsx     # HUD navigation pattern
 │       ├── 3d-particle-system.tsx    # 3D particle system reference
@@ -44,6 +47,14 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 | Ledger Light | Light | `#F0EFEC` | Teal `#3D8B7A` | NASA blueprint |
 | thoughtform.co | Dark | `#050504` | Gold `#CAA554` | Mission control HUD |
 
+### Design Primitives
+
+**Navigation Grid** — Fixed overlay frame system with corner brackets and vertical rails
+- See: `components/shared/NavigationGrid.md`
+- Component: `components/shared/NavigationGrid.tsx`
+- CSS: `components/shared/navigation-grid.css`
+- Platform-agnostic: Change colors, keep structure consistent
+
 ### Non-Negotiables
 
 1. **Zero border-radius** — Sharp corners everywhere
@@ -51,6 +62,7 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 3. **GRID=3 particles** — Pixel snapping at 3px
 4. **No system fonts** — Always PT Mono or IBM Plex
 5. **No box-shadows** — Use borders for depth
+6. **Navigation Grid positioning** — Always fixed, scales with viewport
 
 ### Core Colors
 
@@ -101,6 +113,11 @@ Get the complete design tokens for Atlas and explain the color system.
 ```
 
 **Building Components:**
+```
+Show me the Navigation Grid primitive and apply it to my Astrolabe platform
+with verde color instead of gold.
+```
+
 ```
 Show me the Ledger WireframeBox component and create a similar container
 component for a settings panel.
