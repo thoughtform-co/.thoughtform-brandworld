@@ -16,12 +16,20 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 │       ├── ledger-dark.json  # Verde accent
 │       └── ledger-light.json # Teal accent, paper mode
 ├── particles/
-│   └── core.js               # Shared GRID=3 renderer
+│   ├── core.js                        # Shared GRID=3 renderer
+│   └── thoughtform-co-3d.md          # 3D scroll-driven particle system docs
+├── components/
+│   ├── shared/
+│   │   └── ParticleCanvas.tsx        # Base particle component
+│   └── thoughtform-co/
+│       ├── NavigationCockpit.tsx     # HUD navigation pattern
+│       ├── 3d-particle-system.tsx    # 3D particle system reference
+│       └── NAVIGATION_HUD.md         # HUD system documentation
 ├── philosophy/
-│   └── PRINCIPLES.md         # Core design tenets
+│   └── PRINCIPLES.md                 # Core design tenets
 ├── skills/
-│   └── SKILL.md              # Claude/Cursor skill
-└── mcp-server/               # MCP server for AI access
+│   └── SKILL.md                      # Claude/Cursor skill
+└── mcp-server/                       # MCP server for AI access
 ```
 
 ## Quick Reference
@@ -34,6 +42,7 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 | Atlas | Dark | `#050403` | Gold `#CAA554` | Specimen archive |
 | Ledger Dark | Dark | `#050403` | Verde `#2B4E40` | Blade Runner |
 | Ledger Light | Light | `#F0EFEC` | Teal `#3D8B7A` | NASA blueprint |
+| thoughtform.co | Dark | `#050504` | Gold `#CAA554` | Mission control HUD |
 
 ### Non-Negotiables
 
@@ -156,3 +165,24 @@ Copy `particles/core.js` into your project, or reference the tokens directly:
 ```javascript
 import tokens from './.thoughtform-brandworld/tokens/colors.json';
 ```
+
+## Platform-Specific Implementations
+
+### thoughtform.co
+
+The thoughtform.co website implements a **3D scroll-driven navigation cockpit**:
+
+- **3D Particle System**: Extended topology terrain (160×70 grid) that scrolls through the entire journey. Section-specific landmarks emerge from the terrain.
+  - See: `particles/thoughtform-co-3d.md`
+  - Reference: `components/thoughtform-co/3d-particle-system.tsx`
+
+- **Navigation HUD**: Fixed overlay interface with radar-style indicators, depth scales, and dynamic readouts.
+  - See: `components/thoughtform-co/NAVIGATION_HUD.md`
+  - Pattern: `components/thoughtform-co/NavigationCockpit.tsx`
+
+**Key Features**:
+- Split vanishing points (stars center, terrain right)
+- Scroll-driven depth calculation
+- Section-based landmark visibility
+- Terrain evolution (waves shift phase as you travel)
+- HUD hidden in hero, fades in on scroll
