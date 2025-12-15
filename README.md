@@ -187,19 +187,53 @@ import tokens from './.thoughtform-brandworld/tokens/colors.json';
 
 ### thoughtform.co
 
-The thoughtform.co website implements a **3D scroll-driven navigation cockpit**:
+The thoughtform.co website implements a **3D scroll-driven navigation cockpit** with an **admin-controllable particle system**:
 
-- **3D Particle System**: Extended topology terrain (160×70 grid) that scrolls through the entire journey. Section-specific landmarks emerge from the terrain.
-  - See: `particles/thoughtform-co-3d.md`
-  - Reference: `components/thoughtform-co/3d-particle-system.tsx`
+#### 3D Particle System V2
 
-- **Navigation HUD**: Fixed overlay interface with radar-style indicators, depth scales, and dynamic readouts.
-  - See: `components/thoughtform-co/NAVIGATION_HUD.md`
-  - Pattern: `components/thoughtform-co/NavigationCockpit.tsx`
+Config-driven particle rendering with live admin controls:
 
-**Key Features**:
-- Split vanishing points (stars center, terrain right)
-- Scroll-driven depth calculation
-- Section-based landmark visibility
-- Terrain evolution (waves shift phase as you travel)
-- HUD hidden in hero, fades in on scroll
+- **Manifold (Terrain)**: Semantic Dawn topology grid (configurable 140×60 default) that scrolls through the journey
+- **Landmarks**: Section-specific structures (Gateway, Tower, Helix, Sphere, Ring) in Tensor Gold
+- **Admin Panel**: Floating draggable panel for real-time adjustments
+- **Persistence**: Settings saved to Vercel KV (Upstash Redis)
+
+**Documentation:**
+- See: `particles/thoughtform-co-3d.md`
+- Reference: `components/thoughtform-co/3d-particle-system.tsx`
+
+#### Navigation HUD
+
+Fixed overlay interface with radar-style indicators:
+- See: `components/thoughtform-co/NAVIGATION_HUD.md`
+- Pattern: `components/thoughtform-co/NavigationCockpit.tsx`
+
+#### Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Config-driven** | All particle settings controllable via admin panel |
+| **Manifold topology** | Multi-wave terrain with evolving phase |
+| **Landmark shapes** | Gateway, Tower, Helix, Sphere, Ring |
+| **Proximity boost** | Nearby particles get 80% brightness increase |
+| **Breathing animation** | Subtle oscillation for organic feel |
+| **Y-culling** | Terrain only renders in lower 65% of screen |
+| **Full clear render** | No motion blur, clean each frame |
+| **Section visibility** | Landmarks fade based on scroll position |
+
+#### Admin Panel Controls
+
+**Manifold:**
+- Color (preset or custom hex)
+- Rows/Columns (density)
+- Wave amplitude/frequency (topology)
+- Spread X/Z (scale)
+- Opacity
+
+**Landmarks:**
+- Shape selection
+- Color
+- Density (particle count)
+- Scale
+- Position (Z depth)
+- Enable/disable

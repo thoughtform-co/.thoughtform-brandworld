@@ -1,62 +1,94 @@
-# Thoughtform.co 3D Scroll-Driven Particle System
+# Thoughtform.co 3D Scroll-Driven Particle System V2
 
 ## Overview
 
-The thoughtform.co website uses a 3D particle system that creates a "navigation through latent space" experience. The system features an extended topology terrain that fills the background throughout the scroll journey, with section-specific landmarks that emerge from it.
+The thoughtform.co website uses a **config-driven 3D particle system** that creates a "navigation through latent space" experience. The system features an extended topology terrain (the "Manifold") that fills the background throughout the scroll journey, with section-specific landmarks that emerge from it.
+
+**Key Feature**: The particle system is **admin-controllable** — logged-in admins can adjust colors, density, topology, and landmark shapes in real-time via a floating panel, with settings persisted to Vercel KV (Upstash Redis).
 
 ## Core Concept
 
-**The terrain is the journey** — rather than a backdrop, the gold topology grid extends through the entire scroll experience (Z: 800 to 8800), creating a continuous landscape you travel across. Section-specific landmarks emerge from this terrain as you progress.
+**The terrain is the journey** — rather than a backdrop, the off-white topology grid extends through the entire scroll experience (Z: 1200 to ~9000), creating a continuous landscape you travel across. Section-specific landmarks in Tensor Gold emerge from this terrain as you progress.
 
 ## Architecture
 
 ### Particle Types
 
-1. **Stars** (`type: "star"`)
-   - Ambient background particles
-   - Loop infinitely in Z-space
-   - Center vanishing point (fly straight)
+1. **Terrain** (`type: "terrain"`)
+   - The main topology grid (configurable rows × columns, default 140×60)
+   - Extends through entire scroll journey
+   - Uses Semantic Dawn color (`#ebe3d6`) at configurable opacity
+   - Right-side vanishing point
 
-2. **Terrain** (`type: "terrain"`)
-   - The main topology grid (160 rows × 70 columns)
-   - Extends Z: 800 to 8800
-   - Scrolls with content (not fixed)
-   - Right-side vanishing point (looking out window)
+2. **Gateway** (`type: "gateway"`)
+   - Hero section portal structure
+   - Concentric rings with inner spiral
+   - Pulsing halo effect
+   - Fades as you scroll past
 
 3. **Landmarks** (`type: "geo"`)
-   - Section-specific structures
+   - Section-specific structures (Tower, Helix, Sphere, Ring)
    - Emerge from terrain as sections come into view
+   - Use Tensor Gold color (`#caa554`)
    - Fade based on section proximity
+
+### Configuration Schema
+
+```typescript
+interface ParticleSystemConfig {
+  manifold: {
+    color: string;        // Hex color for terrain
+    rows: number;         // Grid rows (40-200)
+    columns: number;      // Grid columns (30-100)
+    waveAmplitude: number;// Wave height (50-400)
+    waveFrequency: number;// Wave tightness (0.05-0.5)
+    spreadX: number;      // Horizontal spread (0.5-2.0)
+    spreadZ: number;      // Depth spread (0.5-2.0)
+    opacity: number;      // Base opacity (0.1-1.0)
+  };
+  landmarks: LandmarkConfig[];
+  version: number;
+}
+
+interface LandmarkConfig {
+  id: string;
+  sectionId: string;      // Matches data-section attribute
+  name: string;
+  shape: 'gateway' | 'tower' | 'helix' | 'sphere' | 'ring';
+  color: string;          // Hex color
+  density: number;        // Particle count multiplier
+  scale: number;          // Size multiplier
+  position: { x, y, z };  // Base position
+  enabled: boolean;
+}
+```
 
 ### Key Constants
 
 ```typescript
-const GRID = 3;                    // Pixel snapping (non-negotiable)
-const FOCAL = 400;                 // Perspective focal length
-const MAX_DEPTH = 6500;            // Maximum visible depth
-const TERRAIN_SPAN = 8000;         // Z: 800 to 8800
-const SCROLL_RANGE = 8500;         // Total scroll depth
+const GRID = 3;          // Pixel snapping (non-negotiable)
+const FOCAL = 400;       // Perspective focal length
+const MAX_DEPTH = 7000;  // Maximum visible depth
 ```
 
-## Terrain Implementation
+## Manifold (Terrain) Implementation
 
-### Extended Topology Grid
+### Topology Grid
 
-The terrain is a continuous mesh that spans the entire journey:
+The terrain is a continuous mesh with multi-wave topology:
 
 ```typescript
-// 160 rows × 70 columns
-for (let r = 0; r < 160; r++) {
-  for (let c = 0; c < 70; c++) {
-    const x = (c - 35) * 65;        // Wide spread (-2275 to +2275)
-    const z = 800 + (r * 50);       // Z: 800 to 8800
-    const wavePhase = r * 0.02;     // Evolution as you travel
-    
+for (let r = 0; r < config.rows; r++) {
+  for (let c = 0; c < config.columns; c++) {
+    const x = (c - columns / 2) * (70 * spreadX);
+    const z = 1200 + r * (55 * spreadZ);
+
+    const wavePhase = r * 0.02;  // Evolution as you travel
     const y = 400 
-      + Math.sin(c * 0.2 + wavePhase) * 180   // Primary wave (phase-shifted)
-      + Math.cos(r * 0.12) * 150              // Secondary wave
-      + Math.sin(c * 0.35 + r * 0.15) * 70    // Detail wave
-      + Math.sin(r * 0.08) * 100;             // Long-wave undulation
+      + Math.sin(c * waveFrequency + wavePhase) * waveAmplitude
+      + Math.cos(r * 0.12) * 150         // Secondary wave
+      + Math.sin(c * 0.35 + r * 0.15) * 70   // Detail wave
+      + Math.sin(r * 0.08) * 100;        // Long-wave undulation
   }
 }
 ```
@@ -65,208 +97,181 @@ for (let r = 0; r < 160; r++) {
 
 - **Evolving terrain**: `wavePhase = r * 0.02` causes the terrain to morph as you travel
 - **Multi-wave composition**: Four sine/cosine waves create organic topology
-- **Long-wave undulation**: `Math.sin(r * 0.08) * 100` creates gentle rises/falls over distance
-- **Scroll-driven**: Terrain scrolls with content (uses `p.z - scrollZ`), not fixed position
+- **Y-culling**: Terrain only renders in lower 65% of screen to avoid visual noise above
+- **Proximity boost**: Nearby particles get up to 80% brightness increase
 
-## Landmarks
+## Landmark Shapes
 
-### Section Mapping
+### 1. Gateway Portal
+- **Sections**: Hero
+- **Structure**: 8 concentric rings with diminishing radii, plus inner spiral and core glow
+- **Special effect**: Pulsing halo visible in hero section
 
-Each section has a unique landmark structure:
+### 2. Crystalline Tower
+- **Sections**: Manifesto
+- **Structure**: 12 square layers that taper upward, with vertical connectors and apex
+- **Emergence**: Rises from terrain Y position
 
-| Section | Landmark ID | Z Range | Concept |
-|---------|-------------|---------|---------|
-| Hero | 1 | 1500-1900 | Gateway Portal (concentric rings + spiral) |
-| Manifesto | 2 | 2800-3000 | Data Overlay (vertical streams + scan lines) |
-| Services | 3 | 5500-8200 | Trajectory Tunnel (helix) |
-| Contact | 4 | 8500+ | Event Horizon (sphere/singularity) |
+### 3. Trajectory Helix
+- **Sections**: Services
+- **Structure**: Double-strand DNA-like spiral extending along Z-axis
+- **Pattern**: Uses terrain Y as baseline with orbital motion
+
+### 4. Event Horizon (Sphere)
+- **Sections**: Contact
+- **Structure**: Spherical surface with concentric core rings
+- **Color**: Uses Alert orange (`#ff6b35`) for emphasis
+
+### 5. Orbital Ring
+- **Additional shape**: 10 concentric tilted rings at varying angles
+
+## Rendering System
 
 ### Visibility Logic
-
-Landmarks use section-based visibility:
 
 ```typescript
 const currentSection = Math.floor(scrollProgress * 4) + 1;
 const sectionDist = Math.abs(currentSection - landmarkSection);
 
 if (sectionDist === 0) {
-  // Current section: fully visible, with emergence animation
+  // Current section: fully visible with emergence animation
   particleAlpha = 1;
-  const emergence = Math.min(1, sectionProgress * 2);
-  yOffset = (1 - emergence) * 150; // Rise from terrain
+  const emergence = Math.min(1, sectionProgress * 1.8);
+  particleAlpha *= emergence;
 } else if (sectionDist === 1) {
   // Adjacent section: partially visible
-  particleAlpha = 0.4;
+  particleAlpha = 0.3;
 } else {
   // Far sections: hidden
-  particleAlpha = 0;
+  return;
 }
 ```
 
-### Emergence Animation
-
-Landmarks "rise up" from the terrain as their section comes into view:
-
-- Initial state: 150px below final position
-- Animates over first 50% of section scroll
-- Creates sense of discovery/emergence
-
-## Rendering System
-
-### Split Vanishing Points
-
-The system uses two vanishing points for different particle types:
+### Alpha Calculation
 
 ```typescript
-const cx_stars = width * 0.5;    // Stars: Center (fly straight forward)
-const cx_geo = width * 0.72;     // Geo/Terrain: Right (look out window)
+// Depth-based alpha with minimum floor
+const normalizedDepth = relZ / MAX_DEPTH;
+const depthAlpha = Math.min(1, (1 - normalizedDepth) * 1.5 + 0.3);
+
+// Proximity boost for nearby particles
+const proximityBoost = relZ < 1500 ? 1 + (1 - relZ / 1500) * 0.8 : 1;
+
+// Breathing animation
+const breatheAlpha = 0.85 + Math.sin(time * 0.02 + phase) * 0.15;
+
+// Final alpha
+const finalAlpha = depthAlpha * particleAlpha * opacity * breatheAlpha * proximityBoost;
 ```
 
-This creates the effect of:
-- Stars: Flying straight ahead (centered perspective)
-- Terrain/Landmarks: Visible through a side window (right-side perspective)
+### Size Calculation
+
+```typescript
+// Terrain: scale based on depth
+const sizeMultiplier = Math.min(2.5, 0.6 + scale * 1.2);
+const terrainSize = Math.max(GRID, GRID * sizeMultiplier);
+
+// Landmarks: larger, more prominent
+const baseSize = type === "gateway" ? GRID * 2 : GRID * 1.6;
+const landmarkSize = Math.max(GRID, baseSize * Math.min(3, scale * 2));
+```
 
 ### Projection
 
-Simple perspective projection:
-
 ```typescript
 const scale = FOCAL / relZ;
-const x = center + particle.x * scale;
+const cx_geo = width * 0.7;  // Right-side vanishing point
+const x = cx_geo + particle.x * scale;
 const y = cy + particle.y * scale;
-```
-
-### Rendering Modes
-
-1. **Close particles** (scale > 0.35): Render as ASCII characters
-   - Uses semantic chars: `λ, δ, θ, φ, ψ, Σ, π, ∇, ∞, ∂, ⟨, ⟩`
-   - Font size scales with distance
-
-2. **Distant particles** (scale <= 0.35): Render as grid-snapped squares
-   - Size: `Math.max(GRID, GRID * scale)`
-   - Always snaps to 3px grid
-
-3. **Stars**: Always squares, 40% opacity multiplier
-
-### Trail Effect
-
-Partial clearing creates motion blur:
-
-```typescript
-ctx.fillStyle = "rgba(5, 5, 4, 0.88)";  // 88% opacity = 12% fade per frame
-ctx.fillRect(0, 0, width, height);
-```
-
-Lower alpha = longer trails = more motion blur.
-
-## Scroll Integration
-
-The particle system depth is driven by scroll progress:
-
-```typescript
-const scrollProgress = 0 to 1;  // From Lenis smooth scroll
-const scrollZ = scrollProgress * 8500;
-
-// Each particle's relative Z
-let relZ = particle.z - scrollZ;
-```
-
-### Section Detection
-
-Sections are detected via `IntersectionObserver`:
-
-```typescript
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-      setActiveSection(entry.target.getAttribute("data-section"));
-    }
-  });
-}, { threshold: [0.3, 0.5] });
 ```
 
 ## Color Palette
 
 ```typescript
-const DAWN = "#ebe3d6";   // Ambient stars, close particles
-const GOLD = "#caa554";   // Terrain, primary landmarks
-const ALERT = "#ff6b35";  // Event Horizon (final landmark)
+const DAWN = "#ebe3d6";   // Manifold terrain (Semantic Dawn)
+const GOLD = "#caa554";   // Landmarks (Tensor Gold)
+const ALERT = "#ff6b35";  // Event Horizon (Alert Orange)
+const TEAL = "#5b8a7a";   // Available preset
+const VOID = "#050504";   // Background
 ```
+
+## Admin Panel
+
+### Features
+- **Manifold controls**: Color, rows, columns, wave amplitude/frequency, spread, opacity
+- **Landmark controls**: Shape, color, density, scale, position, enabled toggle
+- **Persistence**: Settings saved to Vercel KV (Upstash Redis)
+- **Live preview**: Changes reflect immediately in particle canvas
+
+### Access
+- Toggle button: Square icon in top-right corner
+- Draggable panel: Can be positioned anywhere on screen
+- Storage indicator: Shows "☁ KV" (server) or "💾 Local" (localStorage fallback)
 
 ## Performance
 
-- **Total particles**: ~11,200
-  - Stars: 500
-  - Terrain: 11,200 (160 × 70)
-  - Landmarks: ~3,500
-- **Render loop**: Single `requestAnimationFrame` loop
-- **Depth sorting**: Sorts all particles each frame (back-to-front)
-- **Culling**: Particles outside view frustum are skipped early
-
-## Implementation Notes
-
-### React Integration
-
-- Uses `useRef` for scroll progress to avoid re-renders
-- Canvas dimensions stored in ref for stable render loop
-- `requestAnimationFrame` loop runs independently of React render cycle
-
-### Smooth Scrolling
-
-Integrated with Lenis smooth scroll:
-
-```typescript
-const { scrollProgress } = useLenis();
-// scrollProgress is 0-1 value from Lenis
-```
-
-### Responsive Behavior
-
-- Canvas resizes with viewport
-- DPR-aware scaling for retina displays
-- Vanishing points adjust to screen width
+- **Particle count**: ~8,400+ (terrain) + ~3,500 (landmarks)
+- **Render loop**: Single `requestAnimationFrame`, full clear each frame
+- **Depth sorting**: Back-to-front each frame
+- **Culling**: Y-culling for terrain, bounds checking for all
 
 ## Brand Alignment
 
-This implementation adheres to Thoughtform brand guidelines:
-
 ✅ **Sharp geometry only** — All particles are squares (`fillRect`)  
 ✅ **Grid snapping** — All positions snap to 3px grid  
-✅ **No glow effects** — No `shadowBlur` or bloom  
-✅ **Scroll-driven motion** — No continuous rotation, all movement tied to scroll  
-✅ **ASCII semantics** — Close particles use mathematical/logical symbols  
+✅ **No glow effects** — Clean, crisp rendering  
+✅ **Scroll-driven motion** — No continuous rotation  
+✅ **Pure pixels** — No ASCII characters (removed in V2)  
+✅ **Configurable** — Admin can adjust without code changes
 
-## File Location
+## File Locations
 
-Main implementation:
-- `components/hud/ParticleCanvas.tsx`
+**Implementation:**
+- `components/hud/ParticleCanvasV2.tsx` — Main particle renderer
+- `lib/particle-config.ts` — Configuration schema and defaults
+- `lib/contexts/ParticleConfigContext.tsx` — React context for config state
+- `components/admin/ParticleAdminPanel.tsx` — Admin controls UI
 
-Documentation:
-- `design/PARTICLE_SYSTEM.md` (detailed technical docs)
+**API:**
+- `app/api/particles/config/route.ts` — KV storage endpoints
+
+**Documentation:**
+- `design/PARTICLE_SYSTEM.md` — Detailed technical docs
 
 ## Usage Example
 
 ```tsx
-import { ParticleCanvas } from "@/components/hud/ParticleCanvas";
-import { useLenis } from "@/lib/hooks/useLenis";
+import { ParticleCanvasV2 } from "@/components/hud/ParticleCanvasV2";
+import { ParticleConfigProvider, useParticleConfig } from "@/lib/contexts/ParticleConfigContext";
 
 function NavigationCockpit() {
-  const { scrollProgress } = useLenis();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const { config } = useParticleConfig();
   
   return (
-    <>
-      <ParticleCanvas scrollProgress={scrollProgress} />
+    <ParticleConfigProvider>
+      <ParticleCanvasV2 
+        scrollProgress={scrollProgress} 
+        config={config}
+      />
       {/* Content sections... */}
-    </>
+    </ParticleConfigProvider>
   );
 }
 ```
 
-## Future Enhancements
+## Migration from V1
 
-Potential additions while maintaining brand guidelines:
-- Interactive landmark highlighting on hover
-- Particle density variation based on viewport size
-- Additional landmark types for new sections
-- Subtle parallax between terrain layers
+V2 removes several V1 features:
+- ❌ ASCII character rendering (now pure pixels)
+- ❌ Star particles (removed for cleaner visuals)
+- ❌ Motion blur trails (full clear each frame)
+- ❌ Hardcoded configuration (now admin-controllable)
 
+V2 adds:
+- ✅ Admin panel with live controls
+- ✅ Vercel KV persistence
+- ✅ Multiple landmark shapes
+- ✅ Proximity brightness boost
+- ✅ Breathing animations
+- ✅ Gateway halo effect
