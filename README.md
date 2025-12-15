@@ -63,6 +63,7 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 4. **No system fonts** — Always PT Mono or IBM Plex
 5. **No box-shadows** — Use borders for depth
 6. **Navigation Grid positioning** — Always fixed, scales with viewport
+7. **User menu in top-right corner** — Universal position for logged-in user display (`[USERNAME]: ACTIVE ▼`)
 
 ### Core Colors
 

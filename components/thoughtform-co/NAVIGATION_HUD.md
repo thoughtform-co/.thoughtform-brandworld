@@ -73,13 +73,19 @@ Contains three sections:
 - Active link highlighted with gold underline
 - Monospace font (IBM Plex Sans)
 
-**Right: Signal Strength**
+**Right: User Menu** (Universal Position)
 ```typescript
-<signal-label>Signal</signal-label>
-<signal-value>{percentage}%</signal-value>
+// User menu is now handled by the Navigation component
+// This position is reserved for user identity display
+<username>{user?.email?.split('@')[0]}</username>
+<status>ACTIVE</status>
+<chevron>▼</chevron>
 ```
-- Dynamic percentage based on section
-- Increases as you go deeper (61% → 95%)
+- Format: `[USERNAME]: ACTIVE ▼`
+- Dropdown reveals Admin (if admin) and Log out options
+- This position was previously "Signal Strength" but is now universally reserved for user identity across all Thoughtform platforms
+
+> **Note**: The "Signal Strength" indicator has been deprecated in favor of the universal user menu position. If signal/status information is needed, it should be displayed elsewhere in the HUD (e.g., left rail, bottom bar).
 
 ### 3. Left Rail: Depth Scale
 
