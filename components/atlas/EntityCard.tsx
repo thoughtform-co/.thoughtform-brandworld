@@ -1,60 +1,66 @@
 /**
- * Atlas EntityCard - Reference Implementation
+ * EntityCard - Atlas Reference Implementation
  * 
- * The primary card component for displaying entities in the Atlas constellation.
- * Follows the Atlas dark mode design language with Void backgrounds and Dawn text.
+ * Specimen documentation card for Latent Space Denizens.
+ * Renders entity as scientific specimen with classification data.
  * 
- * KEY DESIGN RULES:
- * - 3:4 aspect ratio (width: 200px)
- * - Zero border-radius (NO rounded corners)
- * - Corner bracket accents on hover
- * - Threat level indicator with color-coded dot
- * - Glassmorphic info overlay at bottom
- * - GRID=3 pixel snapping for any particle effects
+ * SEMANTIC ANCHORS: THRESHOLD, LIVING_GEOMETRY, GRADIENT
+ * - THRESHOLD: Frame contains the alien for observation
+ * - LIVING_GEOMETRY: Entity imagery, particle aura
+ * - GRADIENT: Threat level as continuous spectrum
  * 
- * COLORS:
- * - Background: var(--surface-0) from Void palette
- * - Text: var(--dawn) for primary, var(--dawn-50) for secondary
- * - Accent: var(--gold) for highlights
- * - Borders: var(--dawn-08) default, var(--dawn-30) on hover
+ * DESIGN RULES:
+ * - 4:5 aspect ratio for image
+ * - PT Mono for classification/technical text
+ * - IBM Plex Sans for descriptions
+ * - Zero border-radius (always)
+ * - Threat colors from palette
  */
 
 'use client';
 
-import Image from 'next/image';
+import { ReactNode } from 'react';
 
 // ═══════════════════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════════════════
 
-export type ThreatLevel = 'Benign' | 'Cautious' | 'Volatile' | 'Existential';
+export type ThreatLevel = 'benign' | 'cautious' | 'volatile' | 'existential';
+export type PhaseState = 'visible' | 'glimpsed' | 'theoretical' | 'unknown';
 
 export interface EntityCardProps {
-  /** Entity display name */
+  /** Entity name */
   name: string;
-  /** Optional subtitle */
-  subtitle?: string;
-  /** Entity classification type */
-  type: string;
-  /** Threat level determines indicator color */
+  /** Short descriptor/epithet */
+  epithet?: string;
+  /** Entity image URL or element */
+  image: string | ReactNode;
+  /** Threat classification */
   threatLevel: ThreatLevel;
-  /** Image URL for the entity */
-  imageUrl?: string;
-  /** Optional glyph text (displayed vertically) */
-  glyphs?: string;
-  /** Coordinates in the three cardinal fields */
-  coordinates?: {
-    geometry: number;
-    alterity: number;
-    dynamics: number;
-  };
-  /** Connection count for dot indicators */
-  connectionCount?: number;
-  /** Selection state */
-  isSelected?: boolean;
-  /** Callbacks */
-  onHover?: (isHovered: boolean) => void;
+  /** Phase state */
+  phase?: PhaseState;
+  /** Relative abundance (0-1) */
+  abundance?: number;
+  /** Entity type/classification */
+  type?: string;
+  /** Click handler */
   onClick?: () => void;
+  /** Card size variant */
+  size?: 'sm' | 'md' | 'lg';
+  /** Show parameter bars */
+  showParameters?: boolean;
+  /** Additional class names */
+  className?: string;
+}
+
+export interface ThreatBarProps {
+  level: ThreatLevel;
+}
+
+export interface ParameterIndicatorProps {
+  label: string;
+  value: number; // 0-1
+  color?: string;
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -62,293 +68,382 @@ export interface EntityCardProps {
 // ═══════════════════════════════════════════════════════════════════
 
 const THREAT_COLORS: Record<ThreatLevel, string> = {
-  Benign: 'var(--threat-benign)',      // Green-ish
-  Cautious: 'var(--threat-cautious)',  // Amber
-  Volatile: 'var(--threat-volatile)',  // Orange
-  Existential: 'var(--threat-existential)', // Red
+  benign: '#5B8A7A',
+  cautious: '#7A7868',
+  volatile: '#C17F59',
+  existential: '#8B5A5A',
+};
+
+const THREAT_LABELS: Record<ThreatLevel, string> = {
+  benign: 'BENIGN',
+  cautious: 'CAUTIOUS',
+  volatile: 'VOLATILE',
+  existential: 'EXISTENTIAL',
+};
+
+const PHASE_LABELS: Record<PhaseState, string> = {
+  visible: 'VISIBLE',
+  glimpsed: 'GLIMPSED',
+  theoretical: 'THEORETICAL',
+  unknown: 'UNKNOWN',
+};
+
+const SIZE_CONFIG = {
+  sm: { width: 280, imageHeight: 350, fontSize: { name: 14, epithet: 11, label: 8 } },
+  md: { width: 380, imageHeight: 475, fontSize: { name: 18, epithet: 13, label: 9 } },
+  lg: { width: 620, imageHeight: 775, fontSize: { name: 24, epithet: 15, label: 10 } },
 };
 
 // ═══════════════════════════════════════════════════════════════════
-// COMPONENT
+// THREAT BAR
+// ═══════════════════════════════════════════════════════════════════
+
+function ThreatBar({ level }: ThreatBarProps) {
+  const segments: ThreatLevel[] = ['benign', 'cautious', 'volatile', 'existential'];
+  const activeIndex = segments.indexOf(level);
+
+  return (
+    <div className="flex items-center gap-1">
+      {segments.map((segment, i) => (
+        <div
+          key={segment}
+          style={{
+            width: 16,
+            height: 4,
+            background: i <= activeIndex 
+              ? THREAT_COLORS[segment]
+              : 'var(--dawn-15, rgba(236, 227, 214, 0.15))',
+          }}
+        />
+      ))}
+      <span
+        style={{
+          fontFamily: 'var(--font-mono, "PT Mono", monospace)',
+          fontSize: 9,
+          letterSpacing: '0.08em',
+          color: THREAT_COLORS[level],
+          marginLeft: 8,
+        }}
+      >
+        {THREAT_LABELS[level]}
+      </span>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PARAMETER INDICATOR
+// ═══════════════════════════════════════════════════════════════════
+
+function ParameterIndicator({ label, value, color }: ParameterIndicatorProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <span
+        style={{
+          fontFamily: 'var(--font-mono, "PT Mono", monospace)',
+          fontSize: 8,
+          letterSpacing: '0.1em',
+          color: 'var(--dawn-40, rgba(236, 227, 214, 0.4))',
+          textTransform: 'uppercase',
+          width: 60,
+        }}
+      >
+        {label}
+      </span>
+      <div
+        style={{
+          width: 40,
+          height: 3,
+          background: 'var(--dawn-08, rgba(236, 227, 214, 0.08))',
+        }}
+      >
+        <div
+          style={{
+            width: `${value * 100}%`,
+            height: '100%',
+            background: color || 'var(--dawn-50, rgba(236, 227, 214, 0.5))',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════
 
 export function EntityCard({
   name,
-  subtitle,
-  type,
+  epithet,
+  image,
   threatLevel,
-  imageUrl,
-  glyphs,
-  coordinates,
-  connectionCount = 0,
-  isSelected = false,
-  onHover,
+  phase = 'visible',
+  abundance,
+  type,
   onClick,
+  size = 'md',
+  showParameters = true,
+  className = '',
 }: EntityCardProps) {
-  // Format coordinate for display (removes leading zero)
-  const formatCoord = (n: number): string => {
-    const sign = n < 0 ? '-' : '';
-    return sign + Math.abs(n).toFixed(3).slice(1);
-  };
-
-  const isExistential = threatLevel === 'Existential';
+  const config = SIZE_CONFIG[size];
 
   return (
-    <article
+    <div
       className={`
-        entity-card group cursor-pointer relative
-        ${isSelected ? 'entity-card--selected' : ''}
+        relative cursor-pointer
+        transition-all duration-300
+        hover:translate-y-[-2px]
+        ${className}
       `}
-      onMouseEnter={() => onHover?.(true)}
-      onMouseLeave={() => onHover?.(false)}
+      style={{
+        width: config.width,
+        background: 'var(--void-surface-0, #0A0908)',
+        border: '1px solid var(--dawn-08, rgba(236, 227, 214, 0.08))',
+      }}
       onClick={onClick}
     >
-      {/* ─── Outer Glow (Hover) ─────────────────────────────────────── */}
+      {/* Image container - 4:5 aspect ratio */}
       <div
-        className="absolute -inset-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
+        className="relative overflow-hidden"
         style={{
-          background: 'radial-gradient(ellipse 60% 70% at 50% 45%, rgba(236, 227, 214, 0.08) 0%, rgba(236, 227, 214, 0.03) 40%, transparent 70%)',
-        }}
-      />
-
-      {/* ─── Main Frame ─────────────────────────────────────────────── */}
-      <div
-        className={`
-          relative w-[200px] overflow-hidden
-          border transition-all duration-250
-          group-hover:translate-y-[-2px]
-          ${isSelected
-            ? 'border-[var(--dawn-50)] shadow-[0_0_0_1px_var(--dawn-15),0_0_30px_rgba(236,227,214,0.1)]'
-            : 'border-[var(--dawn-08)] group-hover:border-[var(--dawn-30)]'
-          }
-          group-hover:shadow-[0_0_0_1px_rgba(236,227,214,0.03),0_20px_50px_-15px_rgba(0,0,0,0.5)]
-        `}
-        style={{
-          background: 'var(--surface-0)',
-          transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)',
+          width: '100%',
+          height: config.imageHeight,
+          background: 'var(--void-base, #050403)',
         }}
       >
-        {/* ─── Corner Accents ─────────────────────────────────────────── */}
-        <div
-          className={`
-            absolute -top-px -left-px w-3 h-3
-            border-t border-l border-[var(--dawn-15)]
-            transition-opacity duration-300
-            ${isSelected ? 'opacity-100 border-[var(--dawn-30)]' : 'opacity-0 group-hover:opacity-100'}
-          `}
-        />
-        <div
-          className={`
-            absolute -bottom-px -right-px w-3 h-3
-            border-b border-r border-[var(--dawn-15)]
-            transition-opacity duration-300
-            ${isSelected ? 'opacity-100 border-[var(--dawn-30)]' : 'opacity-0 group-hover:opacity-100'}
-          `}
-        />
-
-        {/* ─── Image Container ────────────────────────────────────────── */}
-        <div
-          className="relative overflow-hidden"
-          style={{
-            aspectRatio: '3/4',
-            background: 'linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%)',
-          }}
-        >
-          {imageUrl ? (
-            <div className="absolute inset-0">
-              <Image
-                src={imageUrl}
-                alt={name}
-                fill
-                className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                style={{ transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)' }}
-              />
-              {/* Gradient overlay for readability */}
-              <div 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(to bottom, rgba(5, 4, 3, 0.1) 0%, transparent 30%, transparent 50%, rgba(5, 4, 3, 0.4) 80%, rgba(5, 4, 3, 0.85) 100%)',
-                }}
-              />
-            </div>
-          ) : (
-            <div
-              className="absolute inset-0 flex items-center justify-center select-none"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '4rem',
-                color: 'var(--dawn-08)',
-              }}
-            >
-              {type[0]}
-            </div>
-          )}
-
-          {/* ─── Scanlines (Hover) ──────────────────────────────────────── */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        {typeof image === 'string' ? (
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover"
             style={{
-              background: 'repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px)',
+              filter: phase === 'glimpsed' ? 'blur(2px) brightness(0.8)' : 
+                     phase === 'theoretical' ? 'blur(4px) brightness(0.6)' :
+                     phase === 'unknown' ? 'blur(8px) brightness(0.3)' : 'none',
             }}
           />
+        ) : (
+          image
+        )}
 
-          {/* ─── Vertical Glyphs ────────────────────────────────────────── */}
-          {glyphs && (
-            <div
-              className="absolute top-4 right-4 opacity-40 group-hover:opacity-75 transition-opacity duration-300"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '7px',
-                lineHeight: 1.6,
-                color: 'var(--dawn-30)',
-                letterSpacing: '0.1em',
-                writingMode: 'vertical-rl',
-              }}
-            >
-              {glyphs}
-            </div>
-          )}
-
-          {/* ─── Threat Indicator ───────────────────────────────────────── */}
-          <div className="absolute top-4 left-4 flex items-center gap-[5px]">
-            <div
-              className={`
-                w-[5px] h-[5px] rounded-full opacity-80
-                group-hover:scale-[1.2] transition-transform duration-300
-                ${isExistential ? 'animate-pulse' : ''}
-              `}
-              style={{
-                background: THREAT_COLORS[threatLevel],
-                boxShadow: threatLevel === 'Volatile' ? '0 0 8px var(--gold-dim)' : 'none',
-              }}
-              title={threatLevel}
-            />
-            <span
-              className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '6px',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--dawn-30)',
-              }}
-            >
-              {threatLevel}
-            </span>
-          </div>
-
-          {/* ─── Info Overlay ───────────────────────────────────────────── */}
+        {/* Phase overlay for non-visible states */}
+        {phase !== 'visible' && (
           <div
-            className="absolute bottom-0 left-0 right-0"
+            className="absolute inset-0 flex items-center justify-center"
             style={{
-              padding: '10px 14px 14px',
-              background: 'rgba(10, 9, 8, 0.4)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              borderTop: '1px solid rgba(236, 227, 214, 0.1)',
+              background: 'rgba(5, 4, 3, 0.4)',
             }}
           >
-            {/* Name */}
-            <h3
-              className="leading-[1.35] group-hover:text-white transition-colors duration-200"
+            <span
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '10px',
-                fontWeight: 400,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                color: 'var(--dawn)',
+                fontFamily: 'var(--font-mono, "PT Mono", monospace)',
+                fontSize: 10,
+                letterSpacing: '0.15em',
+                color: 'var(--dawn-30, rgba(236, 227, 214, 0.3))',
               }}
             >
-              {name}
-            </h3>
-
-            {/* Subtitle */}
-            {subtitle && (
-              <p
-                className="mt-0.5 opacity-80"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '8px',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: 'var(--dawn-50)',
-                }}
-              >
-                {subtitle}
-              </p>
-            )}
-
-            {/* Meta Row */}
-            {coordinates && (
-              <div
-                className="flex items-center overflow-hidden"
-                style={{
-                  marginTop: '8px',
-                  paddingTop: '8px',
-                  borderTop: '1px solid var(--dawn-08)',
-                  columnGap: '16px',
-                }}
-              >
-                <span
-                  className="shrink-0"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '7px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: 'var(--dawn-30)',
-                  }}
-                >
-                  {type}
-                </span>
-
-                <div
-                  className="flex shrink-0"
-                  style={{
-                    columnGap: '4px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '7px',
-                    letterSpacing: '0.03em',
-                    color: 'var(--dawn-30)',
-                  }}
-                >
-                  {/* Geometry - Gold Diamond */}
-                  <span className="flex items-center gap-px">
-                    <span className="text-[8px] text-[var(--gold)]">◆</span>
-                    <span>{formatCoord(coordinates.geometry)}</span>
-                  </span>
-                  {/* Alterity - Dawn Circle */}
-                  <span className="flex items-center gap-px">
-                    <span className="text-[8px] text-[var(--dawn-50)]">○</span>
-                    <span>{formatCoord(coordinates.alterity)}</span>
-                  </span>
-                  {/* Dynamics - Teal Diamond Outline */}
-                  <span className="flex items-center gap-px">
-                    <span className="text-[8px] text-[var(--cardinal-dynamics)]">◇</span>
-                    <span>{formatCoord(coordinates.dynamics)}</span>
-                  </span>
-                </div>
-              </div>
-            )}
+              {PHASE_LABELS[phase]}
+            </span>
           </div>
+        )}
 
-          {/* ─── Connection Dots ─────────────────────────────────────────── */}
-          {connectionCount > 0 && (
-            <div
-              className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        {/* Type badge */}
+        {type && (
+          <div
+            className="absolute top-3 left-3"
+            style={{
+              padding: '4px 8px',
+              background: 'rgba(5, 4, 3, 0.8)',
+              border: '1px solid var(--dawn-08)',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: 'var(--font-mono, "PT Mono", monospace)',
+                fontSize: 8,
+                letterSpacing: '0.12em',
+                color: 'var(--dawn-50)',
+                textTransform: 'uppercase',
+              }}
             >
-              {Array.from({ length: Math.min(connectionCount, 5) }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-[3px] h-[3px]"
-                  style={{ background: 'var(--dawn-30)', borderRadius: '50%' }}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+              {type}
+            </span>
+          </div>
+        )}
       </div>
-    </article>
+
+      {/* Content area */}
+      <div className="p-4">
+        {/* Name */}
+        <h3
+          style={{
+            fontFamily: 'var(--font-mono, "PT Mono", monospace)',
+            fontSize: config.fontSize.name,
+            fontWeight: 400,
+            letterSpacing: '0.05em',
+            color: 'var(--dawn, #ECE3D6)',
+            textTransform: 'uppercase',
+            margin: 0,
+            marginBottom: epithet ? 4 : 12,
+          }}
+        >
+          {name}
+        </h3>
+
+        {/* Epithet */}
+        {epithet && (
+          <p
+            style={{
+              fontFamily: 'var(--font-sans, "IBM Plex Sans", sans-serif)',
+              fontSize: config.fontSize.epithet,
+              color: 'var(--dawn-50, rgba(236, 227, 214, 0.5))',
+              fontStyle: 'italic',
+              margin: 0,
+              marginBottom: 16,
+              lineHeight: 1.4,
+            }}
+          >
+            {epithet}
+          </p>
+        )}
+
+        {/* Divider */}
+        <div
+          style={{
+            height: 1,
+            background: 'var(--dawn-08)',
+            marginBottom: 12,
+          }}
+        />
+
+        {/* Threat bar */}
+        <ThreatBar level={threatLevel} />
+
+        {/* Additional parameters */}
+        {showParameters && (
+          <div className="mt-3 space-y-2">
+            {abundance !== undefined && (
+              <ParameterIndicator 
+                label="Abundance" 
+                value={abundance} 
+              />
+            )}
+            <ParameterIndicator 
+              label="Phase" 
+              value={phase === 'visible' ? 1 : phase === 'glimpsed' ? 0.6 : phase === 'theoretical' ? 0.3 : 0.1}
+              color="var(--gold-40)"
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// COMPACT VARIANT (for constellation view)
+// ═══════════════════════════════════════════════════════════════════
+
+export interface EntityCardCompactProps {
+  name: string;
+  image: string;
+  threatLevel: ThreatLevel;
+  onClick?: () => void;
+  className?: string;
+}
+
+export function EntityCardCompact({
+  name,
+  image,
+  threatLevel,
+  onClick,
+  className = '',
+}: EntityCardCompactProps) {
+  return (
+    <div
+      className={`
+        relative cursor-pointer
+        transition-all duration-200
+        hover:scale-105
+        ${className}
+      `}
+      style={{
+        width: 120,
+        background: 'var(--void-surface-0, #0A0908)',
+        border: '1px solid var(--dawn-08)',
+      }}
+      onClick={onClick}
+    >
+      <div
+        className="relative"
+        style={{ width: '100%', height: 150 }}
+      >
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="p-2">
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 9,
+            letterSpacing: '0.08em',
+            color: 'var(--dawn)',
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {name}
+        </div>
+        <div
+          className="mt-1 flex gap-0.5"
+        >
+          {(['benign', 'cautious', 'volatile', 'existential'] as ThreatLevel[]).map((level, i) => (
+            <div
+              key={level}
+              style={{
+                width: 8,
+                height: 2,
+                background: i <= ['benign', 'cautious', 'volatile', 'existential'].indexOf(threatLevel)
+                  ? THREAT_COLORS[level]
+                  : 'var(--dawn-15)',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// USAGE EXAMPLE
+// ═══════════════════════════════════════════════════════════════════
+/*
+import { EntityCard, EntityCardCompact } from '@/components/atlas/EntityCard';
+
+// Full card
+<EntityCard
+  name="Spasmodite"
+  epithet="The Twitching, It-That-Startles"
+  image="/entities/spasmodite.png"
+  threatLevel="cautious"
+  phase="visible"
+  abundance={0.7}
+  type="Emergent"
+  onClick={() => openEntityModal('spasmodite')}
+/>
+
+// Compact card for constellation
+<EntityCardCompact
+  name="Spasmodite"
+  image="/entities/spasmodite.png"
+  threatLevel="cautious"
+  onClick={() => selectEntity('spasmodite')}
+/>
+*/

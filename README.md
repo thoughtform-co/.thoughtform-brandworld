@@ -17,7 +17,15 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 │       └── ledger-light.json # Teal accent, paper mode
 ├── particles/
 │   ├── core.js                        # Shared GRID=3 renderer
-│   └── thoughtform-co-3d.md          # 3D scroll-driven particle system docs
+│   ├── STRANGE-ATTRACTORS.md          # Mathematical attractor documentation
+│   └── thoughtform-co-3d.md           # 3D scroll-driven particle system docs
+├── icons/
+│   ├── core/
+│   │   ├── GenerativeSigil.tsx        # Algorithmic particle sigils
+│   │   ├── ParticleIcon.tsx           # Legacy geometric icons
+│   │   └── shapes.ts                  # Shape generators
+│   ├── presets/                       # Domain-specific presets
+│   └── README.md                      # Icon system documentation
 ├── components/
 │   ├── shared/
 │   │   ├── ParticleCanvas.tsx        # Base particle component
@@ -54,6 +62,22 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 - Component: `components/shared/NavigationGrid.tsx`
 - CSS: `components/shared/navigation-grid.css`
 - Platform-agnostic: Change colors, keep structure consistent
+
+**Generative Sigils** — Algorithmic particle clusters for unique visual identities
+- See: `philosophy/GENERATIVE-PATTERNS.md`
+- Component: `icons/core/GenerativeSigil.tsx`
+- 5 pattern types: constellation, scatter, grid, cross, spiral
+- Seeded randomness: Same input → same output
+- Glitch offsets: 1-3px displacements echo brand language
+- Cross-platform: Atlas entities, Astrolabe documents, Ledger categories
+
+**Strange Attractors** — Mathematical chaos systems for domain particle nebulae
+- See: `particles/STRANGE-ATTRACTORS.md`
+- Atlas implementation: `components/atlas/DomainNebulae.md`
+- 8 attractor types: Lorenz, Thomas, Halvorsen, Aizawa, Sprott, Rössler, Dadras, Galaxy
+- Deterministic chaos: Complex but predictable patterns
+- 3D rotation with perspective projection
+- Cross-platform: Domain clusters, category backgrounds, ambient effects
 
 ### Non-Negotiables
 

@@ -1,0 +1,204 @@
+{
+  "name": "Marketing",
+  "version": "1.0.0",
+  "description": "Thoughtform public face - portal invitation, threshold seen from outside",
+  
+  "character": {
+    "short": "Invitation to the portal. Threshold seen from outside.",
+    "extended": "THRESHOLD + NAVIGATION: The public face of Thoughtform. Where other platforms are immersive (you're inside the instrument), Marketing is invitational (you're approaching the portal). The Gateway symbol is literal here—come through.",
+    "mood": "Intrigue and invitation. Wonder at what's possible. The moment before crossing."
+  },
+
+  "anchors": {
+    "primary": ["THRESHOLD", "NAVIGATION"],
+    "secondary": ["LIVING_GEOMETRY", "SIGNAL"],
+    "expression": {
+      "THRESHOLD": "The Gateway as literal portal. Liminal lighting. Edge-glow on key messages. The 'before' state.",
+      "NAVIGATION": "Wayfinding through Thoughtform offerings. Compass metaphor. 'Navigate AI's latent space.'",
+      "LIVING_GEOMETRY": "Scattered symbols gathering into meaning. Particles coalesce on scroll.",
+      "SIGNAL": "Core message emerging from visual noise. Clarity crystallizing."
+    }
+  },
+
+  "resonatesWith": {
+    "strong": [
+      "2001: A Space Odyssey monolith/portal",
+      "Arrival (film) visual language",
+      "Museum exhibition entrances",
+      "Observatory public spaces",
+      "Luxury brand minimal websites",
+      "TED talk stage design"
+    ],
+    "medium": [
+      "Architectural photography (portals, thresholds)",
+      "Book cover design (literary fiction)",
+      "Film title sequences",
+      "High-end product reveals",
+      "Planetarium experiences"
+    ],
+    "translationNotes": "Dramatic but not theatrical. Mysterious but not obscure. The invitation should feel achievable, not intimidating."
+  },
+
+  "modes": {
+    "primary": "dark",
+    "alternate": "light",
+    "note": "Dark mode dominant for drama. Light mode for practical pages (contact, detailed services)."
+  },
+  
+  "colors": {
+    "dark": {
+      "background": "void",
+      "text": "dawn",
+      "accent": "gold",
+      "css": {
+        "--background": "var(--void-base)",
+        "--surface": "var(--void-surface-1)",
+        "--text": "var(--dawn-base)",
+        "--text-muted": "var(--dawn-50)",
+        "--accent": "var(--gold-base)",
+        "--accent-glow": "var(--gold-bright)",
+        "--border": "var(--dawn-08)"
+      }
+    },
+    "light": {
+      "background": "paper",
+      "text": "ink",
+      "accent": "gold",
+      "css": {
+        "--background": "var(--paper-base)",
+        "--surface": "var(--paper-warm)",
+        "--text": "var(--ink-base)",
+        "--text-muted": "var(--ink-50)",
+        "--accent": "var(--gold-base)",
+        "--border": "var(--ink-08)"
+      }
+    }
+  },
+
+  "particles": {
+    "type": "scattered-gathering",
+    "primaryColor": "gold",
+    "secondaryColor": "dawn",
+    "behavior": "Scattered symbols (Greek letters, mathematical notation) that gather toward focal points on scroll",
+    "meaning": "Meaning crystallizing from chaos. The moment before understanding. Particles ARE the latent space becoming visible.",
+    "trailAlpha": 0.12,
+    "count": 200,
+    "symbols": ["π", "Σ", "∂", "Ψ", "φ", "Λ", "δ", "∞", "≈", "⊕"],
+    "anchors": ["LIVING_GEOMETRY", "SIGNAL"],
+    "scrollBehavior": {
+      "trigger": "viewport-enter",
+      "action": "Particles drift toward content blocks as they enter view",
+      "intensity": "Increases as user scrolls deeper"
+    }
+  },
+
+  "typography": {
+    "body": "sans",
+    "headings": "mono",
+    "display": "display",
+    "usage": {
+      "PT Mono": "Navigation, section labels, breadcrumbs, technical credibility markers",
+      "IBM Plex Sans": "Body text, descriptions, longer form content",
+      "PP Neue Montreal": "Hero headlines, major statements (from Brand Story)",
+      "Display fonts": "Large numbers, dramatic statistics"
+    }
+  },
+
+  "components": {
+    "primary": [
+      "NavigationGrid",
+      "ManifestoSection",
+      "ServiceCard",
+      "ParticleCanvas",
+      "Gateway"
+    ],
+    "patterns": {
+      "ManifestoSection": {
+        "anchor": "THRESHOLD",
+        "meaning": "Core message delivery. Portal-framed content blocks.",
+        "structure": "Label → Headline → Body → CTA"
+      },
+      "Gateway": {
+        "anchor": "THRESHOLD",
+        "meaning": "The brandmark rendered large. Literal portal imagery.",
+        "usage": "Hero sections, major transitions"
+      },
+      "ServiceCard": {
+        "anchor": "NAVIGATION",
+        "meaning": "Wayfinding to offerings. Each card is a direction."
+      },
+      "SignalIndicator": {
+        "anchor": "SIGNAL",
+        "meaning": "SIGNAL 74% - connection strength to latent space. Playful mystery."
+      }
+    }
+  },
+
+  "layout": {
+    "style": "scroll-narrative",
+    "features": [
+      "navigation-grid-frame",
+      "full-viewport-sections",
+      "scroll-triggered-reveals",
+      "particle-backgrounds"
+    ],
+    "zones": {
+      "topLeft": "THOUGHTFORM / current page",
+      "topCenter": "Primary navigation",
+      "topRight": "SIGNAL indicator (playful)",
+      "bottomLeft": "Semantic coordinates (playful)",
+      "bottomRight": "LANDMARK: current section"
+    },
+    "sections": {
+      "hero": "Full viewport, Gateway imagery, core statement",
+      "manifesto": "The 'AI isn't software' message",
+      "services": "What Thoughtform offers",
+      "about": "The Navigator, credentials",
+      "contact": "Cross the threshold"
+    }
+  },
+
+  "motion": {
+    "character": "Dramatic timing. Scroll-triggered reveals. Building intensity.",
+    "easing": "instrument",
+    "timing": "dramatic",
+    "particleSpeed": "variable",
+    "transitions": "Theatrical but not cheesy. The reveal matters.",
+    "scroll": {
+      "parallax": "Subtle depth layers",
+      "reveals": "Fade-up with slight translation",
+      "stagger": "80ms between sequential elements"
+    }
+  },
+
+  "copywriting": {
+    "tone": "Confident, not arrogant. Mysterious, not obscure. Inviting, not selling.",
+    "headlines": {
+      "structure": "Statement, not question. Bold claim.",
+      "examples": [
+        "AI ISN'T SOFTWARE",
+        "INTUITION IS THE INTERFACE",
+        "NAVIGATE THE LATENT SPACE"
+      ]
+    },
+    "body": {
+      "structure": "Short paragraphs. One idea per block. Build to insight.",
+      "avoid": "Jargon without payoff. Empty superlatives. Generic AI hype."
+    }
+  },
+
+  "glitch": {
+    "defaultLevel": 0,
+    "scrollAccent": 1,
+    "hover": 2,
+    "loading": 2,
+    "note": "Use glitch sparingly for emphasis. Not ambient."
+  },
+
+  "ctrlCreepQuote": {
+    "text": "LLMs will never know light, fire, warmth, sprained wrist, the smell of bread; but neither do we feel wordslip, letter-sparkling, alliteration fugue, the numb wrongness of leaping to a distant conceptspace.",
+    "usage": "Featured quote. Embodies the THRESHOLD anchor perfectly.",
+    "styling": "Italicized, generous line-height, muted gold accent on attribution"
+  }
+}
+

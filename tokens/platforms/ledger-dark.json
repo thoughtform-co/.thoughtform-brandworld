@@ -1,38 +1,155 @@
 {
   "name": "Ledger Dark",
-  "description": "Financial terminal - Blade Runner corporate tech, night shift",
+  "version": "2.0.0",
+  "description": "Financial terminal - Blade Runner corporate tech, night shift data analysis",
+  
+  "character": {
+    "short": "Green phosphor screens in dim offices. Money flows as particle streams.",
+    "extended": "INSTRUMENT + SIGNAL: Late capitalism's control room. Finding pattern in the endless stream. The night shift analyst watching transactions flow like weather systems. Terminal warmth in corporate cold.",
+    "mood": "Focused vigilance. Pattern recognition trance. The satisfaction of signal emerging from noise."
+  },
+
+  "anchors": {
+    "primary": ["INSTRUMENT", "SIGNAL"],
+    "secondary": ["NAVIGATION", "GRADIENT"],
+    "expression": {
+      "INSTRUMENT": "The terminal itself. Dashboard as control surface. Dense data displays.",
+      "SIGNAL": "Spending patterns emerging from transaction noise. CRT aesthetic, scan lines. Verde glow as signal indicator.",
+      "NAVIGATION": "Era detection, trajectory projection. Finding position in financial topology.",
+      "GRADIENT": "Risk spectrums, alignment percentages, confidence intervals."
+    }
+  },
+
+  "resonatesWith": {
+    "strong": [
+      "Blade Runner corporate terminals",
+      "Bloomberg Terminal interfaces",
+      "1980s CRT monitors with green phosphor",
+      "Stock trading floor screens",
+      "Air traffic control radar",
+      "Hospital monitoring equipment"
+    ],
+    "medium": [
+      "Submarine sonar displays",
+      "Oscilloscopes and waveform monitors",
+      "Mainframe computer interfaces",
+      "Hacker movie terminals",
+      "Night vision displays"
+    ],
+    "translationNotes": "Verde/green is the signal emerging. Warm blacks, not cold. The operator is vigilant, not frantic. Data has rhythm."
+  },
+
   "mode": "dark",
-  "character": "Green phosphor screens in dim offices. Money flows as particle streams.",
-
-  "background": "void",
-  "text": "dawn",
-  "accent": "verde",
-
-  "css": {
-    "--background": "var(--void)",
-    "--surface": "var(--surface-0)",
-    "--text": "var(--dawn)",
-    "--text-muted": "var(--dawn-50)",
-    "--accent": "var(--verde)",
-    "--accent-glow": "var(--verde-glow)",
-    "--border": "var(--dawn-08)"
+  
+  "colors": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "verde",
+    "css": {
+      "--background": "var(--void-base)",
+      "--surface": "var(--void-surface-0)",
+      "--text": "var(--dawn-base)",
+      "--text-muted": "var(--dawn-50)",
+      "--accent": "var(--verde-bright)",
+      "--accent-dim": "var(--verde-base)",
+      "--accent-glow": "var(--verde-glow)",
+      "--border": "var(--dawn-08)"
+    }
   },
 
   "particles": {
     "type": "horizontal-flow",
-    "primaryColor": "VERDE_GLOW",
-    "behavior": "Flow left-to-right like money movement",
+    "primaryColor": "verde-glow",
+    "behavior": "Flow left-to-right like money movement, with trails",
+    "meaning": "Transactions flowing through the system. Horizontal motion = time progression. Density = activity level. Particles ARE the money moving.",
     "trailAlpha": 0.05,
-    "scanlines": true
+    "count": 120,
+    "scanlines": true,
+    "anchors": ["SIGNAL", "NAVIGATION"]
   },
 
   "typography": {
     "body": "body",
-    "headings": "mono"
+    "headings": "mono",
+    "data": "mono",
+    "usage": {
+      "PT Mono": "Section headers, labels, navigation",
+      "IBM Plex Mono": "Body text, data values, transaction details. Dense, terminal-like."
+    },
+    "note": "Ledger uses IBM Plex Mono for body (not Sans) to maintain terminal character throughout."
+  },
+
+  "components": {
+    "primary": [
+      "Dashboard",
+      "SpendingTopology",
+      "EraDetector",
+      "ParticleCanvas",
+      "NavigationGrid"
+    ],
+    "patterns": {
+      "SpendingTopology": {
+        "anchor": "LIVING_GEOMETRY",
+        "meaning": "Spending clusters as organic formations. Money has shape."
+      },
+      "EraDetector": {
+        "anchor": "SIGNAL",
+        "meaning": "Pattern recognition across time. Detecting when financial 'weather' changes."
+      },
+      "DriftMonitor": {
+        "anchor": "GRADIENT",
+        "meaning": "Stated intentions vs. revealed patterns. The gap as continuous measurement."
+      }
+    }
   },
 
   "layout": {
     "style": "dashboard-full-bleed",
-    "features": ["scanline-effects", "status-lights", "dense-data"]
+    "features": [
+      "scanline-effects",
+      "status-lights",
+      "dense-data",
+      "navigation-grid-frame"
+    ],
+    "zones": {
+      "topLeft": "LEDGER / current view",
+      "topCenter": "Time range selector",
+      "topRight": "Status indicators, sync state",
+      "bottomLeft": "Current filter, aggregation level",
+      "bottomRight": "Data freshness, connection status"
+    }
+  },
+
+  "effects": {
+    "scanlines": {
+      "enabled": true,
+      "opacity": 0.03,
+      "gap": 2
+    },
+    "phosphorGlow": {
+      "enabled": true,
+      "color": "verde-glow",
+      "blur": "8px"
+    },
+    "crtCurvature": {
+      "enabled": false,
+      "note": "Optional subtle vignette at edges"
+    }
+  },
+
+  "motion": {
+    "character": "Data flow rhythm. Scan line cadence. Continuous but not frantic.",
+    "easing": "linear",
+    "timing": "standard",
+    "particleSpeed": "medium-fast",
+    "transitions": "Scan-line reveals. Data streams in horizontally."
+  },
+
+  "glitch": {
+    "defaultLevel": 2,
+    "loading": 2,
+    "anomaly": 3,
+    "error": 4,
+    "note": "Scanlines always present. Glitch level 2 is baseline, not exception."
   }
 }

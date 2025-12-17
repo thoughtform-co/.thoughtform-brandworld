@@ -1,60 +1,146 @@
 {
   "name": "Ledger Light",
-  "description": "Financial blueprint station - NASA mission planning, morning shift",
+  "version": "2.0.0",
+  "description": "Financial topology - blueprint mode, hopeful technical green, daytime analysis",
+  
+  "character": {
+    "short": "Blueprint precision. Hopeful green on warm paper. The architect's working view.",
+    "extended": "INSTRUMENT + GRADIENT: Daytime counterpart to Ledger Dark. Where Dark is vigilance, Light is planning. Where Dark finds pattern in noise, Light designs the structure. Technical drawing aesthetic with warmth.",
+    "mood": "Constructive focus. Planning mode. The clarity of daylight analysis."
+  },
+
+  "anchors": {
+    "primary": ["INSTRUMENT", "GRADIENT"],
+    "secondary": ["NAVIGATION", "LIVING_GEOMETRY"],
+    "expression": {
+      "INSTRUMENT": "Blueprint as analytical tool. Clean measurement, clear structure.",
+      "GRADIENT": "Budget spectrums, goal progress, health indicators. Planning is gradient work.",
+      "NAVIGATION": "Financial roadmap. Where am I, where am I going.",
+      "LIVING_GEOMETRY": "Spending clusters breathing gently. Topology still lives, but calmer."
+    }
+  },
+
+  "resonatesWith": {
+    "strong": [
+      "Architectural blueprints",
+      "Technical drawings and schematics",
+      "Isometric grid paper",
+      "Engineering diagrams",
+      "Medical chart interfaces",
+      "White-label financial dashboards"
+    ],
+    "medium": [
+      "Apple Health-style visualizations",
+      "Mint/budgeting app interfaces",
+      "Academic paper figures",
+      "Scientific visualization (light mode)"
+    ],
+    "translationNotes": "Clean but not sterile. Warm paper, not pure white. Teal is hopeful, not clinical. The planner is optimistic."
+  },
+
   "mode": "light",
-  "character": "Engineering drawings on warm paper. Scientific instruments with teal markers.",
-
-  "background": "paper",
-  "text": "ink",
-  "accent": "teal",
-  "alert": "signal",
-  "secondary": "gold",
-
-  "css": {
-    "--background": "var(--paper)",
-    "--surface": "var(--paper-light)",
-    "--text": "var(--ink)",
-    "--text-muted": "var(--ink-50)",
-    "--accent": "var(--teal)",
-    "--accent-bright": "var(--teal-bright)",
-    "--alert": "var(--signal)",
-    "--border": "var(--ink-12)"
+  
+  "colors": {
+    "background": "paper",
+    "text": "ink",
+    "accent": "teal",
+    "css": {
+      "--background": "var(--paper-base)",
+      "--surface": "var(--paper-light)",
+      "--text": "var(--ink-base)",
+      "--text-muted": "var(--ink-50)",
+      "--accent": "var(--teal-base)",
+      "--accent-dim": "var(--teal-30)",
+      "--accent-bright": "var(--teal-bright)",
+      "--border": "var(--ink-08)"
+    }
   },
 
   "particles": {
     "type": "clustered-topology",
-    "primaryColor": "TEAL",
-    "secondaryColor": "GOLD",
-    "alertColor": "SIGNAL",
-    "behavior": "Clustered breathing - semantic expense clusters connected by flow lines",
+    "primaryColor": "teal",
+    "behavior": "Breathing clusters with gentle orbital motion. Connected by faint lines.",
+    "meaning": "Spending categories as living clusters. Connections show relationships. Breathing rhythm is slower, more contemplative than Dark mode.",
     "trailAlpha": 0.08,
-    "halos": true
+    "count": 100,
+    "anchors": ["LIVING_GEOMETRY", "GRADIENT"]
   },
 
   "typography": {
-    "body": "body",
+    "body": "sans",
     "headings": "mono",
-    "display": "display"
-  },
-
-  "layout": {
-    "style": "wireframe-boxes",
-    "features": ["corner-brackets", "diamond-markers", "blueprint-grid", "targeting-reticle"]
+    "data": "mono",
+    "usage": {
+      "PT Mono": "Section headers, labels, data values",
+      "IBM Plex Sans": "Body text, descriptions. Lighter mode uses Sans for readability."
+    },
+    "note": "Light mode shifts body to Sans for better daylight readability."
   },
 
   "components": {
-    "wireframeBox": {
-      "border": "1px solid var(--ink-12)",
-      "background": "var(--paper-light)",
-      "cornerBrackets": true
-    },
-    "marker": {
-      "shape": "rotated-square",
-      "size": "8px"
-    },
-    "gridOverlay": {
-      "size": "80px",
-      "color": "var(--ink-05)"
+    "primary": [
+      "Dashboard",
+      "BudgetPlanner",
+      "GoalTracker",
+      "ParticleCanvas"
+    ],
+    "patterns": {
+      "BudgetPlanner": {
+        "anchor": "NAVIGATION",
+        "meaning": "Roadmap view. Where resources should flow."
+      },
+      "GoalTracker": {
+        "anchor": "GRADIENT",
+        "meaning": "Progress as continuous spectrum. Never pass/fail binary."
+      },
+      "ClusterView": {
+        "anchor": "LIVING_GEOMETRY",
+        "meaning": "Spending topology rendered in blueprint style."
+      }
     }
+  },
+
+  "layout": {
+    "style": "dashboard-structured",
+    "features": [
+      "grid-lines",
+      "clean-panels",
+      "generous-whitespace"
+    ],
+    "zones": {
+      "topLeft": "LEDGER / current view",
+      "topCenter": "Time range selector",
+      "topRight": "Sync status (subtle)",
+      "bottomLeft": "Current filter",
+      "bottomRight": "Last updated"
+    },
+    "note": "Navigation grid optional in light mode. Can feel too heavy."
+  },
+
+  "effects": {
+    "scanlines": {
+      "enabled": false,
+      "note": "No scanlines in light mode"
+    },
+    "gridLines": {
+      "enabled": true,
+      "color": "ink-05",
+      "style": "Subtle blueprint grid in background"
+    }
+  },
+
+  "motion": {
+    "character": "Gentle, contemplative. Slower breathing than Dark mode.",
+    "easing": "smooth",
+    "timing": "deliberate",
+    "particleSpeed": "slow",
+    "transitions": "Soft fades. Nothing abrupt."
+  },
+
+  "glitch": {
+    "defaultLevel": 0,
+    "loading": 1,
+    "error": 2,
+    "note": "Minimal glitch in light mode. Clean, precise, planning-focused."
   }
 }

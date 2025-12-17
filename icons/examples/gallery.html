@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoughtform Particle Icons — Geometric Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #0a0908;
+      --dawn: #ECE3D6;
+      --dawn-50: rgba(236, 227, 214, 0.5);
+      --dawn-30: rgba(236, 227, 214, 0.3);
+      --dawn-10: rgba(236, 227, 214, 0.1);
+      --gold: rgb(202, 165, 84);
+      --silver: rgb(180, 200, 200);
+      --blue-white: rgb(184, 196, 208);
+      --amber: rgb(139, 115, 85);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--void);
+      color: var(--dawn);
+      font-family: 'PT Mono', monospace;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dawn-50);
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dawn-30);
+      margin: 40px 0 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--dawn-10);
+    }
+
+    .description {
+      font-size: 11px;
+      color: var(--dawn-30);
+      margin-bottom: 20px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 24px;
+    }
+
+    .icon-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      border: 1px solid var(--dawn-10);
+      transition: border-color 0.2s;
+    }
+
+    .icon-card:hover {
+      border-color: var(--dawn-30);
+    }
+
+    .icon-canvas {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-label {
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dawn-30);
+      text-align: center;
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .equation {
+      font-size: 9px;
+      color: var(--dawn-30);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Thoughtform Particle Icons — Geometric System</h1>
+  
+  <p class="description">
+    Three-layer sigil system: Domain (base polygon) + Role (structural modifier) + Orbital (entity variation).
+    All shapes snap to a 3px grid for crisp pixel rendering.
+  </p>
+
+  <h2>Layer 1 — Domain Shapes</h2>
+  <p class="description">Each domain has a unique base polygon representing its essence.</p>
+  <div class="grid" id="domains"></div>
+
+  <h2>Layer 2 — Role Modifiers</h2>
+  <p class="description">Structural overlays that indicate entity function within a domain.</p>
+  <div class="grid" id="modifiers"></div>
+
+  <h2>Layer 3 — Orbital Elements</h2>
+  <p class="description">Surrounding points for entity-specific variation.</p>
+  <div class="grid" id="orbitals"></div>
+
+  <h2>Combined Entity Glyphs</h2>
+  <p class="description">All three layers combined to create unique entity identifiers.</p>
+  <div class="grid" id="glyphs"></div>
+
+  <script>
+    const GRID = 3;
+
+    // Colors
+    const COLORS = {
+      'Starhaven Reaches': { r: 202, g: 165, b: 84 },
+      'The Gradient Throne': { r: 180, g: 200, b: 200 },
+      'The Lattice': { r: 184, g: 196, b: 208 },
+      'The Threshold': { r: 139, g: 115, b: 85 },
+      'default': { r: 236, g: 227, b: 214 },
+    };
+
+    // Interpolate edges
+    function interpolateEdges(vertices, pointsPerEdge) {
+      const points = [];
+      for (let i = 0; i < vertices.length; i++) {
+        const start = vertices[i];
+        const end = vertices[(i + 1) % vertices.length];
+        for (let j = 1; j <= pointsPerEdge; j++) {
+          const t = j / (pointsPerEdge + 1);
+          points.push({
+            x: start.x + (end.x - start.x) * t,
+            y: start.y + (end.y - start.y) * t,
+            alpha: 0.7,
+          });
+        }
+      }
+      return points;
+    }
+
+    // Domain shapes
+    function trianglePoints(radius = 12) {
+      const vertices = [];
+      for (let i = 0; i < 3; i++) {
+        const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
+        vertices.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 1.0 });
+      }
+      return [...vertices, ...interpolateEdges(vertices, 4)];
+    }
+
+    function squarePoints(radius = 12) {
+      const vertices = [];
+      const offset = Math.PI / 4;
+      for (let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2 + offset;
+        vertices.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 1.0 });
+      }
+      return [...vertices, ...interpolateEdges(vertices, 3)];
+    }
+
+    function pentagonPoints(radius = 12) {
+      const vertices = [];
+      for (let i = 0; i < 5; i++) {
+        const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+        vertices.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 1.0 });
+      }
+      return [...vertices, ...interpolateEdges(vertices, 3)];
+    }
+
+    function hexagonPoints(radius = 12) {
+      const vertices = [];
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        vertices.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 1.0 });
+      }
+      return [...vertices, ...interpolateEdges(vertices, 2)];
+    }
+
+    // Role modifiers
+    function centerDot() {
+      return [{ x: 0, y: 0, alpha: 1.0 }];
+    }
+
+    function innerRing(radius = 5) {
+      const points = [];
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        points.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 0.6 });
+      }
+      return points;
+    }
+
+    function crossAxis(size = 8) {
+      const points = [];
+      for (let i = -size; i <= size; i += GRID) {
+        if (i !== 0) {
+          points.push({ x: i, y: 0, alpha: 0.7 });
+          points.push({ x: 0, y: i, alpha: 0.7 });
+        }
+      }
+      return points;
+    }
+
+    function diagonalAxis(size = 8) {
+      const points = [];
+      for (let i = -size; i <= size; i += GRID) {
+        if (i !== 0) {
+          points.push({ x: i, y: i, alpha: 0.7 });
+          points.push({ x: i, y: -i, alpha: 0.7 });
+        }
+      }
+      return points;
+    }
+
+    function cornerMarks(radius = 10) {
+      const points = [];
+      for (let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2 - Math.PI / 2;
+        points.push({ x: Math.cos(angle) * radius * 0.6, y: Math.sin(angle) * radius * 0.6, alpha: 0.8 });
+      }
+      return points;
+    }
+
+    function edgeMidpoints(radius = 10) {
+      const points = [];
+      const offset = Math.PI / 4;
+      for (let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2 + offset;
+        points.push({ x: Math.cos(angle) * radius * 0.7, y: Math.sin(angle) * radius * 0.7, alpha: 0.8 });
+      }
+      return points;
+    }
+
+    function bracketCorners(size = 10) {
+      const points = [];
+      const len = 4;
+      [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([dx, dy]) => {
+        const cx = dx * size * 0.8;
+        const cy = dy * size * 0.8;
+        points.push({ x: cx, y: cy, alpha: 0.9 });
+        points.push({ x: cx - dx * len, y: cy, alpha: 0.9 });
+        points.push({ x: cx, y: cy - dy * len, alpha: 0.9 });
+      });
+      return points;
+    }
+
+    // Orbital elements
+    function orbitalDots(radius = 14, count = 3, offset = 0) {
+      const points = [];
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2 + offset;
+        points.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, alpha: 0.5 });
+      }
+      return points;
+    }
+
+    function radialSpokes(innerRadius = 10, outerRadius = 14, count = 4) {
+      const points = [];
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        points.push({ x: Math.cos(angle) * innerRadius, y: Math.sin(angle) * innerRadius, alpha: 0.6 });
+        points.push({ x: Math.cos(angle) * outerRadius, y: Math.sin(angle) * outerRadius, alpha: 0.4 });
+      }
+      return points;
+    }
+
+    // Draw function
+    function drawIcon(canvas, points, color, size = 48) {
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+      canvas.style.width = size + 'px';
+      canvas.style.height = size + 'px';
+      ctx.scale(dpr, dpr);
+      
+      ctx.fillStyle = '#0a0908';
+      ctx.fillRect(0, 0, size, size);
+      
+      const center = size / 2;
+      points.forEach(p => {
+        const px = Math.floor((p.x + center) / GRID) * GRID;
+        const py = Math.floor((p.y + center) / GRID) * GRID;
+        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${p.alpha})`;
+        ctx.fillRect(px, py, GRID - 1, GRID - 1);
+      });
+    }
+
+    // Domain shapes
+    const domains = [
+      { name: 'Starhaven Reaches', shape: () => trianglePoints(18), type: 'TRIANGLE' },
+      { name: 'The Gradient Throne', shape: () => squarePoints(18), type: 'DIAMOND' },
+      { name: 'The Lattice', shape: () => pentagonPoints(18), type: 'PENTAGON' },
+      { name: 'The Threshold', shape: () => hexagonPoints(18), type: 'HEXAGON' },
+    ];
+
+    const domainsGrid = document.getElementById('domains');
+    domains.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'icon-card';
+      
+      const canvasDiv = document.createElement('div');
+      canvasDiv.className = 'icon-canvas';
+      const canvas = document.createElement('canvas');
+      drawIcon(canvas, d.shape(), COLORS[d.name], 48);
+      canvasDiv.appendChild(canvas);
+      
+      const label = document.createElement('div');
+      label.className = 'icon-label';
+      label.textContent = d.name;
+      
+      const eq = document.createElement('div');
+      eq.className = 'equation';
+      eq.textContent = d.type;
+      
+      card.appendChild(canvasDiv);
+      card.appendChild(label);
+      card.appendChild(eq);
+      domainsGrid.appendChild(card);
+    });
+
+    // Modifiers
+    const modifiers = [
+      { name: 'CENTER', shape: () => [...squarePoints(14), ...centerDot()], role: 'Herald' },
+      { name: 'INNER-RING', shape: () => [...squarePoints(14), ...innerRing(5)], role: 'Keeper' },
+      { name: 'CROSS', shape: () => [...squarePoints(14), ...crossAxis(7)], role: 'Weaver' },
+      { name: 'DIAGONAL', shape: () => [...squarePoints(14), ...diagonalAxis(7)], role: 'Voidwalker' },
+      { name: 'CORNERS', shape: () => [...squarePoints(14), ...cornerMarks(10)], role: 'Seeker' },
+      { name: 'EDGES', shape: () => [...squarePoints(14), ...edgeMidpoints(10)], role: 'Signal-Speaker' },
+      { name: 'BRACKETS', shape: () => [...squarePoints(14), ...bracketCorners(10)], role: 'Architect' },
+    ];
+
+    const modifiersGrid = document.getElementById('modifiers');
+    modifiers.forEach(m => {
+      const card = document.createElement('div');
+      card.className = 'icon-card';
+      
+      const canvasDiv = document.createElement('div');
+      canvasDiv.className = 'icon-canvas';
+      const canvas = document.createElement('canvas');
+      drawIcon(canvas, m.shape(), COLORS['default'], 48);
+      canvasDiv.appendChild(canvas);
+      
+      const label = document.createElement('div');
+      label.className = 'icon-label';
+      label.textContent = m.name;
+      
+      const eq = document.createElement('div');
+      eq.className = 'equation';
+      eq.textContent = m.role;
+      
+      card.appendChild(canvasDiv);
+      card.appendChild(label);
+      card.appendChild(eq);
+      modifiersGrid.appendChild(card);
+    });
+
+    // Orbitals
+    const orbitals = [
+      { name: 'DOTS-3', shape: () => [...trianglePoints(12), ...orbitalDots(16, 3)] },
+      { name: 'DOTS-4', shape: () => [...trianglePoints(12), ...orbitalDots(16, 4, Math.PI/4)] },
+      { name: 'DOTS-6', shape: () => [...trianglePoints(12), ...orbitalDots(16, 6)] },
+      { name: 'SPOKES', shape: () => [...trianglePoints(12), ...radialSpokes(10, 16, 4)] },
+    ];
+
+    const orbitalsGrid = document.getElementById('orbitals');
+    orbitals.forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'icon-card';
+      
+      const canvasDiv = document.createElement('div');
+      canvasDiv.className = 'icon-canvas';
+      const canvas = document.createElement('canvas');
+      drawIcon(canvas, o.shape(), COLORS['Starhaven Reaches'], 48);
+      canvasDiv.appendChild(canvas);
+      
+      const label = document.createElement('div');
+      label.className = 'icon-label';
+      label.textContent = o.name;
+      
+      card.appendChild(canvasDiv);
+      card.appendChild(label);
+      orbitalsGrid.appendChild(card);
+    });
+
+    // Combined glyphs
+    const glyphs = [
+      { domain: 'Starhaven Reaches', role: 'Herald', 
+        shape: () => [...trianglePoints(14), ...centerDot(), ...orbitalDots(16, 3)] },
+      { domain: 'Starhaven Reaches', role: 'Architect', 
+        shape: () => [...trianglePoints(14), ...bracketCorners(10), ...orbitalDots(16, 4, Math.PI/4)] },
+      { domain: 'The Gradient Throne', role: 'Keeper', 
+        shape: () => [...squarePoints(14), ...innerRing(5)] },
+      { domain: 'The Gradient Throne', role: 'Weaver', 
+        shape: () => [...squarePoints(14), ...crossAxis(7)] },
+      { domain: 'The Lattice', role: 'Voidwalker', 
+        shape: () => [...pentagonPoints(14), ...diagonalAxis(7), ...orbitalDots(16, 4, Math.PI/4)] },
+      { domain: 'The Threshold', role: 'Wanderer', 
+        shape: () => [...hexagonPoints(14), ...cornerMarks(10)] },
+    ];
+
+    const glyphsGrid = document.getElementById('glyphs');
+    glyphs.forEach(g => {
+      const card = document.createElement('div');
+      card.className = 'icon-card';
+      
+      const canvasDiv = document.createElement('div');
+      canvasDiv.className = 'icon-canvas';
+      const canvas = document.createElement('canvas');
+      drawIcon(canvas, g.shape(), COLORS[g.domain], 48);
+      canvasDiv.appendChild(canvas);
+      
+      const label = document.createElement('div');
+      label.className = 'icon-label';
+      label.textContent = `${g.role}`;
+      
+      const sublabel = document.createElement('div');
+      sublabel.className = 'equation';
+      sublabel.textContent = g.domain.split(' ')[0];
+      
+      card.appendChild(canvasDiv);
+      card.appendChild(label);
+      card.appendChild(sublabel);
+      glyphsGrid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

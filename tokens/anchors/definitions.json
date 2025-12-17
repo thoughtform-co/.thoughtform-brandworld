@@ -1,0 +1,192 @@
+{
+  "name": "Thoughtform Semantic Anchors",
+  "version": "1.0.0",
+  "description": "The six conceptual anchors that define Thoughtform's semantic territory. Any expression inhabiting these anchors is 'Thoughtform' regardless of surface appearance.",
+  
+  "anchors": {
+    "NAVIGATION": {
+      "meaning": "Finding position and direction in unmappable space. Wayfinding when maps don't exist. Human agency facing overwhelming possibility.",
+      "resonatesWith": [
+        "Astrolabes, sextants, compasses",
+        "Star charts, celestial navigation",
+        "Radar screens, sonar displays",
+        "GPS and positioning systems",
+        "Mission control interfaces",
+        "Trail markers, breadcrumbs"
+      ],
+      "expressions": [
+        "Coordinate systems and grids",
+        "Position indicators (YOU ARE HERE)",
+        "Directional elements, trajectories",
+        "Cardinal axes, orientation markers",
+        "Path visualization",
+        "Semantic positioning of documents/entities"
+      ],
+      "tensions": {
+        "poles": ["known", "unknown"],
+        "secondary": ["precision", "uncertainty"],
+        "tertiary": ["destination", "exploration"]
+      },
+      "colorAffinity": "gold",
+      "note": "The founding anchor. Thoughtform exists to help humans navigate AI's semantic space."
+    },
+
+    "THRESHOLD": {
+      "meaning": "The boundary between comprehensible and alien. Liminal space where familiar becomes strange. Portals, gates, the edge of understanding.",
+      "resonatesWith": [
+        "Black holes, event horizons",
+        "Doorways, arches, portals",
+        "Dawn/dusk, twilight states",
+        "Borders and boundaries",
+        "The moment before understanding",
+        "Encryption/decryption moments"
+      ],
+      "expressions": [
+        "Circular portal forms (the Gateway)",
+        "Edge glow, liminal lighting",
+        "Gradient transitions known→unknown",
+        "Boundary lines suggesting beyond",
+        "Loading/processing states",
+        "Entity phase states (visible/glimpsed/theoretical)"
+      ],
+      "tensions": {
+        "poles": ["inside", "outside"],
+        "secondary": ["safe", "dangerous"],
+        "tertiary": ["human", "alien"]
+      },
+      "colorAffinity": "dawn",
+      "note": "The Gateway symbol embodies this anchor. Thoughtform lives at the threshold between human and machine intelligence."
+    },
+
+    "INSTRUMENT": {
+      "meaning": "Tools extending human perception into domains we can't directly sense. Apparatus making invisible visible. Technology as cognitive prosthetic.",
+      "resonatesWith": [
+        "Oscilloscopes, spectrum analyzers",
+        "Microscopes, telescopes",
+        "Medical imaging (MRI, ultrasound)",
+        "Scientific instruments",
+        "Control panels, dashboards",
+        "Viewfinders, targeting systems"
+      ],
+      "expressions": [
+        "Readout displays with precise data",
+        "Instrument panel layouts",
+        "Measurement indicators, calibration marks",
+        "Technical labels and annotations",
+        "Status lights and indicators",
+        "The Navigation Grid frame"
+      ],
+      "tensions": {
+        "poles": ["human", "machine"],
+        "secondary": ["intuition", "measurement"],
+        "tertiary": ["operator", "system"]
+      },
+      "colorAffinity": "gold",
+      "note": "Astrolabe IS an instrument. The InstrumentPanel component embodies this anchor."
+    },
+
+    "LIVING_GEOMETRY": {
+      "meaning": "Mathematical structure that behaves organically. Data as organism. The uncanny moment abstract becomes alive. Computation with breath.",
+      "resonatesWith": [
+        "Lissajous curves, waveforms",
+        "Particle systems, flocking behavior",
+        "Neural network visualizations",
+        "Fractals, emergent patterns",
+        "Bioluminescence",
+        "Breathing, pulsing rhythms"
+      ],
+      "expressions": [
+        "Particles that flow and breathe",
+        "Organic motion in geometric space",
+        "Math visualization with warmth",
+        "Data clusters as organisms",
+        "Pulsing, breathing animations",
+        "The particle system itself"
+      ],
+      "tensions": {
+        "poles": ["order", "chaos"],
+        "secondary": ["mechanical", "organic"],
+        "tertiary": ["static", "alive"]
+      },
+      "colorAffinity": "gold",
+      "note": "The particle system is the primary expression. Entities in Atlas ARE living geometry."
+    },
+
+    "GRADIENT": {
+      "meaning": "Continuum rather than binary. Intelligence, understanding, and states exist on spectrums. The refusal of false dichotomies. Everything is 'how much,' not 'whether.'",
+      "resonatesWith": [
+        "Color spectrums, temperature scales",
+        "Evolutionary trees, skill progressions",
+        "Threat levels, confidence intervals",
+        "Phase transitions",
+        "Dimmer switches vs on/off",
+        "Michael Levin's intelligence continuum"
+      ],
+      "expressions": [
+        "Sliders instead of toggles",
+        "Spectrum visualizations",
+        "Graduated scales, intensity variations",
+        "Continuum positioning",
+        "Cardinal Field percentages",
+        "Threat level gradients (benign→existential)"
+      ],
+      "tensions": {
+        "poles": ["discrete", "continuous"],
+        "secondary": ["categories", "spectrums"],
+        "tertiary": ["certain", "probabilistic"]
+      },
+      "colorAffinity": "cardinal",
+      "note": "Levin's insight that intelligence is a gradient validates this anchor philosophically."
+    },
+
+    "SIGNAL": {
+      "meaning": "Information emerging from noise. Pattern recognition at perception's edge. The moment data becomes meaning. Encrypted truth revealing itself.",
+      "resonatesWith": [
+        "Radio static resolving to voice",
+        "Encrypted/decrypted messages",
+        "Glitch revealing underlying structure",
+        "Pattern emerging from noise",
+        "Archaeological discovery",
+        "Semantic Resonance finding connections"
+      ],
+      "expressions": [
+        "Glitch effects (controlled)",
+        "Static/noise textures, scan lines",
+        "Data corruption aesthetics",
+        "Reveal animations, decryption sequences",
+        "CRT phosphor glow",
+        "The Ledger terminal aesthetic"
+      ],
+      "tensions": {
+        "poles": ["noise", "signal"],
+        "secondary": ["hidden", "revealed"],
+        "tertiary": ["corrupted", "clear"]
+      },
+      "colorAffinity": "verde",
+      "note": "Ledger Dark embodies this anchor most strongly. The glitch system serves it."
+    }
+  },
+
+  "combinations": {
+    "note": "Most Thoughtform expressions activate multiple anchors. Combinations create specificity.",
+    "examples": {
+      "NAVIGATION + INSTRUMENT": "The astrolabe itself. Tool for finding position in semantic space.",
+      "THRESHOLD + LIVING_GEOMETRY": "Atlas entities. Creatures at the boundary, made of living math.",
+      "INSTRUMENT + SIGNAL": "Ledger terminal. Tool for making financial patterns perceptible.",
+      "GRADIENT + NAVIGATION": "Cardinal Fields. Dimensions navigated along continuous axes.",
+      "THRESHOLD + SIGNAL": "The Gateway portal. Edge where noise becomes meaning.",
+      "NAVIGATION + THRESHOLD": "Marketing site. Invitation to cross into Thoughtform territory."
+    }
+  },
+
+  "scoring": {
+    "note": "When evaluating references, score each anchor 1-5 for activation strength.",
+    "thresholds": {
+      "strong": "4-5 (primary anchor for this reference)",
+      "medium": "2-3 (secondary resonance)",
+      "weak": "1 (minimal connection)"
+    },
+    "minimumAlignment": "Total score ≥10 and at least one anchor at 4+ suggests Thoughtform territory."
+  }
+}
+

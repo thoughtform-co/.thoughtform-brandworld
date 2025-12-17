@@ -1,37 +1,132 @@
 {
   "name": "Astrolabe",
-  "description": "Knowledge navigation instrument - brass sextant, star charts",
+  "version": "2.0.0",
+  "description": "Knowledge navigation instrument - brass sextant, star charts, celestial precision",
+  
+  "character": {
+    "short": "Brass sextant against night sky. The navigator's study at 3am.",
+    "extended": "NAVIGATION + INSTRUMENT: Warm precision. Candle glow on brass instruments. The operator interface to vast semantic territory. Where documents become coordinates and reading becomes wayfinding.",
+    "mood": "Contemplative focus. Late-night scholarship. The satisfaction of finding position in unmapped space."
+  },
+
+  "anchors": {
+    "primary": ["NAVIGATION", "INSTRUMENT"],
+    "secondary": ["LIVING_GEOMETRY", "GRADIENT"],
+    "expression": {
+      "NAVIGATION": "Documents positioned by semantic content. Cardinal Fields as navigable dimensions. YOU ARE HERE indicators.",
+      "INSTRUMENT": "The platform itself is the instrument. InstrumentPanel, Navigation Grid, coordinate displays.",
+      "LIVING_GEOMETRY": "Gold particles flowing along Vector I axes. Documents as living points in space.",
+      "GRADIENT": "Cardinal Field percentages. Similarity scores. Continuous positioning."
+    }
+  },
+
+  "resonatesWith": {
+    "strong": [
+      "1970s NASA mission control",
+      "Antique orreries and astrolabes",
+      "Maritime navigation instruments",
+      "Observatory control rooms",
+      "Air traffic control interfaces",
+      "Submarine navigation stations"
+    ],
+    "medium": [
+      "Vintage oscilloscopes (warm, not green)",
+      "Brass scientific instruments",
+      "Star charts and celestial maps",
+      "Cockpit instrumentation",
+      "Library card catalogs"
+    ],
+    "translationNotes": "References should feel warm and precise. Avoid cold/clinical. The operator is a scholar, not a technician."
+  },
+
   "mode": "dark",
-  "character": "Precise navigation instrument. Warm brass against night sky.",
-
-  "background": "void",
-  "text": "dawn",
-  "accent": "gold",
-
-  "css": {
-    "--background": "var(--void)",
-    "--surface": "var(--surface-0)",
-    "--text": "var(--dawn)",
-    "--text-muted": "var(--dawn-50)",
-    "--accent": "var(--gold)",
-    "--accent-dim": "var(--gold-40)",
-    "--border": "var(--dawn-08)"
+  
+  "colors": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "gold",
+    "css": {
+      "--background": "var(--void-base)",
+      "--surface": "var(--void-surface-0)",
+      "--text": "var(--dawn-base)",
+      "--text-muted": "var(--dawn-50)",
+      "--accent": "var(--gold-base)",
+      "--accent-dim": "var(--gold-40)",
+      "--accent-glow": "var(--gold-bright)",
+      "--border": "var(--dawn-08)"
+    }
   },
 
   "particles": {
     "type": "axis-flow",
-    "primaryColor": "GOLD",
-    "behavior": "Flow along Vector I axes - diagonal bands of motion",
-    "trailAlpha": 0.1
+    "primaryColor": "gold",
+    "behavior": "Flow along Vector I axes - diagonal bands of motion radiating from center",
+    "meaning": "Documents/concepts as navigable points. Motion suggests exploration along meaning dimensions. Particles ARE the semantic content made visible.",
+    "trailAlpha": 0.1,
+    "count": 150,
+    "anchors": ["NAVIGATION", "LIVING_GEOMETRY"]
   },
 
   "typography": {
     "body": "sans",
-    "headings": "mono"
+    "headings": "mono",
+    "data": "mono",
+    "usage": {
+      "PT Mono": "Coordinates, labels, navigation elements, section headers",
+      "IBM Plex Sans": "Prose, descriptions, document content"
+    }
+  },
+
+  "components": {
+    "primary": [
+      "NavigationGrid",
+      "InstrumentPanel",
+      "ParticleCanvas"
+    ],
+    "patterns": {
+      "NavigationGrid": {
+        "anchor": "INSTRUMENT",
+        "meaning": "Frame transforms content into 'reading' on instrument. User becomes operator."
+      },
+      "InstrumentPanel": {
+        "anchor": "INSTRUMENT", 
+        "meaning": "Control surface. Status readouts. Aerospace-inspired tool palette."
+      },
+      "SemanticResonance": {
+        "anchor": "SIGNAL",
+        "meaning": "Cross-document connections emerging from noise of the collection."
+      }
+    }
   },
 
   "layout": {
     "style": "centered-reading-width",
-    "features": ["diagonal-clip-paths", "instrument-panel-bottom"]
+    "features": [
+      "diagonal-clip-paths",
+      "instrument-panel-bottom",
+      "navigation-grid-frame"
+    ],
+    "zones": {
+      "topLeft": "Brand mark, breadcrumb",
+      "topCenter": "Primary navigation",
+      "topRight": "Status indicators (SIGNAL %)",
+      "bottomLeft": "Current context, mode",
+      "bottomRight": "Landmark, location"
+    }
+  },
+
+  "motion": {
+    "character": "Deliberate, instrument-like. Snappy initiation, gentle settle.",
+    "easing": "instrument",
+    "timing": "deliberate",
+    "particleSpeed": "medium",
+    "transitions": "Fade and slide, never bounce or spring"
+  },
+
+  "glitch": {
+    "defaultLevel": 0,
+    "loading": 2,
+    "error": 3,
+    "note": "Use sparingly. Astrolabe is precise, not corrupted."
   }
 }

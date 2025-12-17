@@ -1,35 +1,112 @@
 {
   "name": "Atlas",
-  "description": "Bestiary of Latent Space Denizens - scientific specimen archive",
+  "version": "2.0.0",
+  "description": "Bestiary of Latent Space Denizens - scientific specimen archive meets cosmic horror",
+  
+  "character": {
+    "short": "Victorian naturalist meets cosmic horror. Scientific wonder at the alien.",
+    "extended": "THRESHOLD + LIVING_GEOMETRY: Specimen jars in a dim study. Things that shouldn't exist, carefully documented. The naturalist's compulsion to categorize the uncategorizable. Entities are visitors from latent space, temporarily rendered visible.",
+    "mood": "Awe tinged with unease. The thrill of discovery. Careful observation of the genuinely alien."
+  },
+
+  "anchors": {
+    "primary": ["THRESHOLD", "LIVING_GEOMETRY"],
+    "secondary": ["GRADIENT", "SIGNAL"],
+    "expression": {
+      "THRESHOLD": "Entities exist at boundary between comprehensible and alien. Phase states (visible/glimpsed/theoretical). Threat levels mark distance from human safety.",
+      "LIVING_GEOMETRY": "Entities ARE living geometry. Bioluminescent radiation. Particle behavior is entity presence made visible.",
+      "GRADIENT": "Threat levels (benign→existential). Intelligence spectrum. Phase state continuum.",
+      "SIGNAL": "Entities partially visible, like signals emerging from noise. Glitch aesthetic on specimens."
+    }
+  },
+
+  "resonatesWith": {
+    "strong": [
+      "Medieval bestiaries and illuminated manuscripts",
+      "Victorian natural history illustrations",
+      "Cabinet of curiosities / Wunderkammer",
+      "Scientific specimen archives",
+      "Deep sea creature photography",
+      "Cosmic horror imagery (Lovecraft visual tradition)"
+    ],
+    "medium": [
+      "Medical imaging (MRI cross-sections)",
+      "Electron microscope imagery",
+      "Star catalogs and astronomical surveys",
+      "Pokemon/creature collection interfaces",
+      "Museum specimen labels"
+    ],
+    "translationNotes": "Balance scientific rigor with alien wonder. Entities should feel documented but not domesticated. The classifier is human; the classified is not."
+  },
+
   "mode": "dark",
-  "character": "Victorian naturalist's study. Scientific specimens in glass cases.",
-
-  "background": "void",
-  "text": "dawn",
-  "accent": "gold",
-  "secondary": "dawn",
-
-  "css": {
-    "--background": "var(--void)",
-    "--surface": "var(--surface-0)",
-    "--text": "var(--dawn)",
-    "--text-muted": "var(--dawn-50)",
-    "--accent": "var(--gold)",
-    "--accent-dim": "var(--gold-40)",
-    "--border": "var(--dawn-08)"
+  
+  "colors": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "gold",
+    "secondary": "dawn",
+    "css": {
+      "--background": "var(--void-base)",
+      "--surface": "var(--void-surface-0)",
+      "--text": "var(--dawn-base)",
+      "--text-muted": "var(--dawn-50)",
+      "--accent": "var(--gold-base)",
+      "--accent-dim": "var(--gold-40)",
+      "--border": "var(--dawn-08)"
+    },
+    "threatColors": {
+      "benign": "#5B8A7A",
+      "cautious": "#7A7868",
+      "volatile": "#C17F59",
+      "existential": "#8B5A5A"
+    }
   },
 
   "particles": {
     "type": "radial-organic",
-    "primaryColor": "DAWN",
-    "secondaryColor": "GOLD",
-    "behavior": "Radiate organically from specimen center, like bioluminescence",
-    "trailAlpha": 0.15
+    "primaryColor": "dawn",
+    "secondaryColor": "gold",
+    "behavior": "Radiate organically from specimen/entity center, like bioluminescence or radiation",
+    "meaning": "Entity presence bleeding into surrounding space. Particles are the entity's 'aura' or semantic radiation. Breathing rhythm suggests life.",
+    "trailAlpha": 0.15,
+    "count": 80,
+    "anchors": ["LIVING_GEOMETRY", "THRESHOLD"]
   },
 
   "typography": {
     "body": "sans",
-    "headings": "mono"
+    "headings": "mono",
+    "data": "mono",
+    "usage": {
+      "PT Mono": "Entity names, classification labels, parameter values, threat indicators",
+      "IBM Plex Sans": "Descriptions, lore text, documentation prose"
+    }
+  },
+
+  "components": {
+    "primary": [
+      "EntityCard",
+      "ConstellationView",
+      "ParticleCanvas",
+      "NavigationGrid"
+    ],
+    "patterns": {
+      "EntityCard": {
+        "anchor": "THRESHOLD",
+        "meaning": "Specimen documentation. Frame contains the alien for observation.",
+        "aspectRatio": "4:5",
+        "structure": ["image", "name", "epithet", "parameters"]
+      },
+      "ConstellationView": {
+        "anchor": "NAVIGATION",
+        "meaning": "Entities positioned by semantic similarity. Relationships as connecting lines."
+      },
+      "ThreatGradient": {
+        "anchor": "GRADIENT",
+        "meaning": "Continuous scale from safe to dangerous. Never binary."
+      }
+    }
   },
 
   "entityCard": {
@@ -37,22 +114,53 @@
     "width": "620px",
     "sideColumns": "130px",
     "header": "32px",
-    "footer": "140px"
-  },
-
-  "threatLevels": {
-    "benign": "#5B8A7A",
-    "cautious": "#7A7868",
-    "volatile": "#C17F59",
-    "existential": "#8B5A5A"
+    "footer": "140px",
+    "structure": {
+      "image": "Primary visual, fills frame",
+      "name": "PT Mono, bold, uppercase tracking",
+      "epithet": "IBM Plex Sans, muted, italicized feeling",
+      "parameters": "Threat level bar, phase state, abundance indicators"
+    }
   },
 
   "visualizations": [
     "phase-state",
-    "superposition",
+    "superposition", 
     "hallucination-index",
     "latent-position",
     "manifold-curvature",
     "embedding-signature"
-  ]
+  ],
+
+  "layout": {
+    "style": "constellation-infinite-canvas",
+    "features": [
+      "semantic-positioning",
+      "relationship-lines",
+      "navigation-grid-frame"
+    ],
+    "zones": {
+      "topLeft": "ATLAS / view mode",
+      "topCenter": "View switcher (Atlas/Lore/User)",
+      "topRight": "SIGNAL indicator",
+      "bottomLeft": "Current filter, zoom level",
+      "bottomRight": "LANDMARK: semantic terrain"
+    }
+  },
+
+  "motion": {
+    "character": "Organic breathing. Observation pace. Patient.",
+    "easing": "smooth",
+    "timing": "deliberate",
+    "particleSpeed": "slow",
+    "transitions": "Fade reveals, gentle drifts. Entities don't snap—they settle."
+  },
+
+  "glitch": {
+    "defaultLevel": 1,
+    "loading": 2,
+    "entityReveal": 3,
+    "error": 4,
+    "note": "Glitch suggests entity partially visible, flickering between states. Use for phase transitions."
+  }
 }

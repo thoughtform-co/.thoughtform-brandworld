@@ -44,6 +44,76 @@ We draw from 1970s NASA mission control, brass instruments, and CRT terminals. T
 
 ---
 
+## Generative Identity
+
+**Identity through algorithm.** Unique visual signatures emerge from deterministic mathematical processes.
+
+### The Sigil System
+
+Rather than designing static icons, we generate them algorithmically:
+
+1. **Category = DNA**: Each category has pattern parameters (type, spread, glitch chance, arms)
+2. **Instance = Mutation**: Unique IDs create variations within the category's genetic space
+3. **Seeded Randomness**: Same input always produces same output (deterministic)
+4. **Mathematical Beauty**: Golden ratio, fibonacci spirals, organic distributions
+
+### Pattern Types
+
+| Pattern | Character | Glitch | Application |
+|---------|-----------|--------|-------------|
+| Constellation | Radiating star | 5% | Primary entities |
+| Scatter | Organic cloud | 8% | Ambient elements |
+| Grid | Data corruption | 25% | Technical/system |
+| Cross | Gateway X | 12% | Transitions |
+| Spiral | Fibonacci arms | 10% | Evolution/progress |
+
+### The Glitch Offset
+
+Every sigil includes subtle 1-3px displacements — the Thoughtform signature that:
+- Breaks mathematical perfection
+- Echoes wordmark cuts and vector interruptions  
+- Adds organic life to algorithmic forms
+- Signals liminality (data at the boundary of meaning)
+
+See: `philosophy/GENERATIVE-PATTERNS.md` for implementation details.
+
+---
+
+## Strange Attractors
+
+**Chaos is beautiful.** Mathematical chaos systems produce infinitely complex, never-repeating patterns.
+
+### The Attractor Philosophy
+
+Strange attractors are deterministic systems that appear random:
+
+1. **Deterministic Chaos** — Same initial conditions = same trajectory
+2. **Infinite Complexity** — Never repeats, always evolving
+3. **Organic Beauty** — Mathematical precision feels natural
+4. **Domain Identity** — Each attractor has unique visual character
+
+### Available Attractors
+
+| Attractor | Equation Type | Visual Character |
+|-----------|---------------|------------------|
+| **Lorenz** | 3 coupled ODEs | Butterfly wings |
+| **Thomas** | Sinusoidal | Smooth, symmetric |
+| **Halvorsen** | Quadratic terms | Twisted triangular loops |
+| **Aizawa** | Complex with powers | Disc with axis |
+| **Rössler** | Spiral fold | Classic chaos |
+| **Galaxy** | Parametric spiral | Familiar, accessible |
+
+### Cross-Platform Application
+
+- **Atlas**: Domain nebulae around entity clusters
+- **Astrolabe**: Background particle fields for navigation
+- **Ledger**: Category visualization backgrounds
+- **thoughtform.co**: Gateway section atmospheric effect
+
+See: `particles/STRANGE-ATTRACTORS.md` for implementation details.
+
+---
+
 ## Glitch as Leitmotif
 
 The "glitch" aesthetic is a unifying thread across all Thoughtform platforms. It represents the boundary where meaning dissolves into mathematical form — data becoming visible.
