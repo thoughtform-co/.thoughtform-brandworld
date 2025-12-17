@@ -476,6 +476,123 @@ When implementing the Navigation Grid:
 - [ ] Test across different aspect ratios
 - [ ] Verify colors match platform theme
 
+## Adjacent Element Positioning
+
+When placing UI elements (buttons, labels, filters, panels) adjacent to the Navigation Grid, use consistent positioning formulas to ensure proper alignment and adequate margin from grid lines.
+
+### Positioning Formula
+
+```css
+/* Standard inset for elements adjacent to the right rail */
+--adjacent-inset-right: calc(48px + var(--hud-padding));
+/* Expands to: calc(48px + clamp(32px, 5vw, 64px)) */
+
+/* Standard inset for elements adjacent to the left rail */
+--adjacent-inset-left: calc(48px + var(--hud-padding));
+
+/* Standard inset from top (below header area) */
+--adjacent-inset-top: calc(60px + var(--hud-padding));
+
+/* Standard inset from bottom */
+--adjacent-inset-bottom: calc(48px + var(--hud-padding));
+```
+
+### Why 48px Base Margin?
+
+The 48px provides comfortable clearance from the grid's vertical rail lines:
+- **Rail width**: ~60px (contains tick marks)
+- **Visual breathing room**: ~48px from rail edge to adjacent element
+- **Total from viewport edge**: `48px + hud-padding` = ~80-112px depending on viewport
+
+### Example: Right-Aligned Element
+
+```css
+/* Settings button aligned with Domain filters */
+.settings-button {
+  position: fixed;
+  bottom: 80px;
+  right: calc(48px + clamp(32px, 5vw, 64px));
+}
+
+/* Filter panel (same horizontal alignment) */
+.filter-panel {
+  position: fixed;
+  top: calc(60px + clamp(32px, 5vw, 64px));
+  right: calc(48px + clamp(32px, 5vw, 64px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+```
+
+### Vertical Alignment Groups
+
+Elements on the same side should share the same `right` or `left` value:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                                              [DOMAIN]   │ ← right: calc(48px + hud-padding)
+│                                              ├ Filter1  │
+│  │                                           ├ Filter2  │
+│  │                                                 │    │
+│  │                                                 │    │
+│  │                                                 │    │
+│  │                                                 │    │
+│  │                                           [⚙️]  │    │ ← same right value
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Panel Positioning
+
+When a button opens a panel, both should use the same horizontal alignment:
+
+```css
+.trigger-button {
+  position: fixed;
+  bottom: 80px;
+  right: calc(48px + clamp(32px, 5vw, 64px));
+}
+
+.popup-panel {
+  position: fixed;
+  bottom: 130px; /* Above the button */
+  right: calc(48px + clamp(32px, 5vw, 64px)); /* Same alignment */
+}
+```
+
+### Z-Index Layering
+
+```css
+/* Navigation Grid elements */
+.navigation-grid { z-index: 60; }
+
+/* Adjacent controls (buttons, filters) */
+.adjacent-controls { z-index: 70; }
+
+/* Popups/panels */
+.popup-panels { z-index: 90; }
+
+/* Modal overlays */
+.modals { z-index: 100+; }
+```
+
+### Pointer Events
+
+Adjacent elements must re-enable pointer events since the grid container disables them:
+
+```css
+.navigation-grid {
+  pointer-events: none; /* Grid doesn't intercept clicks */
+}
+
+.adjacent-element {
+  pointer-events: auto; /* Re-enable for interactive elements */
+}
+```
+
+---
+
 ## Non-Negotiables
 
 1. **Fixed positioning** — Grid must stay fixed while content scrolls
@@ -485,6 +602,7 @@ When implementing the Navigation Grid:
 5. **Faded rails** — Vertical lines must fade at top/bottom (10%-90%)
 6. **Color variables** — Never hardcode colors, always use CSS variables
 7. **Pointer events** — Container is `none`, interactive elements are `auto`
+8. **Adjacent element alignment** — Use `calc(48px + var(--hud-padding))` for consistent margins from grid lines
 
 ## File Locations
 

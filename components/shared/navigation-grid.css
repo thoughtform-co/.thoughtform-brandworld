@@ -235,6 +235,53 @@
   align-items: flex-end;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   ADJACENT ELEMENT POSITIONING
+   
+   Elements placed near the grid (buttons, filters, panels) should
+   use these formulas for consistent alignment and margin from grid lines.
+   
+   The 48px base margin provides comfortable clearance from rail lines.
+   Combined with hud-padding, elements align vertically across the interface.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Adjacent element insets - use these for elements near the grid */
+  --grid-adjacent-margin: 48px;
+  --grid-adjacent-inset: calc(var(--grid-adjacent-margin) + var(--hud-padding, clamp(32px, 5vw, 64px)));
+  
+  /* Shorthand for common positions */
+  --grid-adjacent-right: calc(48px + clamp(32px, 5vw, 64px));
+  --grid-adjacent-left: calc(48px + clamp(32px, 5vw, 64px));
+  --grid-adjacent-top: calc(60px + clamp(32px, 5vw, 64px));
+  --grid-adjacent-bottom: calc(48px + clamp(32px, 5vw, 64px));
+}
+
+/* Example utility classes for adjacent elements */
+.grid-adjacent-right {
+  position: fixed;
+  right: var(--grid-adjacent-right);
+}
+
+.grid-adjacent-left {
+  position: fixed;
+  left: var(--grid-adjacent-left);
+}
+
+.grid-adjacent-top {
+  top: var(--grid-adjacent-top);
+}
+
+.grid-adjacent-bottom {
+  bottom: var(--grid-adjacent-bottom);
+}
+
+/* Adjacent panels - re-enable pointer events */
+.grid-adjacent-panel {
+  pointer-events: auto;
+  z-index: 70;
+}
+
 /* Responsive: Tablet - hide rails */
 @media (max-width: 1100px) {
   .grid-rail {

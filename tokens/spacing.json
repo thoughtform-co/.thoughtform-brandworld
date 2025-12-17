@@ -25,6 +25,19 @@
     "elementGap": "8px"
   },
 
+  "navigationGrid": {
+    "hudPadding": "clamp(32px, 5vw, 64px)",
+    "hudPaddingFormula": "clamp(32px, 5vw, 64px)",
+    "cornerSize": "40px",
+    "cornerSizeTablet": "30px",
+    "cornerSizeMobile": "24px",
+    "railWidth": "60px",
+    "cornerRailGap": "20px",
+    "adjacentMargin": "48px",
+    "adjacentInsetFormula": "calc(48px + clamp(32px, 5vw, 64px))",
+    "note": "Elements adjacent to grid rails use adjacentInsetFormula for consistent alignment and margin from grid lines"
+  },
+
   "particles": {
     "GRID": 3,
     "note": "All particle positions snap to 3px grid - DO NOT CHANGE"
