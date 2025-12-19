@@ -148,6 +148,52 @@ The "glitch" aesthetic is a unifying thread across all Thoughtform platforms. It
 
 ---
 
+## Cards as Thresholds
+
+**Every card is a boundary.** A threshold between the user's space and the content's space. The frame communicates as much as what's inside it.
+
+### The Display Case Metaphor
+
+Cards are museum display cases:
+
+- **Glass edges** catch light → subtle border glow on hover
+- **Specimens** are the focus → clear content hierarchy
+- **Labels** are secondary → metadata in monospace, smaller
+- **Cases don't compete** → the grid is harmonious
+
+### Card Principles
+
+1. **Contain Without Confining** — Content should breathe, not feel trapped
+2. **Frame Without Distracting** — The border serves content, not vice versa
+3. **Invite Without Demanding** — Hover states suggest, not shout
+4. **Platform Metaphor** — Each platform has its own "case" style:
+   - Atlas: Victorian specimen archive (display case)
+   - Ledger Light: Blueprint schematic (wireframe box)
+   - Ledger Dark: Terminal readout (data frame)
+   - Astrolabe: Brass instrument panel (navigation tile)
+
+### Interactive States
+
+| State | Border | Transform | Corner Brackets |
+|-------|--------|-----------|-----------------|
+| Rest | dawn-08 | none | hidden |
+| Hover | dawn-30 | translateY(-2px) | visible |
+| Selected | dawn-50 + glow | none | visible |
+| Focus | gold ring | none | visible |
+
+### Card Anatomy Rules
+
+- **Zero border-radius** — Always sharp corners
+- **Dawn-08 borders** — `rgba(236, 227, 214, 0.08)` at rest
+- **16px internal padding** — Consistent breathing room
+- **Corner brackets on hover** — L-shaped marks appear at corners
+- **Image zones: 3:4 or 4:5** — Never arbitrary ratios
+- **Gradient overlays** — Fade to void at bottom for text legibility
+
+See: `components/shared/CardSystem.md` for full documentation.
+
+---
+
 ## Component Translation Framework
 
 Brand metaphors translate to specific UI patterns. Use this framework to derive new components.

@@ -307,41 +307,101 @@ The Gateway is the Thoughtform brandmark rendered in 3D:
 
 ## Card System
 
-### Three Tiers
+> **Cards are containers for meaning.** They frame content the way a museum display case frames a specimen, or a blueprint frames a schematic.
 
-**Content Cards** — Services, features, list items
+### Core Principles
+
+1. **Cards as Thresholds** — Every card is a boundary between user space and content space
+2. **Contain Without Confining** — Content should breathe, not feel trapped
+3. **Frame Without Distracting** — The border serves content, not vice versa
+4. **Invite Without Demanding** — Hover states suggest, not shout
+
+### Card Anatomy
+
 ```
-┌─────────────────────────────┐
-│ 01 · KEYNOTE                │  ← Index + label (gold, 9px mono)
-│ Title Here                  │  ← Title (dawn, 15px mono)
-│ Body text describing the    │  ← Body (dawn-50, 14px sans)
-│ service or feature...       │
-└─────────────────────────────┘
-   Border: 1px dawn-08
-   Padding: 32px
+┌─────────────────────────────────────┐
+│ ┌─┐                             ┌─┐ │  ← Corner brackets (hover)
+│                                     │
+│           [ IMAGE ZONE ]            │  ← 3:4 or 4:5 aspect ratio
+│                                     │
+│ └─┘                             └─┘ │
+├─────────────────────────────────────┤  ← Divider (dawn-08)
+│  TITLE                              │  ← PT Mono, uppercase
+│  Subtitle or epithet                │  ← IBM Plex Sans, italic
+│  ▬▬▬▬ ▬▬ ▬  STATUS                  │  ← Indicator bar
+│  ◆ 0.156  ○ 0.312  ◇ 0.089         │  ← Metadata
+└─────────────────────────────────────┘
 ```
 
-**Terminal Frames** — Manifesto, focal content
+### Platform Metaphors
+
+| Platform | Metaphor | Border Accent |
+|----------|----------|---------------|
+| **Atlas** | Victorian specimen archive, display cases | Dawn |
+| **Ledger Light** | Blueprint, technical schematic | Ink |
+| **Ledger Dark** | Blade Runner terminal | Verde |
+| **Astrolabe** | Brass instrument panel | Gold |
+
+### Sizing Scale
+
+| Size | Width | Use Case |
+|------|-------|----------|
+| xs | 120px | Compact constellation cards |
+| sm | 200px | Grid cards, stacked views |
+| md | 280px | Standard grid card |
+| lg | 380px | Featured card |
+| xl | 620px | Detail/preview card |
+
+### Interactive States
+
+```css
+/* Rest */
+border: 1px solid var(--dawn-08);
+
+/* Hover */
+border-color: var(--dawn-30);
+transform: translateY(-2px);
+
+/* Selected */
+border-color: var(--dawn-50);
+box-shadow: 0 0 30px rgba(236, 227, 214, 0.1);
+```
+
+### Card Variants
+
+**Entity Cards** (Atlas) — Specimen documentation with threat bars
+```
+┌─────────────────────────┐
+│ ┌─┐         [◎ SIGIL]   │  ← Threat indicator + sigil
+│     [ENTITY IMAGE]      │  ← 3:4 ratio, scanlines
+│ └─┘                     │
+├─────────────────────────┤
+│ SPASMODITE              │  ← Name (PT Mono)
+│ The Twitching           │  ← Epithet (italic)
+│ ▬▬▬▬ ▬▬ ▬ CAUTIOUS     │  ← Threat bar
+│ ◆.156 ○.312 ◇.089      │  ← Coordinates
+└─────────────────────────┘
+```
+
+**Stat Cards** (Ledger) — Financial metrics with trends
+```
+┌─────────────────┐
+│ TOTAL REVENUE   │  ← Label (9px mono, uppercase)
+│ €24,580         │  ← Value (24px mono, gold)
+│ ↑ +12.5%        │  ← Trend (teal if up, signal if down)
+└─────────────────┘
+```
+
+**Terminal Frames** (Marketing) — Manifesto, focal content
 ```
 ┌──┐                        ┌──┐
 │  │ ■ MANIFESTO            │  │  ← Corner brackets (gold)
-│  │                        │  │  ← Header with icon
-│  │     AI ISN'T SOFTWARE  │  │  ← Centered display headline
-│  │     Body content...    │  │
+│  │     AI ISN'T SOFTWARE  │  │  ← Display headline
 │  │ ─────────────────────  │  │  ← Footer divider
-│  │ [tag]         [tag]    │  │  ← Meta tags
 └──┘                        └──┘
 ```
 
-**Data Cards** — Stats, metrics
-```
-┌─────────────────┐
-│ TEAMS TRAINED   │  ← Label (dawn-30, 9px mono)
-│ 47              │  ← Value (gold, 24px mono)
-│ +12 this quarter│  ← Trend (dawn-50, 11px mono)
-└─────────────────┘
-   Padding: 24px
-```
+See: `components/shared/CardSystem.md` for full documentation.
 
 ---
 
@@ -456,4 +516,4 @@ xl   32px     Card padding
 ---
 
 *Last updated: December 2024*
-*Version: 1.2 — Added Strange Attractor & Generative Sigil Systems*
+*Version: 1.3 — Added Card System documentation*

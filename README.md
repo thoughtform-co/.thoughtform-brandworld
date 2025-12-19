@@ -79,6 +79,14 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 - 3D rotation with perspective projection
 - Cross-platform: Domain clusters, category backgrounds, ambient effects
 
+**Card System** — Unified card design across all platforms
+- See: `components/shared/CardSystem.md`
+- Cards as thresholds: Containers that frame content like museum display cases
+- Zero border-radius, dawn-08 borders, corner brackets on hover
+- Platform variants: Atlas (specimen archive), Ledger (blueprint), Astrolabe (instrument panel)
+- Sizing scale: xs (120px) to xl (620px)
+- Interactive states: rest, hover, selected, focus, disabled
+
 ### Non-Negotiables
 
 1. **Zero border-radius** — Sharp corners everywhere
