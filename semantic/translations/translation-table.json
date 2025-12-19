@@ -1,0 +1,398 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Thoughtform Translation Table",
+  "version": "1.0.0",
+  "description": "Maps semantic anchors to physical translations and patterns. This is THE workflow: Anchor → Translation → Physical Pattern → Implementation.",
+
+  "anchors": {
+    "NAVIGATION": {
+      "translations": [
+        "Rail System",
+        "Coordinate Badge",
+        "Axis Gauge",
+        "Vector Field",
+        "Position Indicator",
+        "Trajectory Line"
+      ],
+      "physicalPatterns": {
+        "Rail System": {
+          "component": "NavigationGrid",
+          "elements": ["vertical rails", "corner brackets", "horizontal lines"],
+          "signalQuotient": [20, 40],
+          "dialects": ["shared"],
+          "docs": "components/shared/NavigationGrid.md"
+        },
+        "Coordinate Badge": {
+          "component": "CoordinateReadout",
+          "elements": ["X: Y: format", "monospace values", "axis labels"],
+          "signalQuotient": [5, 15],
+          "dialects": ["astrolabe", "atlas"],
+          "docs": null
+        },
+        "Axis Gauge": {
+          "component": "SliderControl",
+          "elements": ["graduated scale", "position marker", "value readout"],
+          "signalQuotient": [10, 20],
+          "dialects": ["astrolabe"],
+          "docs": null
+        },
+        "Vector Field": {
+          "component": "ParticleCanvas",
+          "elements": ["directional particles", "flow lines", "axis alignment"],
+          "signalQuotient": [40, 70],
+          "dialects": ["astrolabe"],
+          "behavior": "axis-flow",
+          "docs": "particles/core.js"
+        },
+        "Position Indicator": {
+          "component": "StatusBadge",
+          "elements": ["YOU ARE HERE", "section marker", "progress indicator"],
+          "signalQuotient": [5, 15],
+          "dialects": ["marketing"],
+          "docs": null
+        },
+        "Trajectory Line": {
+          "component": "ConnectionLine",
+          "elements": ["dotted path", "directional arrow", "endpoint markers"],
+          "signalQuotient": [10, 25],
+          "dialects": ["astrolabe", "atlas"],
+          "docs": null
+        }
+      }
+    },
+
+    "THRESHOLD": {
+      "translations": [
+        "Display Case",
+        "Portal Frame",
+        "Gateway",
+        "Examination Chamber",
+        "Boundary Line",
+        "Liminal Glow"
+      ],
+      "physicalPatterns": {
+        "Display Case": {
+          "component": "EntityCard",
+          "elements": ["glass-edge borders", "specimen centered", "dark void surround"],
+          "signalQuotient": [20, 40],
+          "dialects": ["atlas"],
+          "docs": "components/atlas/EntityCard.md"
+        },
+        "Portal Frame": {
+          "component": "TerminalFrame",
+          "elements": ["corner brackets", "gold accent", "centered content"],
+          "signalQuotient": [30, 50],
+          "dialects": ["marketing", "shared"],
+          "docs": null
+        },
+        "Gateway": {
+          "component": "GatewayShape",
+          "elements": ["circular form", "radial particles", "threshold glow"],
+          "signalQuotient": [60, 80],
+          "dialects": ["marketing"],
+          "docs": "particles/STRANGE-ATTRACTORS.md"
+        },
+        "Examination Chamber": {
+          "component": "Modal",
+          "elements": ["centered overlay", "dark backdrop", "corner brackets"],
+          "signalQuotient": [30, 50],
+          "dialects": ["atlas"],
+          "docs": null
+        },
+        "Boundary Line": {
+          "component": "Divider",
+          "elements": ["1px hairline", "dawn-08 color", "full width"],
+          "signalQuotient": [0, 5],
+          "dialects": ["shared"],
+          "docs": null
+        },
+        "Liminal Glow": {
+          "component": "GlitchEffects",
+          "elements": ["edge glow", "threshold shimmer", "phase transition"],
+          "signalQuotient": [30, 60],
+          "dialects": ["atlas", "marketing"],
+          "docs": "components/shared/GlitchEffects.tsx"
+        }
+      }
+    },
+
+    "INSTRUMENT": {
+      "translations": [
+        "Readout",
+        "Gauge",
+        "Panel",
+        "Viewfinder",
+        "Status Light",
+        "Calibration Mark"
+      ],
+      "physicalPatterns": {
+        "Readout": {
+          "component": "StatCard",
+          "elements": ["mono value", "label above", "trend indicator"],
+          "signalQuotient": [5, 20],
+          "dialects": ["ledger-dark", "ledger-light"],
+          "docs": "components/ledger/StatCard.tsx"
+        },
+        "Gauge": {
+          "component": "ProgressBar",
+          "elements": ["graduated scale", "fill indicator", "numeric value"],
+          "signalQuotient": [10, 25],
+          "dialects": ["astrolabe", "ledger-dark"],
+          "docs": null
+        },
+        "Panel": {
+          "component": "InstrumentPanel",
+          "elements": ["vertical dividers", "tool sections", "status indicators"],
+          "signalQuotient": [20, 40],
+          "dialects": ["astrolabe"],
+          "docs": "components/astrolabe/InstrumentPanel.tsx"
+        },
+        "Viewfinder": {
+          "component": "FocusFrame",
+          "elements": ["crosshairs", "corner marks", "targeting reticle"],
+          "signalQuotient": [15, 30],
+          "dialects": ["atlas", "astrolabe"],
+          "docs": null
+        },
+        "Status Light": {
+          "component": "StatusIndicator",
+          "elements": ["5px circle", "color state", "pulsing animation"],
+          "signalQuotient": [5, 15],
+          "dialects": ["shared"],
+          "docs": null
+        },
+        "Calibration Mark": {
+          "component": "ScaleMarker",
+          "elements": ["tick marks", "numeric labels", "alignment guides"],
+          "signalQuotient": [0, 10],
+          "dialects": ["ledger-light"],
+          "docs": null
+        }
+      }
+    },
+
+    "LIVING_GEOMETRY": {
+      "translations": [
+        "Particle Cloud",
+        "Breathing Element",
+        "Organic Flow",
+        "Bioluminescence",
+        "Data Organism",
+        "Generative Sigil"
+      ],
+      "physicalPatterns": {
+        "Particle Cloud": {
+          "component": "ParticleCanvas",
+          "elements": ["scattered particles", "gaussian distribution", "ambient motion"],
+          "signalQuotient": [50, 80],
+          "dialects": ["shared"],
+          "docs": "particles/core.js"
+        },
+        "Breathing Element": {
+          "component": "BreathingAnimation",
+          "elements": ["scale oscillation", "opacity pulse", "organic timing"],
+          "signalQuotient": [20, 40],
+          "dialects": ["atlas", "astrolabe"],
+          "docs": null
+        },
+        "Organic Flow": {
+          "component": "ParticleCanvas",
+          "elements": ["radial movement", "breathing rhythm", "entity centered"],
+          "signalQuotient": [50, 70],
+          "dialects": ["atlas"],
+          "behavior": "radial-organic",
+          "docs": "particles/core.js"
+        },
+        "Bioluminescence": {
+          "component": "EntityAura",
+          "elements": ["soft glow", "dawn color", "proximity brightness"],
+          "signalQuotient": [30, 50],
+          "dialects": ["atlas"],
+          "docs": null
+        },
+        "Data Organism": {
+          "component": "ClusterVisualization",
+          "elements": ["connected nodes", "breathing connections", "emergent groups"],
+          "signalQuotient": [40, 70],
+          "dialects": ["ledger-light", "astrolabe"],
+          "docs": null
+        },
+        "Generative Sigil": {
+          "component": "GenerativeSigil",
+          "elements": ["deterministic pattern", "category DNA", "glitch offsets"],
+          "signalQuotient": [30, 50],
+          "dialects": ["atlas", "astrolabe", "ledger-dark"],
+          "docs": "icons/README.md"
+        }
+      }
+    },
+
+    "GRADIENT": {
+      "translations": [
+        "Spectrum Bar",
+        "Slider Control",
+        "Threat Gradient",
+        "Phase Indicator",
+        "Intensity Scale",
+        "Cardinal Field"
+      ],
+      "physicalPatterns": {
+        "Spectrum Bar": {
+          "component": "GradientBar",
+          "elements": ["color transition", "position marker", "end labels"],
+          "signalQuotient": [10, 25],
+          "dialects": ["atlas", "astrolabe"],
+          "docs": null
+        },
+        "Slider Control": {
+          "component": "RangeSlider",
+          "elements": ["track", "thumb", "value display"],
+          "signalQuotient": [5, 15],
+          "dialects": ["shared"],
+          "docs": null
+        },
+        "Threat Gradient": {
+          "component": "ThreatBadge",
+          "elements": ["color scale (verde→cardinal)", "level indicator", "bar segments"],
+          "signalQuotient": [10, 25],
+          "dialects": ["atlas"],
+          "docs": "components/atlas/ThreatBadge.tsx"
+        },
+        "Phase Indicator": {
+          "component": "PhaseDisplay",
+          "elements": ["current state", "adjacent states", "transition progress"],
+          "signalQuotient": [15, 30],
+          "dialects": ["atlas"],
+          "docs": null
+        },
+        "Intensity Scale": {
+          "component": "IntensityMeter",
+          "elements": ["graduated marks", "fill level", "threshold lines"],
+          "signalQuotient": [10, 20],
+          "dialects": ["ledger-dark"],
+          "docs": null
+        },
+        "Cardinal Field": {
+          "component": "CardinalFieldControl",
+          "elements": ["axis labels", "percentage values", "position dot"],
+          "signalQuotient": [15, 30],
+          "dialects": ["atlas"],
+          "docs": null
+        }
+      }
+    },
+
+    "SIGNAL": {
+      "translations": [
+        "Glitch Effect",
+        "Scanline Overlay",
+        "Data Stream",
+        "Noise Texture",
+        "Reveal Animation",
+        "Terminal Aesthetic"
+      ],
+      "physicalPatterns": {
+        "Glitch Effect": {
+          "component": "GlitchEffects",
+          "elements": ["horizontal displacement", "chromatic aberration", "brief duration"],
+          "signalQuotient": [40, 70],
+          "dialects": ["shared"],
+          "docs": "components/shared/GlitchEffects.tsx"
+        },
+        "Scanline Overlay": {
+          "component": "ScanlineFilter",
+          "elements": ["horizontal lines", "2-3px spacing", "subtle opacity"],
+          "signalQuotient": [20, 40],
+          "dialects": ["ledger-dark", "marketing"],
+          "docs": "systems/signal/glitch/effects.css"
+        },
+        "Data Stream": {
+          "component": "ParticleCanvas",
+          "elements": ["horizontal flow", "trail effects", "varying speed"],
+          "signalQuotient": [40, 60],
+          "dialects": ["ledger-dark"],
+          "behavior": "horizontal-flow",
+          "docs": "particles/core.js"
+        },
+        "Noise Texture": {
+          "component": "NoiseOverlay",
+          "elements": ["film grain", "subtle animation", "low opacity"],
+          "signalQuotient": [10, 25],
+          "dialects": ["shared"],
+          "docs": null
+        },
+        "Reveal Animation": {
+          "component": "DecryptSequence",
+          "elements": ["character scramble", "progressive reveal", "glitch transition"],
+          "signalQuotient": [30, 50],
+          "dialects": ["marketing", "ledger-dark"],
+          "docs": null
+        },
+        "Terminal Aesthetic": {
+          "component": "TerminalContainer",
+          "elements": ["verde glow", "phosphor effect", "CRT curvature"],
+          "signalQuotient": [30, 50],
+          "dialects": ["ledger-dark"],
+          "docs": null
+        }
+      }
+    }
+  },
+
+  "anchorCombinations": {
+    "note": "Common anchor pairings and what they produce",
+    "combinations": {
+      "NAVIGATION + INSTRUMENT": {
+        "produces": "The astrolabe itself — tool for finding position",
+        "primaryTranslations": ["Rail System", "Panel", "Coordinate Badge"],
+        "exampleComponents": ["NavigationGrid", "InstrumentPanel"]
+      },
+      "THRESHOLD + LIVING_GEOMETRY": {
+        "produces": "Atlas entities — creatures at the boundary, made of living math",
+        "primaryTranslations": ["Display Case", "Organic Flow", "Bioluminescence"],
+        "exampleComponents": ["EntityCard", "ParticleCanvas"]
+      },
+      "INSTRUMENT + SIGNAL": {
+        "produces": "Ledger terminal — tool for making patterns perceptible",
+        "primaryTranslations": ["Readout", "Data Stream", "Terminal Aesthetic"],
+        "exampleComponents": ["StatCard", "DataTable"]
+      },
+      "GRADIENT + NAVIGATION": {
+        "produces": "Cardinal Fields — dimensions navigated along continuous axes",
+        "primaryTranslations": ["Cardinal Field", "Axis Gauge", "Spectrum Bar"],
+        "exampleComponents": ["CardinalFieldControl"]
+      },
+      "THRESHOLD + SIGNAL": {
+        "produces": "Gateway portal — edge where noise becomes meaning",
+        "primaryTranslations": ["Gateway", "Glitch Effect", "Reveal Animation"],
+        "exampleComponents": ["GatewayShape", "GlitchEffects"]
+      },
+      "NAVIGATION + THRESHOLD": {
+        "produces": "Marketing site — invitation to cross into Thoughtform territory",
+        "primaryTranslations": ["Portal Frame", "Position Indicator", "Rail System"],
+        "exampleComponents": ["TerminalFrame", "NavigationGrid"]
+      }
+    }
+  },
+
+  "translationDistance": {
+    "note": "How to measure distance when translating a reference",
+    "levels": {
+      "close": {
+        "description": "Similar visual language to Thoughtform",
+        "approach": "Token substitution — swap colors, fonts, keep structure",
+        "effort": "Low"
+      },
+      "medium": {
+        "description": "Shared meaning, different surface expression",
+        "approach": "Selective transformation — preserve structure, change surface",
+        "effort": "Medium"
+      },
+      "far": {
+        "description": "Strong anchor alignment, very different visual language",
+        "approach": "Full re-expression — extract essence, rebuild from scratch",
+        "effort": "High"
+      }
+    }
+  }
+}

@@ -1,0 +1,458 @@
+{
+  "$schema": "./assets.schema.json",
+  "name": "Thoughtform Asset Registry",
+  "version": "1.0.0",
+  "description": "Machine-readable catalog of Thoughtform design assets",
+
+  "assets": [
+    {
+      "id": "navigation-grid",
+      "name": "Navigation Grid",
+      "type": "component",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [20, 40],
+        "expression": "Corner brackets, vertical rails, horizontal accent lines"
+      },
+      "anchors": {
+        "primary": ["NAVIGATION", "INSTRUMENT"],
+        "secondary": ["THRESHOLD"],
+        "weights": { "NAVIGATION": 0.9, "INSTRUMENT": 0.8, "THRESHOLD": 0.4 }
+      },
+      "translations": ["Rail System", "Panel"],
+      "dialects": ["shared"],
+      "paths": {
+        "docs": "components/shared/NavigationGrid.md",
+        "implementation": "components/shared/NavigationGrid.tsx",
+        "examples": ["components/thoughtform-co/NavigationCockpit.tsx"]
+      },
+      "validation": {
+        "requiredTests": ["instrument-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "Fixed overlay frame system with corner brackets and vertical rails. The foundational navigation pattern.",
+      "tags": ["navigation", "hud", "frame", "grid"]
+    },
+
+    {
+      "id": "entity-card",
+      "name": "Entity Card",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [20, 40],
+        "expression": "Corner brackets on hover, threat indicator glow, specimen framing"
+      },
+      "anchors": {
+        "primary": ["THRESHOLD", "LIVING_GEOMETRY"],
+        "secondary": ["GRADIENT"],
+        "weights": { "THRESHOLD": 0.9, "LIVING_GEOMETRY": 0.7, "GRADIENT": 0.5 }
+      },
+      "translations": ["Display Case", "Specimen Frame"],
+      "dialects": ["atlas"],
+      "paths": {
+        "docs": null,
+        "implementation": "components/atlas/EntityCard.tsx"
+      },
+      "validation": {
+        "requiredTests": ["instrument-test", "sibling-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "3:4 aspect ratio card for displaying Atlas entities with threat indicators and metadata.",
+      "tags": ["card", "entity", "specimen", "atlas"]
+    },
+
+    {
+      "id": "stat-card",
+      "name": "Stat Card",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [5, 20],
+        "expression": "Minimal signal — solid container with data readout"
+      },
+      "anchors": {
+        "primary": ["INSTRUMENT"],
+        "secondary": ["SIGNAL"],
+        "weights": { "INSTRUMENT": 0.9, "SIGNAL": 0.4 }
+      },
+      "translations": ["Readout", "Gauge"],
+      "dialects": ["ledger-dark", "ledger-light"],
+      "paths": {
+        "implementation": "components/ledger/StatCard.tsx"
+      },
+      "validation": {
+        "requiredTests": ["instrument-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "Financial metric display with mono value, label above, and trend indicator.",
+      "tags": ["card", "stat", "metric", "ledger"]
+    },
+
+    {
+      "id": "threat-badge",
+      "name": "Threat Badge",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [10, 25],
+        "expression": "Graduated color scale from verde to cardinal"
+      },
+      "anchors": {
+        "primary": ["GRADIENT"],
+        "secondary": ["THRESHOLD"],
+        "weights": { "GRADIENT": 0.9, "THRESHOLD": 0.5 }
+      },
+      "translations": ["Threat Gradient", "Intensity Scale"],
+      "dialects": ["atlas"],
+      "paths": {
+        "implementation": "components/atlas/ThreatBadge.tsx"
+      },
+      "validation": {
+        "requiredTests": ["material-state-check"],
+        "antipatterns": []
+      },
+      "description": "Threat level indicator with segmented bar and color gradient.",
+      "tags": ["badge", "threat", "gradient", "atlas"]
+    },
+
+    {
+      "id": "wireframe-box",
+      "name": "Wireframe Box",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [15, 30],
+        "expression": "Corner brackets, blueprint aesthetic, technical framing"
+      },
+      "anchors": {
+        "primary": ["INSTRUMENT"],
+        "secondary": ["NAVIGATION"],
+        "weights": { "INSTRUMENT": 0.8, "NAVIGATION": 0.5 }
+      },
+      "translations": ["Panel", "Calibration Mark"],
+      "dialects": ["ledger-light"],
+      "paths": {
+        "implementation": "components/ledger/WireframeBox.tsx"
+      },
+      "validation": {
+        "requiredTests": ["crt-blueprint-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "Blueprint-style container with corner brackets for Ledger Light mode.",
+      "tags": ["container", "wireframe", "blueprint", "ledger"]
+    },
+
+    {
+      "id": "data-table",
+      "name": "Data Table",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [5, 15],
+        "expression": "Diamond markers, subtle hover states"
+      },
+      "anchors": {
+        "primary": ["INSTRUMENT", "SIGNAL"],
+        "secondary": [],
+        "weights": { "INSTRUMENT": 0.8, "SIGNAL": 0.5 }
+      },
+      "translations": ["Readout"],
+      "dialects": ["ledger-dark", "ledger-light"],
+      "paths": {
+        "implementation": "components/ledger/DataTable.tsx"
+      },
+      "validation": {
+        "requiredTests": ["instrument-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "Minimal table with diamond markers and hover states.",
+      "tags": ["table", "data", "ledger"]
+    },
+
+    {
+      "id": "instrument-panel",
+      "name": "Instrument Panel",
+      "type": "component",
+      "layer": "form",
+      "signalQuotient": {
+        "range": [20, 40],
+        "expression": "Vertical dividers, tool sections, status indicators"
+      },
+      "anchors": {
+        "primary": ["INSTRUMENT", "NAVIGATION"],
+        "secondary": [],
+        "weights": { "INSTRUMENT": 0.9, "NAVIGATION": 0.7 }
+      },
+      "translations": ["Panel", "Status Light"],
+      "dialects": ["astrolabe"],
+      "paths": {
+        "implementation": "components/astrolabe/InstrumentPanel.tsx"
+      },
+      "validation": {
+        "requiredTests": ["instrument-test"],
+        "antipatterns": ["no-border-radius"]
+      },
+      "description": "Navigation instrument panel with status indicators and tool sections.",
+      "tags": ["panel", "instrument", "astrolabe"]
+    },
+
+    {
+      "id": "particle-canvas",
+      "name": "Particle Canvas",
+      "type": "system",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [50, 80],
+        "expression": "Full ambient particle system — the primary SIGNAL expression"
+      },
+      "anchors": {
+        "primary": ["LIVING_GEOMETRY"],
+        "secondary": ["SIGNAL", "NAVIGATION"],
+        "weights": { "LIVING_GEOMETRY": 1.0, "SIGNAL": 0.6, "NAVIGATION": 0.4 }
+      },
+      "translations": ["Particle Cloud", "Vector Field", "Organic Flow", "Data Stream"],
+      "dialects": ["shared"],
+      "paths": {
+        "docs": "particles/core.js",
+        "implementation": "components/shared/ParticleCanvas.tsx"
+      },
+      "validation": {
+        "requiredTests": ["material-state-check"],
+        "antipatterns": ["wrong-grid-particles"]
+      },
+      "description": "GRID=3 particle system with platform-specific behaviors.",
+      "tags": ["particles", "canvas", "signal", "ambient"]
+    },
+
+    {
+      "id": "particle-axis-flow",
+      "name": "Particle Behavior: Axis Flow",
+      "type": "behavior",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [40, 60],
+        "expression": "Diagonal axis flow along Vector I directions"
+      },
+      "anchors": {
+        "primary": ["NAVIGATION", "INSTRUMENT"],
+        "secondary": ["LIVING_GEOMETRY"],
+        "weights": { "NAVIGATION": 0.9, "INSTRUMENT": 0.7, "LIVING_GEOMETRY": 0.5 }
+      },
+      "translations": ["Vector Field"],
+      "dialects": ["astrolabe"],
+      "paths": {
+        "docs": "particles/core.js"
+      },
+      "description": "Astrolabe particle behavior — star chart navigation aesthetic.",
+      "tags": ["particles", "behavior", "astrolabe", "navigation"]
+    },
+
+    {
+      "id": "particle-radial-organic",
+      "name": "Particle Behavior: Radial Organic",
+      "type": "behavior",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [50, 70],
+        "expression": "Breathing, radial movement centered on subject"
+      },
+      "anchors": {
+        "primary": ["LIVING_GEOMETRY", "THRESHOLD"],
+        "secondary": [],
+        "weights": { "LIVING_GEOMETRY": 0.9, "THRESHOLD": 0.6 }
+      },
+      "translations": ["Organic Flow", "Bioluminescence"],
+      "dialects": ["atlas"],
+      "paths": {
+        "docs": "particles/core.js"
+      },
+      "description": "Atlas particle behavior — bioluminescent specimen aesthetic.",
+      "tags": ["particles", "behavior", "atlas", "organic"]
+    },
+
+    {
+      "id": "particle-horizontal-flow",
+      "name": "Particle Behavior: Horizontal Flow",
+      "type": "behavior",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [30, 50],
+        "expression": "Scanline-like horizontal drift with trails"
+      },
+      "anchors": {
+        "primary": ["SIGNAL", "INSTRUMENT"],
+        "secondary": [],
+        "weights": { "SIGNAL": 0.8, "INSTRUMENT": 0.7 }
+      },
+      "translations": ["Data Stream", "Terminal Aesthetic"],
+      "dialects": ["ledger-dark"],
+      "paths": {
+        "docs": "particles/core.js"
+      },
+      "description": "Ledger Dark particle behavior — data stream aesthetic.",
+      "tags": ["particles", "behavior", "ledger", "signal"]
+    },
+
+    {
+      "id": "particle-clustered",
+      "name": "Particle Behavior: Clustered",
+      "type": "behavior",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [20, 40],
+        "expression": "Breathing clusters with connection lines"
+      },
+      "anchors": {
+        "primary": ["LIVING_GEOMETRY", "GRADIENT"],
+        "secondary": [],
+        "weights": { "LIVING_GEOMETRY": 0.7, "GRADIENT": 0.5 }
+      },
+      "translations": ["Data Organism"],
+      "dialects": ["ledger-light"],
+      "paths": {
+        "docs": "particles/core.js"
+      },
+      "description": "Ledger Light particle behavior — semantic topology aesthetic.",
+      "tags": ["particles", "behavior", "ledger", "topology"]
+    },
+
+    {
+      "id": "glitch-effects",
+      "name": "Glitch Effects",
+      "type": "system",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [30, 70],
+        "expression": "Scanlines, chromatic aberration, displacement, noise"
+      },
+      "anchors": {
+        "primary": ["SIGNAL"],
+        "secondary": ["THRESHOLD"],
+        "weights": { "SIGNAL": 1.0, "THRESHOLD": 0.6 }
+      },
+      "translations": ["Glitch Effect", "Scanline Overlay", "Noise Texture"],
+      "dialects": ["shared"],
+      "paths": {
+        "implementation": "components/shared/GlitchEffects.tsx"
+      },
+      "validation": {
+        "requiredTests": ["material-state-check"],
+        "antipatterns": []
+      },
+      "description": "CSS and React glitch effects — scanlines, aberration, noise, loading states.",
+      "tags": ["glitch", "signal", "effects", "ambient"]
+    },
+
+    {
+      "id": "generative-sigil",
+      "name": "Generative Sigil",
+      "type": "component",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [30, 50],
+        "expression": "Deterministic particle pattern from category hash"
+      },
+      "anchors": {
+        "primary": ["LIVING_GEOMETRY"],
+        "secondary": ["SIGNAL"],
+        "weights": { "LIVING_GEOMETRY": 0.8, "SIGNAL": 0.5 }
+      },
+      "translations": ["Generative Sigil"],
+      "dialects": ["atlas", "astrolabe", "ledger-dark"],
+      "paths": {
+        "docs": "philosophy/GENERATIVE-PATTERNS.md",
+        "implementation": "icons/core/GenerativeSigil.tsx"
+      },
+      "validation": {
+        "requiredTests": [],
+        "antipatterns": []
+      },
+      "description": "Algorithmic particle clusters for unique visual identities from category/domain hash.",
+      "tags": ["sigil", "generative", "icon", "identity"]
+    },
+
+    {
+      "id": "strange-attractors",
+      "name": "Strange Attractors",
+      "type": "system",
+      "layer": "signal",
+      "signalQuotient": {
+        "range": [60, 90],
+        "expression": "Mathematical chaos systems for domain nebulae"
+      },
+      "anchors": {
+        "primary": ["LIVING_GEOMETRY", "THRESHOLD"],
+        "secondary": ["NAVIGATION"],
+        "weights": { "LIVING_GEOMETRY": 1.0, "THRESHOLD": 0.7, "NAVIGATION": 0.4 }
+      },
+      "translations": ["Particle Cloud", "Gateway"],
+      "dialects": ["atlas", "astrolabe", "marketing"],
+      "paths": {
+        "docs": "particles/STRANGE-ATTRACTORS.md",
+        "implementation": "particles/StrangeAttractor.ts",
+        "examples": ["components/atlas/DomainNebulae.md"]
+      },
+      "validation": {
+        "requiredTests": ["material-state-check"],
+        "antipatterns": ["wrong-grid-particles"]
+      },
+      "description": "Lorenz, Thomas, Halvorsen, and other attractors for complex particle patterns.",
+      "tags": ["attractor", "chaos", "particles", "nebula"]
+    },
+
+    {
+      "id": "color-tokens",
+      "name": "Color Tokens",
+      "type": "token",
+      "layer": "void",
+      "signalQuotient": {
+        "range": [0, 0],
+        "expression": "N/A — tokens are foundational"
+      },
+      "anchors": {
+        "primary": [],
+        "secondary": [],
+        "weights": {}
+      },
+      "translations": [],
+      "dialects": ["shared"],
+      "paths": {
+        "docs": "tokens/colors.json"
+      },
+      "validation": {
+        "requiredTests": [],
+        "antipatterns": ["no-pure-black", "no-pure-white", "no-purple-gradients"]
+      },
+      "description": "Canonical color definitions — void, dawn, gold, verde, teal, signal, cardinal.",
+      "tags": ["tokens", "color", "palette"]
+    },
+
+    {
+      "id": "spacing-tokens",
+      "name": "Spacing Tokens",
+      "type": "token",
+      "layer": "structure",
+      "signalQuotient": {
+        "range": [0, 0],
+        "expression": "N/A — tokens are foundational"
+      },
+      "anchors": {
+        "primary": [],
+        "secondary": [],
+        "weights": {}
+      },
+      "translations": [],
+      "dialects": ["shared"],
+      "paths": {
+        "docs": "tokens/spacing.json"
+      },
+      "validation": {
+        "requiredTests": [],
+        "antipatterns": ["wrong-grid-structure"]
+      },
+      "description": "4px base spacing scale for layout and structure.",
+      "tags": ["tokens", "spacing", "grid", "layout"]
+    }
+  ]
+}

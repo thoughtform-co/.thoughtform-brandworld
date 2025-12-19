@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Thoughtform Typography Fallback Chains",
+  "version": "1.0.0",
+  "description": "Font family fallback chains for graceful degradation",
+
+  "voices": {
+    "system": {
+      "name": "System Voice",
+      "use": "Navigation, labels, coordinates, instruments",
+      "chain": [
+        {
+          "font": "PP Mondwest",
+          "type": "licensed",
+          "source": "Pangram Pangram",
+          "weights": [400],
+          "note": "Primary - requires license"
+        },
+        {
+          "font": "PT Mono",
+          "type": "free",
+          "source": "Google Fonts",
+          "weights": [400],
+          "note": "First fallback - very close match"
+        },
+        {
+          "font": "JetBrains Mono",
+          "type": "free",
+          "source": "JetBrains",
+          "weights": [400, 500, 700],
+          "note": "Second fallback - modern mono"
+        },
+        {
+          "font": "monospace",
+          "type": "system",
+          "note": "System fallback"
+        }
+      ],
+      "cssValue": "'PP Mondwest', 'PT Mono', 'JetBrains Mono', monospace"
+    },
+
+    "content": {
+      "name": "Content Voice",
+      "use": "Body text, descriptions, long-form reading",
+      "chain": [
+        {
+          "font": "PP Neue Montreal",
+          "type": "licensed",
+          "source": "Pangram Pangram",
+          "weights": [400, 500, 600],
+          "note": "Primary - requires license"
+        },
+        {
+          "font": "IBM Plex Sans",
+          "type": "free",
+          "source": "Google Fonts",
+          "weights": [400, 500, 600, 700],
+          "note": "First fallback - excellent match"
+        },
+        {
+          "font": "system-ui",
+          "type": "system",
+          "note": "System sans-serif"
+        },
+        {
+          "font": "sans-serif",
+          "type": "system",
+          "note": "Generic fallback"
+        }
+      ],
+      "cssValue": "'PP Neue Montreal', 'IBM Plex Sans', system-ui, sans-serif"
+    },
+
+    "scholarly": {
+      "name": "Scholarly Voice",
+      "use": "Atlas entity descriptions, specimen notes",
+      "chain": [
+        {
+          "font": "Crimson Pro",
+          "type": "free",
+          "source": "Google Fonts",
+          "weights": [400, 500, 600],
+          "styles": ["normal", "italic"],
+          "note": "Primary - free font"
+        },
+        {
+          "font": "Georgia",
+          "type": "system",
+          "note": "System serif - very common"
+        },
+        {
+          "font": "serif",
+          "type": "system",
+          "note": "Generic fallback"
+        }
+      ],
+      "cssValue": "'Crimson Pro', Georgia, serif"
+    }
+  },
+
+  "freeFontsOnly": {
+    "description": "Fallback chain for development without licensed fonts",
+    "system": "'PT Mono', 'JetBrains Mono', monospace",
+    "content": "'IBM Plex Sans', system-ui, sans-serif",
+    "scholarly": "'Crimson Pro', Georgia, serif"
+  },
+
+  "googleFontsImport": {
+    "url": "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=PT+Mono&display=swap",
+    "families": ["PT Mono", "IBM Plex Sans:400,500,600", "Crimson Pro:400,500,400i"]
+  }
+}

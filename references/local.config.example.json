@@ -1,0 +1,8 @@
+{
+  "$schema": "./local.config.schema.json",
+  "description": "Copy this file to local.config.json and update paths for your machine",
+  "roots": {
+    "generalReferences": "C:\\Users\\YOUR_USERNAME\\Dropbox\\03_Thoughtform\\01_Thoughtform Branding\\07_Artifacts\\_01_GENERAL REFERENCES",
+    "moodboards": "C:\\Users\\YOUR_USERNAME\\Dropbox\\03_Thoughtform\\01_Thoughtform Branding\\02_Moodboards"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "$comment": "This file re-exports from the canonical source for convenience. See tokens/anchors/definitions.json for the source of truth.",
+  "$ref": "../../tokens/anchors/definitions.json"
+}

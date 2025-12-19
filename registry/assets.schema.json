@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thoughtform.co/schemas/assets.schema.json",
+  "title": "Thoughtform Asset Registry Schema",
+  "description": "Schema for registered design assets (tokens, patterns, components, behaviors)",
+  
+  "definitions": {
+    "anchorId": {
+      "type": "string",
+      "enum": ["NAVIGATION", "THRESHOLD", "INSTRUMENT", "LIVING_GEOMETRY", "GRADIENT", "SIGNAL"]
+    },
+    "dialectId": {
+      "type": "string",
+      "enum": ["astrolabe", "atlas", "ledger-dark", "ledger-light", "marketing", "shared"]
+    },
+    "assetType": {
+      "type": "string",
+      "enum": ["token", "primitive", "pattern", "component", "system", "behavior"]
+    },
+    "layerId": {
+      "type": "string",
+      "enum": ["void", "structure", "signal", "form"]
+    },
+    "signalQuotient": {
+      "type": "object",
+      "properties": {
+        "range": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0, "maximum": 100 },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Min and max signal percentage [min, max]"
+        },
+        "expression": {
+          "type": "string",
+          "description": "How signal manifests in this asset"
+        }
+      },
+      "required": ["range"]
+    },
+    "anchorWeights": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/anchorId" },
+          "description": "Primary anchors this asset expresses"
+        },
+        "secondary": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/anchorId" },
+          "description": "Secondary/accent anchors"
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 },
+          "description": "Numeric weights per anchor (0.0-1.0)"
+        }
+      },
+      "required": ["primary"]
+    },
+    "assetPaths": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "type": "string",
+          "description": "Path to documentation file"
+        },
+        "implementation": {
+          "type": "string",
+          "description": "Path to implementation file (tsx, js, css)"
+        },
+        "examples": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths to example usage files"
+        }
+      }
+    },
+    "validationRules": {
+      "type": "object",
+      "properties": {
+        "requiredTests": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Test IDs from validation.json that must pass"
+        },
+        "antipatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Anti-pattern IDs that apply to this asset"
+        }
+      }
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Unique kebab-case identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name"
+          },
+          "type": { "$ref": "#/definitions/assetType" },
+          "layer": { "$ref": "#/definitions/layerId" },
+          "signalQuotient": { "$ref": "#/definitions/signalQuotient" },
+          "anchors": { "$ref": "#/definitions/anchorWeights" },
+          "translations": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Translation patterns this asset implements (from translation-table.json)"
+          },
+          "dialects": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/dialectId" },
+            "description": "Which platform dialects this asset belongs to"
+          },
+          "paths": { "$ref": "#/definitions/assetPaths" },
+          "validation": { "$ref": "#/definitions/validationRules" },
+          "description": {
+            "type": "string",
+            "description": "Brief description of the asset"
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Searchable tags"
+          }
+        },
+        "required": ["id", "name", "type", "layer", "dialects"]
+      }
+    }
+  },
+  "required": ["name", "version", "assets"]
+}

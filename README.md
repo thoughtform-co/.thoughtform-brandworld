@@ -1,48 +1,92 @@
 # Thoughtform Brandworld
 
-Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledger, and thoughtform.co.
+A semantic design system for all Thoughtform platforms: Astrolabe, Atlas, Ledger, and thoughtform.co.
+
+**Key insight:** Traditional brand guidelines *restrict*. Semantic brand systems *interpret*. We define meanings, not just aesthetics.
+
+---
+
+## Navigation
+
+| Layer | Purpose | Start Here |
+|-------|---------|------------|
+| **[semantic/](semantic/)** | Meaning layer — anchors, translations, dialects | Understanding the brand |
+| **[systems/](systems/)** | Primitives — structure (4px), signal (3px), typography | Building components |
+| **[registry/](registry/)** | Asset catalog — machine-readable source of truth | Finding existing patterns |
+| **[references/](references/)** | Reference library — inspiration with semantic metadata | Adding new references |
+| **[tokens/](tokens/)** | Token values — colors, spacing, motion | Getting exact values |
+| **[components/](components/)** | Component implementations — React/TSX code | Copy-paste ready code |
+| **[particles/](particles/)** | Particle system — GRID=3 renderer, attractors | Ambient effects |
+| **[philosophy/](philosophy/)** | Design philosophy — principles, vision | Deep understanding |
+
+---
+
+## The Semantic Design Workflow
+
+```
+Reference → Anchor Scoring → Translation Selection → Physical Pattern → Implementation
+```
+
+1. **Score the reference** against the six anchors (see `semantic/anchors/`)
+2. **Select translations** from `semantic/translations/translation-table.json`
+3. **Choose physical patterns** that implement those translations
+4. **Implement** using the appropriate dialect's tokens
+
+---
 
 ## Structure
 
 ```
 .thoughtform-brandworld/
-├── tokens/
-│   ├── colors.json           # Canonical color definitions
-│   ├── typography.json       # Font stacks, scale, tracking
-│   ├── spacing.json          # 4px grid system
-│   └── platforms/
-│       ├── astrolabe.json    # Gold accent, dark mode
-│       ├── atlas.json        # Dawn/Gold, dark mode
-│       ├── ledger-dark.json  # Verde accent
-│       └── ledger-light.json # Teal accent, paper mode
-├── particles/
-│   ├── core.js                        # Shared GRID=3 renderer
-│   ├── STRANGE-ATTRACTORS.md          # Mathematical attractor documentation
-│   └── thoughtform-co-3d.md           # 3D scroll-driven particle system docs
-├── icons/
-│   ├── core/
-│   │   ├── GenerativeSigil.tsx        # Algorithmic particle sigils
-│   │   ├── ParticleIcon.tsx           # Legacy geometric icons
-│   │   └── shapes.ts                  # Shape generators
-│   ├── presets/                       # Domain-specific presets
-│   └── README.md                      # Icon system documentation
-├── components/
-│   ├── shared/
-│   │   ├── ParticleCanvas.tsx        # Base particle component
-│   │   ├── NavigationGrid.tsx        # Navigation grid primitive component
-│   │   ├── NavigationGrid.md         # Navigation grid specification
-│   │   └── navigation-grid.css       # Navigation grid CSS implementation
-│   └── thoughtform-co/
-│       ├── NavigationCockpit.tsx     # HUD navigation pattern
-│       ├── 3d-particle-system.tsx    # 3D particle system reference
-│       └── NAVIGATION_HUD.md         # HUD system documentation
-├── philosophy/
-│   ├── PRINCIPLES.md                 # Core design tenets
-│   ├── GENERATIVE-PATTERNS.md        # Sigil system math & philosophy
-│   └── SEMANTIC-BRAND-VISION.md      # Future of embedding-based brands
-├── skills/
-│   └── SKILL.md                      # Claude/Cursor skill
-└── mcp-server/                       # MCP server for AI access
+├── semantic/                        # MEANING LAYER (stable)
+│   ├── anchors/                     # The six semantic anchors
+│   ├── translations/                # Anchor → Physical Pattern mappings
+│   ├── dialects/                    # Platform-specific expressions
+│   ├── models/                      # Material states, layer architecture
+│   └── antipatterns.md              # Never/always rules
+│
+├── systems/                         # PRIMITIVES (executable)
+│   ├── structure/                   # Layout, spacing, grid (4px base)
+│   ├── signal/                      # Particles, glitch (GRID=3)
+│   └── typography/                  # Font rules, fallbacks
+│
+├── registry/                        # ASSET CATALOG (source of truth)
+│   ├── assets.schema.json           # Asset schema
+│   ├── assets.json                  # All registered assets
+│   └── validation.json              # Tests + anti-patterns
+│
+├── references/                      # REFERENCE LIBRARY
+│   ├── entries/                     # Reference markdown files
+│   ├── assets/                      # Preview images
+│   └── index/                       # Search index
+│
+├── build/                           # GENERATED OUTPUTS
+│   └── skills/                      # Generated Claude skill files
+│
+├── tokens/                          # TOKEN VALUES
+│   ├── colors.json
+│   ├── typography.json
+│   ├── spacing.json
+│   └── platforms/                   # Platform-specific tokens
+│
+├── components/                      # IMPLEMENTATIONS
+│   ├── atlas/
+│   ├── ledger/
+│   ├── astrolabe/
+│   └── shared/
+│
+├── particles/                       # PARTICLE SYSTEM
+│   ├── core.js
+│   └── STRANGE-ATTRACTORS.md
+│
+├── philosophy/                      # PHILOSOPHY
+│   ├── PRINCIPLES.md
+│   └── SEMANTIC-BRAND-VISION.md
+│
+├── skills/                          # CLAUDE SKILLS
+│   └── semantic-design/
+│
+└── mcp-server/                      # MCP SERVER
 ```
 
 ## Quick Reference

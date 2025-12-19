@@ -74,6 +74,27 @@ Add to Cursor's MCP settings (Settings > MCP):
 | `thoughtform://components/astrolabe/InstrumentPanel` | Navigation panel with status indicators |
 | `thoughtform://components/shared/ParticleCanvas` | GRID=3 particle system for all platforms |
 
+### Semantic Layer
+
+| URI | Description |
+|-----|-------------|
+| `thoughtform://semantic/anchors` | The six semantic anchors (NAVIGATION, THRESHOLD, etc.) |
+| `thoughtform://semantic/translations` | Anchor → Translation → Physical Pattern mappings |
+| `thoughtform://semantic/antipatterns` | Never/always design rules |
+
+### Registry
+
+| URI | Description |
+|-----|-------------|
+| `thoughtform://registry/assets` | All registered design assets with semantic metadata |
+| `thoughtform://registry/validation` | Quality tests and anti-pattern rules |
+
+### Reference Library
+
+| URI | Description |
+|-----|-------------|
+| `thoughtform://references/list` | All reference entries with summaries |
+
 ## Available Tools
 
 ### `get_design_tokens`
@@ -99,6 +120,33 @@ Get all reference component code for a platform.
 Arguments:
   platform: "atlas" | "ledger" | "astrolabe"
   includeShared: boolean (default: true) - Include ParticleCanvas
+```
+
+### `search_references`
+Search the reference library by anchor, dialect, tag, or mode.
+
+```
+Arguments:
+  anchors: string[] (optional) - Filter by anchor (NAVIGATION, THRESHOLD, etc.)
+  dialect: string (optional) - Filter by dialect affinity
+  mode: string (optional) - Filter by mode (direct, philosophical, hybrid)
+  tags: string[] (optional) - Filter by tags
+```
+
+### `suggest_translation`
+Given a reference ID, suggest Thoughtform assets and translation patterns.
+
+```
+Arguments:
+  referenceId: string - Reference ID from the library
+```
+
+### `get_translation_chain`
+Get the full Anchor → Translations → Physical Patterns chain.
+
+```
+Arguments:
+  anchor: "NAVIGATION" | "THRESHOLD" | "INSTRUMENT" | "LIVING_GEOMETRY" | "GRADIENT" | "SIGNAL"
 ```
 
 ## Usage in Claude/Cursor

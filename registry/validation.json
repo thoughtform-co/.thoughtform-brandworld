@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Thoughtform Validation Rules",
+  "version": "1.0.0",
+  "description": "Formalized quality tests and anti-pattern rules for validating Thoughtform components",
+
+  "tests": [
+    {
+      "id": "instrument-test",
+      "name": "Instrument Test",
+      "question": "Could this exist in brass and glass?",
+      "description": "The component should feel like a precision instrument — something you might find in a Victorian observatory or NASA mission control.",
+      "failureIndicates": "Too digital, not enough retrofuturism. May feel like generic SaaS rather than specialized equipment.",
+      "severity": "error",
+      "category": "aesthetic"
+    },
+    {
+      "id": "ctrl-creep-test",
+      "name": "Ctrl Creep Test",
+      "question": "Does it express mutual human-machine alienness?",
+      "description": "Thoughtform lives at the threshold between human meaning and machine geometry. The design should acknowledge both sides.",
+      "failureIndicates": "Either too generic-tech (could be from any AI startup) or too incomprehensibly weird (lost the human side).",
+      "passCriteria": "Sweet spot: instrument for navigating alien intelligence",
+      "severity": "warning",
+      "category": "philosophy"
+    },
+    {
+      "id": "material-state-check",
+      "name": "Material State Check",
+      "question": "Can you identify the signal quotient and threshold location?",
+      "description": "For any component, you should be able to say: 'This is X% SIGNAL' and 'The threshold is HERE' (pointing to where meaning emerges).",
+      "failureIndicates": "Composition unclear. The relationship between VOID, SIGNAL, and FORM is muddy.",
+      "severity": "warning",
+      "category": "structure"
+    },
+    {
+      "id": "sibling-test",
+      "name": "Sibling Test",
+      "question": "Could this exist alongside other Thoughtform work?",
+      "description": "Work from different platforms should feel like siblings — same family, different rooms.",
+      "failureIndicates": "Either too similar to other platforms (dialects not differentiated) or too different (anchors not consistent).",
+      "severity": "warning",
+      "category": "coherence"
+    },
+    {
+      "id": "crt-blueprint-test",
+      "name": "CRT/Blueprint Test",
+      "question": "Would this look correct on both a CRT terminal AND a blueprint?",
+      "description": "Dark mode should feel like warm CRT phosphor. Light mode should feel like NASA engineering drawings.",
+      "failureIndicates": "Mode-specific design not properly expressed.",
+      "severity": "info",
+      "category": "aesthetic"
+    }
+  ],
+
+  "antipatterns": [
+    {
+      "id": "no-border-radius",
+      "name": "No Border Radius",
+      "rule": "border-radius must always be 0",
+      "rationale": "Sharp corners are the instrument aesthetic — precision, not friendliness.",
+      "cssPattern": "border-radius:\\s*[1-9]",
+      "severity": "error",
+      "category": "geometry"
+    },
+    {
+      "id": "no-pure-black",
+      "name": "No Pure Black",
+      "rule": "Never use #000000 or rgb(0,0,0) — use warm void (#070604)",
+      "rationale": "Pure black is cold and digital. Thoughtform's void is warm, inhabited.",
+      "cssPattern": "#000000|#000\\b|rgb\\(\\s*0\\s*,\\s*0\\s*,\\s*0\\s*\\)",
+      "severity": "error",
+      "category": "color"
+    },
+    {
+      "id": "no-pure-white",
+      "name": "No Pure White",
+      "rule": "Never use #FFFFFF or rgb(255,255,255) — use dawn (#ECE3D6) or paper (#F0EFEC)",
+      "rationale": "Pure white is harsh. Our whites are warm and aged.",
+      "cssPattern": "#FFFFFF|#FFF\\b|rgb\\(\\s*255\\s*,\\s*255\\s*,\\s*255\\s*\\)",
+      "severity": "error",
+      "category": "color"
+    },
+    {
+      "id": "no-inter-font",
+      "name": "No Inter or System Fonts",
+      "rule": "Never use Inter, system-ui, Arial, or Helvetica",
+      "rationale": "Inter is the font of a thousand AI landing pages. We are not that.",
+      "cssPattern": "font-family:[^;]*(Inter|system-ui|Arial|Helvetica)(?!.*Mono)",
+      "severity": "error",
+      "category": "typography"
+    },
+    {
+      "id": "no-purple-gradients",
+      "name": "No Purple/Indigo Gradients",
+      "rule": "Never use purple or indigo as primary colors",
+      "rationale": "Purple gradients scream 'generic AI startup'. Stay within Dawn/Gold/Verde/Teal.",
+      "cssPattern": "#6366F1|#667eea|#764ba2|#8B5CF6|#7C3AED",
+      "severity": "error",
+      "category": "color"
+    },
+    {
+      "id": "no-heavy-shadows",
+      "name": "No Heavy Box Shadows",
+      "rule": "Avoid box-shadow for depth — use borders and transparency instead",
+      "rationale": "Shadows are soft and modern. We are sharp and retrofuturistic.",
+      "cssPattern": "box-shadow:\\s*0\\s+[1-9]\\d*px\\s+[1-9]\\d*px",
+      "severity": "warning",
+      "category": "effects"
+    },
+    {
+      "id": "no-emoji",
+      "name": "No Emoji",
+      "rule": "Never use emoji in UI — use ASCII markers (◆ ◇ │ // etc.)",
+      "rationale": "Emoji break the terminal/instrument aesthetic.",
+      "textPattern": "[\\u{1F300}-\\u{1F9FF}]",
+      "severity": "error",
+      "category": "typography"
+    },
+    {
+      "id": "no-circles",
+      "name": "No Circular Elements (with exceptions)",
+      "rule": "Avoid border-radius: 50% except for 5px threat dots",
+      "rationale": "Circles are friendly. Diamonds are precise. Use diamonds (rotated squares) instead.",
+      "cssPattern": "border-radius:\\s*(50%|9999px)",
+      "exceptions": ["threat-dot", "status-indicator"],
+      "severity": "warning",
+      "category": "geometry"
+    },
+    {
+      "id": "wrong-grid-particles",
+      "name": "Wrong Particle Grid",
+      "rule": "Particles must snap to GRID=3, not 4 or other values",
+      "rationale": "The 3px grid creates visible quantization evoking CRT phosphor dots.",
+      "codePattern": "const GRID\\s*=\\s*[^3]",
+      "severity": "error",
+      "category": "signal"
+    },
+    {
+      "id": "wrong-grid-structure",
+      "name": "Wrong Structure Grid",
+      "rule": "Layout spacing should use 4px base, not 3px or other",
+      "rationale": "4px base provides readable, accessible spacing for UI elements.",
+      "codePattern": "--space-base:\\s*3px",
+      "severity": "warning",
+      "category": "structure"
+    }
+  ],
+
+  "categories": {
+    "aesthetic": "Visual feel and retrofuturism",
+    "philosophy": "Core Thoughtform meaning",
+    "structure": "Layout and composition",
+    "coherence": "Cross-platform consistency",
+    "geometry": "Shapes and corners",
+    "color": "Palette usage",
+    "typography": "Fonts and text",
+    "effects": "Shadows, glows, overlays",
+    "signal": "Particle and generative systems"
+  },
+
+  "severities": {
+    "error": "Must fix before shipping",
+    "warning": "Should fix, but not blocking",
+    "info": "Nice to have, for polish"
+  }
+}

@@ -2,21 +2,31 @@
 /**
  * Thoughtform Design System MCP Server
  *
- * Serves design tokens, philosophy, platform specs, and reference components
+ * Serves design tokens, philosophy, platform specs, reference components,
+ * semantic anchors, translation tables, asset registry, and reference library
  * to Claude and Cursor.
  *
  * Resources:
- * - thoughtform://tokens/colors
- * - thoughtform://tokens/typography
- * - thoughtform://tokens/spacing
- * - thoughtform://tokens/{platform}
+ * - thoughtform://tokens/{type}
  * - thoughtform://philosophy
  * - thoughtform://particles
  * - thoughtform://skill
- * - thoughtform://components/atlas/{component}
- * - thoughtform://components/ledger/{component}
- * - thoughtform://components/astrolabe/{component}
- * - thoughtform://components/shared/{component}
+ * - thoughtform://components/{platform}/{component}
+ * - thoughtform://semantic/anchors
+ * - thoughtform://semantic/translations
+ * - thoughtform://semantic/antipatterns
+ * - thoughtform://registry/assets
+ * - thoughtform://registry/validation
+ * - thoughtform://references/list
+ * - thoughtform://references/{id}
+ *
+ * Tools:
+ * - get_design_tokens
+ * - get_color_css
+ * - get_platform_components
+ * - search_references (NEW)
+ * - suggest_translation (NEW)
+ * - get_translation_chain (NEW)
  */
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -177,6 +187,45 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
                 description: "CSS and React glitch effects (scanlines, aberration, noise, loading)",
                 mimeType: "text/typescript",
             },
+            // ─── Semantic Layer ──────────────────────────────────────────────
+            {
+                uri: "thoughtform://semantic/anchors",
+                name: "Semantic Anchors",
+                description: "The six semantic anchors (NAVIGATION, THRESHOLD, INSTRUMENT, LIVING_GEOMETRY, GRADIENT, SIGNAL)",
+                mimeType: "application/json",
+            },
+            {
+                uri: "thoughtform://semantic/translations",
+                name: "Translation Table",
+                description: "Anchor → Translation → Physical Pattern mappings (THE workflow)",
+                mimeType: "application/json",
+            },
+            {
+                uri: "thoughtform://semantic/antipatterns",
+                name: "Anti-Patterns",
+                description: "Never/always design rules",
+                mimeType: "text/markdown",
+            },
+            // ─── Registry ────────────────────────────────────────────────────
+            {
+                uri: "thoughtform://registry/assets",
+                name: "Asset Registry",
+                description: "All registered design assets with semantic metadata",
+                mimeType: "application/json",
+            },
+            {
+                uri: "thoughtform://registry/validation",
+                name: "Validation Rules",
+                description: "Quality tests and anti-pattern rules",
+                mimeType: "application/json",
+            },
+            // ─── References ──────────────────────────────────────────────────
+            {
+                uri: "thoughtform://references/list",
+                name: "Reference Library",
+                description: "List of all reference entries with summaries",
+                mimeType: "application/json",
+            },
         ],
     };
 });
@@ -209,6 +258,15 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
         // Shared Components
         "thoughtform://components/shared/ParticleCanvas": { path: "components/shared/ParticleCanvas.tsx", type: "text" },
         "thoughtform://components/shared/GlitchEffects": { path: "components/shared/GlitchEffects.tsx", type: "text" },
+        // Semantic Layer
+        "thoughtform://semantic/anchors": { path: "tokens/anchors/definitions.json", type: "json" },
+        "thoughtform://semantic/translations": { path: "semantic/translations/translation-table.json", type: "json" },
+        "thoughtform://semantic/antipatterns": { path: "semantic/antipatterns.md", type: "text" },
+        // Registry
+        "thoughtform://registry/assets": { path: "registry/assets.json", type: "json" },
+        "thoughtform://registry/validation": { path: "registry/validation.json", type: "json" },
+        // References
+        "thoughtform://references/list": { path: "references/index/keywords.json", type: "json" },
     };
     const resource = resourceMap[uri];
     if (!resource) {
@@ -282,6 +340,64 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                         },
                     },
                     required: ["platform"],
+                },
+            },
+            {
+                name: "search_references",
+                description: "Search the reference library by anchor, dialect, tag, or mode",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        anchors: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "Filter by anchor activation (NAVIGATION, THRESHOLD, INSTRUMENT, LIVING_GEOMETRY, GRADIENT, SIGNAL)",
+                        },
+                        dialect: {
+                            type: "string",
+                            description: "Filter by dialect affinity (astrolabe, atlas, ledger-dark, ledger-light, marketing)",
+                            enum: ["astrolabe", "atlas", "ledger-dark", "ledger-light", "marketing"],
+                        },
+                        mode: {
+                            type: "string",
+                            description: "Filter by reference mode (direct, philosophical, hybrid)",
+                            enum: ["direct", "philosophical", "hybrid"],
+                        },
+                        tags: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "Filter by tags (retrofuturism, CRT, terminal, etc.)",
+                        },
+                    },
+                },
+            },
+            {
+                name: "suggest_translation",
+                description: "Given a reference ID, suggest Thoughtform assets and translation patterns",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        referenceId: {
+                            type: "string",
+                            description: "Reference ID from the library",
+                        },
+                    },
+                    required: ["referenceId"],
+                },
+            },
+            {
+                name: "get_translation_chain",
+                description: "Get the full Anchor → Translations → Physical Patterns chain for an anchor",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        anchor: {
+                            type: "string",
+                            description: "Anchor name (NAVIGATION, THRESHOLD, INSTRUMENT, LIVING_GEOMETRY, GRADIENT, SIGNAL)",
+                            enum: ["NAVIGATION", "THRESHOLD", "INSTRUMENT", "LIVING_GEOMETRY", "GRADIENT", "SIGNAL"],
+                        },
+                    },
+                    required: ["anchor"],
                 },
             },
         ],
@@ -390,6 +506,143 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                         platform,
                         components,
                         summary: `${Object.keys(components).length} components loaded for ${platform}`,
+                    }, null, 2),
+                },
+            ],
+        };
+    }
+    if (name === "search_references") {
+        const { anchors, dialect, mode, tags } = args;
+        const keywordIndex = readJsonFile("references/index/keywords.json");
+        if (!keywordIndex) {
+            return { content: [{ type: "text", text: "Reference index not found" }] };
+        }
+        let results = Object.entries(keywordIndex.entries || {});
+        // Filter by anchors
+        if (anchors && anchors.length > 0) {
+            results = results.filter(([_, entry]) => {
+                const entryAnchors = entry.anchors?.highest || [];
+                return anchors.some((a) => entryAnchors.includes(a));
+            });
+        }
+        // Filter by dialect
+        if (dialect) {
+            results = results.filter(([_, entry]) => {
+                const entryDialects = entry.dialects?.highest || [];
+                return entryDialects.includes(dialect);
+            });
+        }
+        // Filter by mode
+        if (mode) {
+            results = results.filter(([_, entry]) => entry.referenceMode === mode);
+        }
+        // Filter by tags
+        if (tags && tags.length > 0) {
+            results = results.filter(([_, entry]) => {
+                const entryTags = entry.tags || [];
+                return tags.some((t) => entryTags.includes(t));
+            });
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify({
+                        count: results.length,
+                        results: results.map(([id, entry]) => ({
+                            id,
+                            title: entry.title,
+                            mode: entry.referenceMode,
+                            distance: entry.translationDistance,
+                            anchors: entry.anchors?.highest,
+                            dialects: entry.dialects?.highest,
+                            translations: entry.translations,
+                            tags: entry.tags,
+                        })),
+                    }, null, 2),
+                },
+            ],
+        };
+    }
+    if (name === "suggest_translation") {
+        const { referenceId } = args;
+        const keywordIndex = readJsonFile("references/index/keywords.json");
+        const translationTable = readJsonFile("semantic/translations/translation-table.json");
+        const assetsRegistry = readJsonFile("registry/assets.json");
+        if (!keywordIndex || !translationTable || !assetsRegistry) {
+            return { content: [{ type: "text", text: "Required files not found" }] };
+        }
+        const reference = keywordIndex.entries?.[referenceId];
+        if (!reference) {
+            return { content: [{ type: "text", text: `Reference not found: ${referenceId}` }] };
+        }
+        // Get translations from reference
+        const suggestedTranslations = reference.translations || [];
+        // Get anchor-based translations
+        const highAnchors = reference.anchors?.highest || [];
+        const anchorTranslations = {};
+        for (const anchor of highAnchors) {
+            const anchorData = translationTable.anchors?.[anchor];
+            if (anchorData) {
+                anchorTranslations[anchor] = anchorData.translations || [];
+            }
+        }
+        // Find matching assets
+        const matchingAssets = (assetsRegistry.assets || []).filter((asset) => {
+            const assetTranslations = asset.translations || [];
+            return suggestedTranslations.some((t) => assetTranslations.includes(t));
+        });
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify({
+                        reference: {
+                            id: referenceId,
+                            title: reference.title,
+                            mode: reference.referenceMode,
+                            distance: reference.translationDistance,
+                        },
+                        suggestedTranslations,
+                        anchorTranslations,
+                        matchingAssets: matchingAssets.map((a) => ({
+                            id: a.id,
+                            name: a.name,
+                            type: a.type,
+                            translations: a.translations,
+                            dialects: a.dialects,
+                            path: a.paths?.implementation,
+                        })),
+                    }, null, 2),
+                },
+            ],
+        };
+    }
+    if (name === "get_translation_chain") {
+        const { anchor } = args;
+        const translationTable = readJsonFile("semantic/translations/translation-table.json");
+        const anchorsData = readJsonFile("tokens/anchors/definitions.json");
+        if (!translationTable || !anchorsData) {
+            return { content: [{ type: "text", text: "Required files not found" }] };
+        }
+        const anchorDef = anchorsData.anchors?.[anchor];
+        const anchorTrans = translationTable.anchors?.[anchor];
+        if (!anchorDef || !anchorTrans) {
+            return { content: [{ type: "text", text: `Anchor not found: ${anchor}` }] };
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify({
+                        anchor: {
+                            name: anchor,
+                            meaning: anchorDef.meaning,
+                            tensions: anchorDef.tensions,
+                            colorAffinity: anchorDef.colorAffinity,
+                        },
+                        translations: anchorTrans.translations,
+                        physicalPatterns: anchorTrans.physicalPatterns,
                     }, null, 2),
                 },
             ],

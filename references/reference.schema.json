@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thoughtform.co/schemas/reference.schema.json",
+  "title": "Thoughtform Reference Schema",
+  "description": "Schema for reference library entries with semantic metadata",
+
+  "definitions": {
+    "anchorId": {
+      "type": "string",
+      "enum": ["NAVIGATION", "THRESHOLD", "INSTRUMENT", "LIVING_GEOMETRY", "GRADIENT", "SIGNAL"]
+    },
+    "dialectId": {
+      "type": "string",
+      "enum": ["astrolabe", "atlas", "ledger-dark", "ledger-light", "marketing"]
+    },
+    "referenceMode": {
+      "type": "string",
+      "enum": ["direct", "philosophical", "hybrid"],
+      "description": "How to interpret this reference: direct (implement pattern, adapt tokens), philosophical (extract essence, translate through anchors), hybrid (some of each)"
+    },
+    "translationDistance": {
+      "type": "string",
+      "enum": ["close", "medium", "far"],
+      "description": "How far this reference is from Thoughtform's visual language"
+    },
+    "anchorScores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "description": "Score each anchor 0.0-1.0 for activation strength"
+    },
+    "dialectAffinity": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "description": "How well this reference aligns with each dialect (0.0-1.0)"
+    },
+    "externalSource": {
+      "type": "object",
+      "properties": {
+        "rootKey": {
+          "type": "string",
+          "description": "Key from local.config.json (e.g., 'generalReferences')"
+        },
+        "relativePath": {
+          "type": "string",
+          "description": "Path relative to the root"
+        }
+      },
+      "required": ["rootKey", "relativePath"]
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique kebab-case identifier"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title"
+    },
+    "source": {
+      "type": "string",
+      "description": "URL or original file path"
+    },
+    "referenceMode": { "$ref": "#/definitions/referenceMode" },
+    "anchorScores": { "$ref": "#/definitions/anchorScores" },
+    "suggestedTranslations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Translation patterns from translation-table.json that this reference suggests"
+    },
+    "dialectAffinity": { "$ref": "#/definitions/dialectAffinity" },
+    "translationDistance": { "$ref": "#/definitions/translationDistance" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Searchable tags (retrofuturism, control-room, CRT, etc.)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-form notes about why this resonates and how to translate it"
+    },
+    "external": { "$ref": "#/definitions/externalSource" },
+    "preview": {
+      "type": "string",
+      "description": "Path to preview image in references/assets/"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["id", "title", "referenceMode", "anchorScores"]
+}

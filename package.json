@@ -1,0 +1,18 @@
+{
+  "name": "thoughtform-brandworld",
+  "version": "1.0.0",
+  "description": "Semantic design system for Thoughtform platforms",
+  "type": "module",
+  "scripts": {
+    "build:skills": "node scripts/build-skills.js",
+    "build:mcp": "cd mcp-server && npm run build"
+  },
+  "keywords": [
+    "design-system",
+    "semantic-design",
+    "thoughtform"
+  ],
+  "author": "Thoughtform",
+  "license": "UNLICENSED",
+  "private": true
+}

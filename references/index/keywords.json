@@ -1,0 +1,91 @@
+{
+  "$schema": "../index.schema.json",
+  "name": "Reference Keyword Index",
+  "version": "1.0.0",
+  "description": "V1 keyword-based search index for references",
+  "lastUpdated": "2024-12-17T00:00:00Z",
+
+  "entries": {
+    "nasa-mission-control-1969": {
+      "title": "NASA Mission Control, Apollo 11 (1969)",
+      "referenceMode": "philosophical",
+      "translationDistance": "medium",
+      "anchors": {
+        "highest": ["NAVIGATION", "INSTRUMENT"],
+        "scores": {
+          "NAVIGATION": 0.9,
+          "INSTRUMENT": 0.9,
+          "SIGNAL": 0.6,
+          "THRESHOLD": 0.5
+        }
+      },
+      "dialects": {
+        "highest": ["astrolabe", "ledger-dark"],
+        "scores": {
+          "astrolabe": 0.9,
+          "ledger-dark": 0.7
+        }
+      },
+      "translations": ["Rail System", "Panel", "Readout", "Coordinate Badge"],
+      "tags": ["retrofuturism", "control-room", "collective-navigation", "CRT", "warm-electronics", "instrument-banks"]
+    },
+
+    "blade-runner-terminal": {
+      "title": "Blade Runner Esper Machine / Corporate Terminals",
+      "referenceMode": "direct",
+      "translationDistance": "close",
+      "anchors": {
+        "highest": ["SIGNAL", "INSTRUMENT"],
+        "scores": {
+          "SIGNAL": 0.9,
+          "INSTRUMENT": 0.8,
+          "THRESHOLD": 0.6
+        }
+      },
+      "dialects": {
+        "highest": ["ledger-dark"],
+        "scores": {
+          "ledger-dark": 0.95
+        }
+      },
+      "translations": ["Terminal Aesthetic", "Scanline Overlay", "Data Stream", "Glitch Effect"],
+      "tags": ["retrofuturism", "terminal", "CRT", "noir", "corporate", "data-forensics"]
+    }
+  },
+
+  "tagIndex": {
+    "retrofuturism": ["nasa-mission-control-1969", "blade-runner-terminal"],
+    "control-room": ["nasa-mission-control-1969"],
+    "collective-navigation": ["nasa-mission-control-1969"],
+    "CRT": ["nasa-mission-control-1969", "blade-runner-terminal"],
+    "warm-electronics": ["nasa-mission-control-1969"],
+    "instrument-banks": ["nasa-mission-control-1969"],
+    "terminal": ["blade-runner-terminal"],
+    "noir": ["blade-runner-terminal"],
+    "corporate": ["blade-runner-terminal"],
+    "data-forensics": ["blade-runner-terminal"]
+  },
+
+  "anchorIndex": {
+    "NAVIGATION": ["nasa-mission-control-1969"],
+    "THRESHOLD": ["blade-runner-terminal"],
+    "INSTRUMENT": ["nasa-mission-control-1969", "blade-runner-terminal"],
+    "SIGNAL": ["blade-runner-terminal"]
+  },
+
+  "dialectIndex": {
+    "astrolabe": ["nasa-mission-control-1969"],
+    "ledger-dark": ["nasa-mission-control-1969", "blade-runner-terminal"]
+  },
+
+  "translationIndex": {
+    "Rail System": ["nasa-mission-control-1969"],
+    "Panel": ["nasa-mission-control-1969"],
+    "Readout": ["nasa-mission-control-1969"],
+    "Coordinate Badge": ["nasa-mission-control-1969"],
+    "Terminal Aesthetic": ["blade-runner-terminal"],
+    "Scanline Overlay": ["blade-runner-terminal"],
+    "Data Stream": ["blade-runner-terminal"],
+    "Glitch Effect": ["blade-runner-terminal"]
+  }
+}
