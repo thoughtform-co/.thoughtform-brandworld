@@ -37,7 +37,9 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 │       ├── 3d-particle-system.tsx    # 3D particle system reference
 │       └── NAVIGATION_HUD.md         # HUD system documentation
 ├── philosophy/
-│   └── PRINCIPLES.md                 # Core design tenets
+│   ├── PRINCIPLES.md                 # Core design tenets
+│   ├── GENERATIVE-PATTERNS.md        # Sigil system math & philosophy
+│   └── SEMANTIC-BRAND-VISION.md      # Future of embedding-based brands
 ├── skills/
 │   └── SKILL.md                      # Claude/Cursor skill
 └── mcp-server/                       # MCP server for AI access
@@ -86,6 +88,14 @@ Centralized design system for all Thoughtform platforms: Astrolabe, Atlas, Ledge
 - Platform variants: Atlas (specimen archive), Ledger (blueprint), Astrolabe (instrument panel)
 - Sizing scale: xs (120px) to xl (620px)
 - Interactive states: rest, hover, selected, focus, disabled
+
+**Semantic Brand Architecture** — Meaning-based design system vision
+- See: `philosophy/SEMANTIC-BRAND-VISION.md`
+- See: `skills/semantic-design/SKILL.md` for methodology
+- 6 Semantic Anchors: Navigation, Threshold, Instrument, Living Geometry, Gradient, Signal
+- Platform dialects: Same anchors, different expressions
+- Translation protocol: Reference → Extract meaning → Map to anchors → Render in dialect
+- Future vision: Embeddings for automatic brand alignment checking
 
 ### Non-Negotiables
 
