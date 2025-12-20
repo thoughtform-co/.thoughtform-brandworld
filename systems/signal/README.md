@@ -26,8 +26,10 @@ function drawPixel(ctx, x, y, color, alpha) {
 
 ## Contents
 
-| Folder | Purpose |
-|--------|---------|
+| File/Folder | Purpose |
+|-------------|---------|
+| `generative-sigils.md` | Algorithmic identity system for entities/categories |
+| `domain-nebulae.md` | Strange attractor particle systems for domains |
 | `particles/` | Core particle system + platform behaviors |
 | `glitch/` | Glitch effects (scanlines, aberration, noise) |
 
@@ -65,9 +67,45 @@ function drawPixel(ctx, x, y, color, alpha) {
 
 ---
 
+---
+
+## Generative Systems
+
+Two algorithmic systems create unique visual identities:
+
+### Generative Sigils
+**Purpose:** Unique visual identity for each entity/category
+
+| Aspect | Description |
+|--------|-------------|
+| **Input** | Domain name + entity ID |
+| **Output** | Deterministic particle cluster |
+| **Pattern types** | constellation, scatter, grid, cross, spiral |
+| **Seeded** | Same input → same sigil (always) |
+| **Glitch** | 1-3px displacements as signature |
+
+→ See: `generative-sigils.md`
+
+### Domain Nebulae (Strange Attractors)
+**Purpose:** Distinctive particle field for each domain/category
+
+| Aspect | Description |
+|--------|-------------|
+| **Input** | Attractor type + configuration |
+| **Output** | 3D rotating particle cloud |
+| **Attractor types** | Lorenz, Thomas, Halvorsen, Aizawa, Sprott, Rössler, Dadras, Galaxy |
+| **Character** | Deterministic chaos — complex but predictable |
+| **Rendering** | 3D rotation with perspective projection |
+
+→ See: `domain-nebulae.md`
+
+---
+
 ## Source Files
 
 - `particles/core.js` — Base particle renderer
 - `particles/behaviors/` — Platform-specific behaviors
 - `glitch/effects.css` — CSS glitch implementations
 - `../../particles/` — Full particle system code
+- `../../icons/core/GenerativeSigil.tsx` — Sigil component
+- `../../particles/StrangeAttractor.ts` — Attractor module

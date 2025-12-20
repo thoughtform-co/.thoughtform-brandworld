@@ -164,4 +164,3 @@ This approach:
 1. **CardFrame.tsx** — The reusable foundation
 2. **ServicesSection refactor** — Most visible improvement
 3. **ShiftSection alignment** — Consistency proof
-4. **globals.css classes** — For NavigationCockpitV2 compatibility
