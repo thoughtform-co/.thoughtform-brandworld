@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captain's Log | Thoughtform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Thoughtform Design Tokens ──────────────────────────────────────────── */
+    :root {
+      /* Colors */
+      --void: #050403;
+      --surface-0: #0A0908;
+      --surface-1: #111110;
+      --dawn: #ECE3D6;
+      --dawn-50: rgba(236, 227, 214, 0.5);
+      --dawn-30: rgba(236, 227, 214, 0.3);
+      --dawn-08: rgba(236, 227, 214, 0.08);
+      --gold: #CAA554;
+      --gold-40: rgba(202, 165, 84, 0.4);
+      --verde: #2B4E40;
+      --cardinal: #8B3A3A;
+      
+      /* Platform Colors */
+      --thoughtform: var(--gold);
+      --atlas: var(--gold);
+      --ledger: var(--verde);
+      --astrolabe: var(--gold);
+      --starhaven: var(--gold);
+      --journal: var(--dawn);
+      
+      /* Typography */
+      --font-mono: 'PT Mono', monospace;
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 300ms;
+    }
+    
+    /* ─── Base Styles ────────────────────────────────────────────────────────── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--dawn);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* ─── Navigation Grid Frame ──────────────────────────────────────────────── */
+    .nav-grid {
+      position: fixed;
+      inset: var(--space-4);
+      pointer-events: none;
+      z-index: 100;
+    }
+    
+    .nav-grid::before,
+    .nav-grid::after {
+      content: '';
+      position: absolute;
+      background: var(--dawn-08);
+    }
+    
+    /* Corner brackets */
+    .corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--dawn-08);
+    }
+    
+    .corner--tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+    .corner--tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+    .corner--bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+    .corner--br { bottom: 0; right: 0; border-left: none; border-top: none; }
+    
+    /* ─── Main Layout ────────────────────────────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: var(--space-8);
+    }
+    
+    /* ─── Header ─────────────────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--dawn-08);
+      margin-bottom: var(--space-6);
+    }
+    
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dawn-50);
+    }
+    
+    .logo strong {
+      color: var(--gold);
+    }
+    
+    .stardate {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--dawn-30);
+    }
+    
+    /* ─── Main Content ───────────────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: var(--space-8);
+    }
+    
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* ─── Recording Panel ────────────────────────────────────────────────────── */
+    .record-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    
+    .record-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-6);
+      background: var(--surface-0);
+      border: 1px solid var(--dawn-08);
+      padding: var(--space-8);
+      min-height: 300px;
+    }
+    
+    /* ─── Record Button ──────────────────────────────────────────────────────── */
+    .record-btn {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--dawn-30);
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+    
+    .record-btn:hover {
+      border-color: var(--gold);
+    }
+    
+    .record-btn.recording {
+      border-color: var(--cardinal);
+    }
+    
+    .record-btn::before {
+      content: '';
+      position: absolute;
+      inset: 24px;
+      background: var(--dawn-30);
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+    
+    .record-btn:hover::before {
+      background: var(--gold);
+    }
+    
+    .record-btn.recording::before {
+      background: var(--cardinal);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.95); }
+    }
+    
+    .record-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--dawn-50);
+    }
+    
+    /* ─── Transcription Display ──────────────────────────────────────────────── */
+    .transcription {
+      width: 100%;
+      min-height: 100px;
+      background: var(--void);
+      border: 1px solid var(--dawn-08);
+      padding: var(--space-4);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--dawn);
+      line-height: 1.6;
+    }
+    
+    .transcription:empty::before {
+      content: 'Your transcription will appear here...';
+      color: var(--dawn-30);
+    }
+    
+    .transcription .trigger {
+      color: var(--gold);
+      font-weight: 500;
+    }
+    
+    /* ─── Platform Indicator ─────────────────────────────────────────────────── */
+    .platform-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--surface-1);
+      border: 1px solid var(--dawn-08);
+    }
+    
+    .platform-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--thoughtform);
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+    
+    .platform-indicator[data-platform="atlas"] .platform-dot { background: var(--atlas); }
+    .platform-indicator[data-platform="ledger"] .platform-dot { background: var(--ledger); }
+    .platform-indicator[data-platform="astrolabe"] .platform-dot { background: var(--astrolabe); }
+    .platform-indicator[data-platform="starhaven"] .platform-dot { background: var(--starhaven); }
+    .platform-indicator[data-platform="journal"] .platform-dot { background: var(--journal); }
+    
+    .platform-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dawn-50);
+    }
+    
+    /* ─── Actions ────────────────────────────────────────────────────────────── */
+    .actions {
+      display: flex;
+      gap: var(--space-3);
+    }
+    
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: var(--space-3) var(--space-4);
+      background: transparent;
+      border: 1px solid var(--dawn-08);
+      color: var(--dawn-50);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+    
+    .btn:hover {
+      border-color: var(--dawn-30);
+      color: var(--dawn);
+    }
+    
+    .btn--primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--void);
+    }
+    
+    .btn--primary:hover {
+      background: var(--dawn);
+      border-color: var(--dawn);
+    }
+    
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    /* ─── Sidebar ────────────────────────────────────────────────────────────── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    
+    .sidebar-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--dawn-30);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--dawn-08);
+    }
+    
+    /* ─── Entry List ─────────────────────────────────────────────────────────── */
+    .entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .entry-card {
+      padding: var(--space-3);
+      background: var(--surface-0);
+      border: 1px solid var(--dawn-08);
+      cursor: pointer;
+      transition: border-color var(--duration-fast) var(--ease-out);
+    }
+    
+    .entry-card:hover {
+      border-color: var(--dawn-30);
+    }
+    
+    .entry-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-2);
+    }
+    
+    .entry-platform {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 2px 6px;
+      background: var(--dawn-08);
+    }
+    
+    .entry-card[data-platform="atlas"] .entry-platform { color: var(--atlas); }
+    .entry-card[data-platform="ledger"] .entry-platform { color: var(--ledger); }
+    .entry-card[data-platform="astrolabe"] .entry-platform { color: var(--astrolabe); }
+    .entry-card[data-platform="thoughtform"] .entry-platform { color: var(--thoughtform); }
+    
+    .entry-stardate {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--dawn-30);
+    }
+    
+    .entry-content {
+      font-size: 13px;
+      color: var(--dawn-50);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* ─── Status Bar ─────────────────────────────────────────────────────────── */
+    .status-bar {
+      position: fixed;
+      bottom: var(--space-4);
+      left: var(--space-4);
+      right: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--dawn-30);
+      padding: var(--space-2) var(--space-4);
+      background: var(--surface-0);
+      border: 1px solid var(--dawn-08);
+    }
+    
+    .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: var(--space-2);
+      background: var(--verde);
+    }
+    
+    .status-dot.error { background: var(--cardinal); }
+    .status-dot.recording { background: var(--gold); animation: pulse 1s infinite; }
+    
+    /* ─── Configuration Modal ────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 4, 3, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    
+    .modal-overlay.hidden { display: none; }
+    
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface-0);
+      border: 1px solid var(--dawn-08);
+      padding: var(--space-6);
+    }
+    
+    .modal-title {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+    }
+    
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+    
+    .form-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dawn-50);
+      margin-bottom: var(--space-2);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: var(--space-3);
+      background: var(--void);
+      border: 1px solid var(--dawn-08);
+      color: var(--dawn);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .form-hint {
+      font-size: 12px;
+      color: var(--dawn-30);
+      margin-top: var(--space-2);
+    }
+    
+    /* ─── Empty State ────────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-8);
+      color: var(--dawn-30);
+    }
+    
+    .empty-state p {
+      margin-bottom: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Grid -->
+  <div class="nav-grid">
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--tr"></div>
+    <div class="corner corner--bl"></div>
+    <div class="corner corner--br"></div>
+  </div>
+
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <strong>Captain's Log</strong> // Thoughtform
+      </div>
+      <div class="stardate" id="stardate">Stardate Loading...</div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Recording Panel -->
+      <section class="record-panel">
+        <div class="record-area">
+          <button class="record-btn" id="recordBtn" title="Click to start recording">
+          </button>
+          <span class="record-label" id="recordLabel">Press to record</span>
+        </div>
+        
+        <div class="platform-indicator" id="platformIndicator" data-platform="thoughtform">
+          <span class="platform-dot"></span>
+          <span class="platform-name" id="platformName">Thoughtform</span>
+        </div>
+        
+        <div class="transcription" id="transcription" contenteditable="true"></div>
+        
+        <div class="actions">
+          <button class="btn" id="clearBtn">Clear</button>
+          <button class="btn btn--primary" id="saveBtn" disabled>Save Entry</button>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">Recent Entries</div>
+        <div class="entry-list" id="entryList">
+          <div class="empty-state">
+            <p>No entries yet</p>
+            <p>Start recording to create your first log</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div>
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Ready</span>
+    </div>
+    <div id="apiStatus">API: Not configured</div>
+  </div>
+
+  <!-- Configuration Modal -->
+  <div class="modal-overlay" id="configModal">
+    <div class="modal">
+      <h2 class="modal-title">Configure Captain's Log</h2>
+      <div class="form-group">
+        <label class="form-label">Wispr Flow API Key</label>
+        <input type="password" class="form-input" id="wisprKey" placeholder="sk-...">
+        <p class="form-hint">Get your key from <a href="https://api-docs.wisprflow.ai" target="_blank" style="color: var(--gold)">api-docs.wisprflow.ai</a></p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Supabase URL</label>
+        <input type="text" class="form-input" id="supabaseUrl" placeholder="https://xxx.supabase.co">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Supabase Anon Key</label>
+        <input type="password" class="form-input" id="supabaseKey" placeholder="eyJ...">
+      </div>
+      <div class="actions" style="margin-top: var(--space-6)">
+        <button class="btn" id="skipConfig">Skip (Use Local Storage)</button>
+        <button class="btn btn--primary" id="saveConfig">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // ─── Configuration ──────────────────────────────────────────────────────────
+    const CONFIG_KEY = 'captains-log-config';
+    const ENTRIES_KEY = 'captains-log-entries';
+    
+    let config = JSON.parse(localStorage.getItem(CONFIG_KEY) || 'null');
+    let entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '[]');
+    
+    // ─── DOM Elements ───────────────────────────────────────────────────────────
+    const recordBtn = document.getElementById('recordBtn');
+    const recordLabel = document.getElementById('recordLabel');
+    const transcription = document.getElementById('transcription');
+    const platformIndicator = document.getElementById('platformIndicator');
+    const platformName = document.getElementById('platformName');
+    const clearBtn = document.getElementById('clearBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const entryList = document.getElementById('entryList');
+    const stardateEl = document.getElementById('stardate');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const apiStatus = document.getElementById('apiStatus');
+    const configModal = document.getElementById('configModal');
+    
+    // ─── State ──────────────────────────────────────────────────────────────────
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    
+    // ─── Trigger Patterns ───────────────────────────────────────────────────────
+    const TRIGGER_PATTERNS = {
+      "captain's log": 'thoughtform',
+      "captains log": 'thoughtform',
+      "captain log": 'thoughtform',
+      "atlas entry": 'atlas',
+      "atlas log": 'atlas',
+      "ledger note": 'ledger',
+      "ledger log": 'ledger',
+      "astrolabe log": 'astrolabe',
+      "astrolabe entry": 'astrolabe',
+      "starhaven log": 'starhaven',
+      "journal this": 'journal',
+      "journal entry": 'journal',
+    };
+    
+    // ─── Stardate Generator ─────────────────────────────────────────────────────
+    function generateStardate(date = new Date()) {
+      const year = date.getFullYear();
+      const startOfYear = new Date(year, 0, 1);
+      const endOfYear = new Date(year + 1, 0, 1);
+      const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
+      const totalDays = Math.floor((endOfYear - startOfYear) / (1000 * 60 * 60 * 24));
+      const fraction = Math.round((dayOfYear / totalDays) * 100) / 10;
+      return `${year}${fraction.toFixed(1)}`;
+    }
+    
+    function updateStardate() {
+      stardateEl.textContent = `Stardate ${generateStardate()}`;
+    }
+    
+    // ─── Platform Detection ─────────────────────────────────────────────────────
+    function detectPlatform(text) {
+      const normalized = text.toLowerCase().trim();
+      const triggers = Object.keys(TRIGGER_PATTERNS).sort((a, b) => b.length - a.length);
+      
+      for (const trigger of triggers) {
+        if (normalized.includes(trigger)) {
+          return {
+            platform: TRIGGER_PATTERNS[trigger],
+            trigger,
+            content: text.slice(normalized.indexOf(trigger) + trigger.length).replace(/^[:\-–—,.\s]+/, '').trim()
+          };
+        }
+      }
+      
+      return { platform: 'thoughtform', trigger: null, content: text };
+    }
+    
+    function updatePlatformIndicator(platform) {
+      platformIndicator.dataset.platform = platform;
+      platformName.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+    }
+    
+    // ─── Transcription Handling ─────────────────────────────────────────────────
+    function handleTranscriptionChange() {
+      const text = transcription.textContent;
+      const detected = detectPlatform(text);
+      updatePlatformIndicator(detected.platform);
+      saveBtn.disabled = !text.trim();
+    }
+    
+    transcription.addEventListener('input', handleTranscriptionChange);
+    
+    // ─── Recording ──────────────────────────────────────────────────────────────
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          stream.getTracks().forEach(track => track.stop());
+          
+          // If Wispr API is configured, transcribe
+          if (config?.wisprKey) {
+            setStatus('Transcribing...', 'recording');
+            try {
+              const result = await transcribeWithWispr(audioBlob);
+              transcription.textContent = result;
+              handleTranscriptionChange();
+              setStatus('Transcription complete', 'success');
+            } catch (error) {
+              setStatus('Transcription failed: ' + error.message, 'error');
+            }
+          } else {
+            setStatus('No API key - manual entry mode', 'warning');
+          }
+        };
+        
+        mediaRecorder.start();
+        isRecording = true;
+        recordBtn.classList.add('recording');
+        recordLabel.textContent = 'Recording...';
+        setStatus('Recording', 'recording');
+        
+      } catch (error) {
+        setStatus('Microphone access denied', 'error');
+      }
+    }
+    
+    function stopRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordBtn.classList.remove('recording');
+        recordLabel.textContent = 'Press to record';
+      }
+    }
+    
+    recordBtn.addEventListener('click', () => {
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    });
+    
+    // ─── Wispr Flow API ─────────────────────────────────────────────────────────
+    async function transcribeWithWispr(audioBlob) {
+      const response = await fetch('https://api.wisprflow.ai/api', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${config.wisprKey}`,
+          'Content-Type': 'audio/webm',
+        },
+        body: audioBlob,
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.text || data.transcription || '';
+    }
+    
+    // ─── Entry Management ───────────────────────────────────────────────────────
+    function saveEntry() {
+      const text = transcription.textContent.trim();
+      if (!text) return;
+      
+      const detected = detectPlatform(text);
+      const entry = {
+        id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        rawTranscription: text,
+        cleanedContent: detected.content || text,
+        platform: detected.platform,
+        triggerPhrase: detected.trigger,
+        stardate: generateStardate(),
+        createdAt: new Date().toISOString(),
+        source: 'voice',
+      };
+      
+      entries.unshift(entry);
+      localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+      
+      renderEntries();
+      clearTranscription();
+      setStatus(`Entry saved to ${entry.platform}`, 'success');
+    }
+    
+    function clearTranscription() {
+      transcription.textContent = '';
+      saveBtn.disabled = true;
+      updatePlatformIndicator('thoughtform');
+    }
+    
+    function renderEntries() {
+      if (entries.length === 0) {
+        entryList.innerHTML = `
+          <div class="empty-state">
+            <p>No entries yet</p>
+            <p>Start recording to create your first log</p>
+          </div>
+        `;
+        return;
+      }
+      
+      entryList.innerHTML = entries.slice(0, 20).map(entry => `
+        <div class="entry-card" data-platform="${entry.platform}" data-id="${entry.id}">
+          <div class="entry-meta">
+            <span class="entry-platform">${entry.platform}</span>
+            <span class="entry-stardate">Stardate ${entry.stardate}</span>
+          </div>
+          <div class="entry-content">${entry.cleanedContent}</div>
+        </div>
+      `).join('');
+    }
+    
+    saveBtn.addEventListener('click', saveEntry);
+    clearBtn.addEventListener('click', clearTranscription);
+    
+    // ─── Status Bar ─────────────────────────────────────────────────────────────
+    function setStatus(text, type = 'normal') {
+      statusText.textContent = text;
+      statusDot.className = 'status-dot';
+      if (type === 'error') statusDot.classList.add('error');
+      if (type === 'recording') statusDot.classList.add('recording');
+    }
+    
+    function updateApiStatus() {
+      if (config?.wisprKey) {
+        apiStatus.textContent = 'API: Configured';
+      } else {
+        apiStatus.textContent = 'API: Not configured (manual mode)';
+      }
+    }
+    
+    // ─── Configuration ──────────────────────────────────────────────────────────
+    function showConfigModal() {
+      configModal.classList.remove('hidden');
+      if (config) {
+        document.getElementById('wisprKey').value = config.wisprKey || '';
+        document.getElementById('supabaseUrl').value = config.supabaseUrl || '';
+        document.getElementById('supabaseKey').value = config.supabaseKey || '';
+      }
+    }
+    
+    function hideConfigModal() {
+      configModal.classList.add('hidden');
+    }
+    
+    document.getElementById('saveConfig').addEventListener('click', () => {
+      config = {
+        wisprKey: document.getElementById('wisprKey').value,
+        supabaseUrl: document.getElementById('supabaseUrl').value,
+        supabaseKey: document.getElementById('supabaseKey').value,
+      };
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+      hideConfigModal();
+      updateApiStatus();
+      setStatus('Configuration saved', 'success');
+    });
+    
+    document.getElementById('skipConfig').addEventListener('click', () => {
+      hideConfigModal();
+      setStatus('Using local storage mode', 'warning');
+    });
+    
+    // ─── Keyboard Shortcuts ─────────────────────────────────────────────────────
+    document.addEventListener('keydown', (e) => {
+      // Space to toggle recording when not in transcription field
+      if (e.code === 'Space' && document.activeElement !== transcription) {
+        e.preventDefault();
+        if (isRecording) {
+          stopRecording();
+        } else {
+          startRecording();
+        }
+      }
+      
+      // Ctrl+Enter to save
+      if (e.ctrlKey && e.code === 'Enter') {
+        saveEntry();
+      }
+      
+      // Escape to clear
+      if (e.code === 'Escape') {
+        clearTranscription();
+      }
+    });
+    
+    // ─── Initialize ─────────────────────────────────────────────────────────────
+    function init() {
+      updateStardate();
+      setInterval(updateStardate, 60000); // Update every minute
+      
+      renderEntries();
+      updateApiStatus();
+      
+      // Show config modal if not configured
+      if (!config) {
+        showConfigModal();
+      } else {
+        hideConfigModal();
+      }
+      
+      setStatus('Ready - Press space or click to record');
+    }
+    
+    init();
+  </script>
+</body>
+</html>
+

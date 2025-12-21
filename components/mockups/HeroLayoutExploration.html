@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Layout Exploration - Thoughtform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       DESIGN TOKENS
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      --void: #0a0908;
+      --void-deep: #050504;
+      --dawn: #ebe3d6;
+      --dawn-90: rgba(235, 227, 214, 0.9);
+      --dawn-70: rgba(235, 227, 214, 0.7);
+      --dawn-50: rgba(235, 227, 214, 0.5);
+      --dawn-30: rgba(235, 227, 214, 0.3);
+      --dawn-15: rgba(235, 227, 214, 0.15);
+      --dawn-08: rgba(235, 227, 214, 0.08);
+      --gold: #caa554;
+      --gold-70: rgba(202, 165, 84, 0.7);
+      --gold-50: rgba(202, 165, 84, 0.5);
+      --gold-30: rgba(202, 165, 84, 0.3);
+      
+      --font-body: 'IBM Plex Mono', monospace;
+      --hud-padding: clamp(32px, 4vw, 64px);
+      --rail-width: 60px;
+      --corner-size: 40px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--void);
+      color: var(--dawn);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HUD FRAME
+       ═══════════════════════════════════════════════════════════════ */
+    .hud-frame {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    /* Corner Brackets */
+    .hud-corner {
+      position: absolute;
+      width: var(--corner-size);
+      height: var(--corner-size);
+    }
+
+    .hud-corner::before,
+    .hud-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+    }
+
+    .hud-corner-tl { top: var(--hud-padding); left: var(--hud-padding); }
+    .hud-corner-tl::before { top: 0; left: 0; width: var(--corner-size); height: 2px; }
+    .hud-corner-tl::after { top: 0; left: 0; width: 2px; height: var(--corner-size); }
+
+    .hud-corner-tr { top: var(--hud-padding); right: var(--hud-padding); }
+    .hud-corner-tr::before { top: 0; right: 0; width: var(--corner-size); height: 2px; }
+    .hud-corner-tr::after { top: 0; right: 0; width: 2px; height: var(--corner-size); }
+
+    .hud-corner-bl { bottom: var(--hud-padding); left: var(--hud-padding); }
+    .hud-corner-bl::before { bottom: 0; left: 0; width: var(--corner-size); height: 2px; }
+    .hud-corner-bl::after { bottom: 0; left: 0; width: 2px; height: var(--corner-size); }
+
+    .hud-corner-br { bottom: var(--hud-padding); right: var(--hud-padding); }
+    .hud-corner-br::before { bottom: 0; right: 0; width: var(--corner-size); height: 2px; }
+    .hud-corner-br::after { bottom: 0; right: 0; width: 2px; height: var(--corner-size); }
+
+    /* Left Rail */
+    .hud-rail-left {
+      position: absolute;
+      left: var(--hud-padding);
+      top: calc(var(--hud-padding) + var(--corner-size) + 20px);
+      bottom: calc(var(--hud-padding) + var(--corner-size) + 20px);
+      width: var(--rail-width);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hud-rail-left::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--dawn-15) 10%,
+        var(--dawn-15) 90%,
+        transparent 100%
+      );
+    }
+
+    .rail-scale {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-left: 8px;
+    }
+
+    .tick {
+      position: relative;
+      height: 1px;
+    }
+
+    .tick::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 1px;
+      background: var(--dawn-30);
+    }
+
+    .tick-major::before { width: 16px; background: var(--dawn-50); }
+    .tick-minor::before { width: 8px; }
+
+    .tick-label {
+      position: absolute;
+      left: 24px;
+      top: -6px;
+      font-size: 10px;
+      color: var(--dawn-30);
+      font-family: var(--font-body);
+    }
+
+    /* Right Rail */
+    .hud-rail-right {
+      position: absolute;
+      right: var(--hud-padding);
+      top: calc(var(--hud-padding) + var(--corner-size) + 20px);
+      bottom: calc(var(--hud-padding) + var(--corner-size) + 20px);
+      width: var(--rail-width);
+    }
+
+    .hud-rail-right::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--dawn-15) 10%,
+        var(--dawn-15) 90%,
+        transparent 100%
+      );
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       GATEWAY (Placeholder)
+       ═══════════════════════════════════════════════════════════════ */
+    .gateway-placeholder {
+      position: fixed;
+      top: 50%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 280px;
+      height: 280px;
+      border: 1px solid var(--gold-30);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--dawn-30);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .gateway-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1px solid var(--gold-30);
+      border-radius: 50%;
+    }
+
+    .gateway-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border: 1px solid var(--gold-30);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO CONTENT - Layout Options
+       ═══════════════════════════════════════════════════════════════ */
+    
+    /* Wordmark SVG Styling */
+    .wordmark {
+      width: 200px;
+      height: auto;
+    }
+
+    .wordmark .wm-dawn { fill: var(--dawn); }
+    .wordmark .wm-gold { fill: var(--gold); }
+
+    /* Runway Arrows */
+    .runway-arrows {
+      display: flex;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .runway-arrow {
+      font-size: 18px;
+      color: var(--gold);
+      opacity: 0.3;
+      animation: runway-pulse 2s ease-in-out infinite;
+    }
+
+    .runway-arrow:nth-child(1) { animation-delay: 0s; }
+    .runway-arrow:nth-child(2) { animation-delay: 0.1s; }
+    .runway-arrow:nth-child(3) { animation-delay: 0.2s; }
+    .runway-arrow:nth-child(4) { animation-delay: 0.3s; }
+    .runway-arrow:nth-child(5) { animation-delay: 0.4s; }
+    .runway-arrow:nth-child(6) { animation-delay: 0.5s; }
+    .runway-arrow:nth-child(7) { animation-delay: 0.6s; }
+    .runway-arrow:nth-child(8) { animation-delay: 0.7s; }
+
+    @keyframes runway-pulse {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Hero Text Frame */
+    .hero-text-frame {
+      position: relative;
+      padding: 20px 24px;
+      border: 1px solid var(--dawn-15);
+      background: rgba(10, 9, 8, 0.25);
+      backdrop-filter: blur(8px);
+      max-width: 420px;
+    }
+
+    .hero-text-frame::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1px solid var(--gold);
+      border-left: 1px solid var(--gold);
+    }
+
+    .hero-text-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1px solid var(--gold);
+      border-right: 1px solid var(--gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(18px, 2.2vw, 24px);
+      line-height: 1.5;
+      font-weight: 300;
+      color: var(--dawn);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT OPTION A: Logo anchored to left rail
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-a .hero-wordmark {
+      position: fixed;
+      top: calc(var(--hud-padding) + var(--corner-size) + 30px);
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      z-index: 10;
+    }
+
+    .layout-a .hero-runway {
+      position: fixed;
+      top: 50%;
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .layout-a .hero-text {
+      position: fixed;
+      bottom: calc(var(--hud-padding) + 40px);
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      z-index: 10;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT OPTION B: Logo + arrows as connected unit
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-b .hero-left-column {
+      position: fixed;
+      top: 50%;
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      transform: translateY(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .layout-b .hero-text {
+      position: fixed;
+      bottom: calc(var(--hud-padding) + 40px);
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      z-index: 10;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT OPTION C: Compact stack with integrated arrows
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-c .hero-stack {
+      position: fixed;
+      top: 50%;
+      left: calc(var(--hud-padding) + var(--rail-width) + 24px);
+      transform: translateY(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .layout-c .hero-stack .wordmark {
+      width: 180px;
+    }
+
+    .layout-c .runway-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .layout-c .runway-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dawn-30);
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CONTROL PANEL
+       ═══════════════════════════════════════════════════════════════ */
+    .control-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      background: rgba(10, 9, 8, 0.95);
+      border: 1px solid var(--dawn-15);
+      padding: 16px;
+      font-size: 12px;
+      min-width: 200px;
+    }
+
+    .control-panel h3 {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .control-group {
+      margin-bottom: 12px;
+    }
+
+    .control-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 6px 0;
+      color: var(--dawn-70);
+      transition: color 0.15s;
+    }
+
+    .control-group label:hover {
+      color: var(--dawn);
+    }
+
+    .control-group input[type="radio"] {
+      accent-color: var(--gold);
+    }
+
+    .control-group input[type="radio"]:checked + span {
+      color: var(--gold);
+    }
+
+    /* Hide inactive layouts */
+    .layout-container { display: none; }
+    .layout-container.active { display: block; }
+
+  </style>
+</head>
+<body>
+  <!-- HUD Frame -->
+  <div class="hud-frame">
+    <div class="hud-corner hud-corner-tl"></div>
+    <div class="hud-corner hud-corner-tr"></div>
+    <div class="hud-corner hud-corner-bl"></div>
+    <div class="hud-corner hud-corner-br"></div>
+
+    <!-- Left Rail with Depth Scale -->
+    <aside class="hud-rail-left">
+      <div class="rail-scale">
+        <div class="tick tick-major"><span class="tick-label">0</span></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-major"><span class="tick-label">2</span></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-major"><span class="tick-label">5</span></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-major"><span class="tick-label">7</span></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-minor"></div>
+        <div class="tick tick-major"><span class="tick-label">10</span></div>
+      </div>
+    </aside>
+
+    <!-- Right Rail -->
+    <aside class="hud-rail-right"></aside>
+  </div>
+
+  <!-- Gateway Placeholder -->
+  <div class="gateway-placeholder">
+    [3D Gateway]
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT A: Logo at top-left of rail, arrows center, text bottom
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="layout-container layout-a active" id="layout-a">
+    <div class="hero-wordmark">
+      <svg class="wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1178.18 494.93">
+        <defs><style>.wm-dawn{fill:#ebe3d6}.wm-gold{fill:#caa554}</style></defs>
+        <path class="wm-dawn" d="M517.7,108.78c0,59.15-39.04,108.78-107.06,108.78s-107.06-49.63-107.06-108.78S342.62,0,410.64,0s107.06,49.63,107.06,108.78ZM491.63,108.78c0-56.24-28.32-103.49-80.86-103.49s-80.86,47.38-80.86,103.49,28.32,103.49,80.86,103.49,80.86-47.38,80.86-103.49Z"/>
+        <path class="wm-gold" d="M421.49,374.38l-2.51,8.47h-93.83l-1.19,6.62h-8.87l-20.38,105.47h-11.38l18.26-97.13h-4.23l1.46-8.34h-9.93l1.19-6.62H0l2.51-8.47h294.31l1.19-6.62h8.87l18.39-97.93h11.38l-16.28,89.59h4.23l-1.46,8.34h9.93l-1.19,6.62h89.72-.13Z"/>
+        <path class="wm-dawn" d="M598.29,273.54v9.93h-106.93v210.02h-25.94v-219.94h133-.13Z"/>
+        <path class="wm-dawn" d="M557,373.58h-70.27v9.93h70.27v-9.93Z"/>
+        <path class="wm-dawn" d="M734.59,483.95h-89.72v9.79h89.72v-9.79Z"/>
+        <path class="wm-dawn" d="M618.54,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M786.47,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M734.59,283.46v-9.53h-89.99v9.53h-25.94v33.48h25.94v-33.22h89.99v33.22h25.94v-33.48h-25.94Z"/>
+        <path class="wm-dawn" d="M644.87,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M760.53,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M912.58,283.46v100.31h-85.09v-100.31h85.09v-10.45h-111.16v220.74h26.07v-99.25h40.89v33.48h25.28v44.07h25.94v-44.07h-25.94v-33.48h18.92v-10.85h21.84v-100.31h-21.84v.13Z"/>
+        <path class="wm-dawn" d="M930.98,472.17h-11.38v21.7h11.38v-21.7Z"/>
+        <path class="wm-dawn" d="M1117.7,273.01v44.73h-25.67v43.27h-10.45v44.73h10.45v-44.73h25.67v132.6h25.81v-220.74h-25.81v.13Z"/>
+        <path class="wm-dawn" d="M1009.06,361.14v-43.27h-25.67v-44.73h-25.81v220.74h25.81v-132.6h25.67v44.73h10.45v-44.73h-10.45v-.13Z"/>
+        <path class="wm-dawn" d="M1035.26,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1081.84,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1066.09,450.2h-30.83v43.67h30.83v-43.67h0Z"/>
+      </svg>
+    </div>
+
+    <div class="hero-runway">
+      <div class="runway-arrows">
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <div class="hero-text-frame">
+        <p class="hero-tagline">
+          AI isn't software to command.<br>
+          It's a strange intelligence to navigate.<br>
+          Thoughtform teaches how.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT B: Logo + arrows vertically stacked in center-left
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="layout-container layout-b" id="layout-b">
+    <div class="hero-left-column">
+      <svg class="wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1178.18 494.93">
+        <defs><style>.wm-dawn{fill:#ebe3d6}.wm-gold{fill:#caa554}</style></defs>
+        <path class="wm-dawn" d="M517.7,108.78c0,59.15-39.04,108.78-107.06,108.78s-107.06-49.63-107.06-108.78S342.62,0,410.64,0s107.06,49.63,107.06,108.78ZM491.63,108.78c0-56.24-28.32-103.49-80.86-103.49s-80.86,47.38-80.86,103.49,28.32,103.49,80.86,103.49,80.86-47.38,80.86-103.49Z"/>
+        <path class="wm-gold" d="M421.49,374.38l-2.51,8.47h-93.83l-1.19,6.62h-8.87l-20.38,105.47h-11.38l18.26-97.13h-4.23l1.46-8.34h-9.93l1.19-6.62H0l2.51-8.47h294.31l1.19-6.62h8.87l18.39-97.93h11.38l-16.28,89.59h4.23l-1.46,8.34h9.93l-1.19,6.62h89.72-.13Z"/>
+        <path class="wm-dawn" d="M598.29,273.54v9.93h-106.93v210.02h-25.94v-219.94h133-.13Z"/>
+        <path class="wm-dawn" d="M557,373.58h-70.27v9.93h70.27v-9.93Z"/>
+        <path class="wm-dawn" d="M734.59,483.95h-89.72v9.79h89.72v-9.79Z"/>
+        <path class="wm-dawn" d="M618.54,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M786.47,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M734.59,283.46v-9.53h-89.99v9.53h-25.94v33.48h25.94v-33.22h89.99v33.22h25.94v-33.48h-25.94Z"/>
+        <path class="wm-dawn" d="M644.87,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M760.53,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M912.58,283.46v100.31h-85.09v-100.31h85.09v-10.45h-111.16v220.74h26.07v-99.25h40.89v33.48h25.28v44.07h25.94v-44.07h-25.94v-33.48h18.92v-10.85h21.84v-100.31h-21.84v.13Z"/>
+        <path class="wm-dawn" d="M930.98,472.17h-11.38v21.7h11.38v-21.7Z"/>
+        <path class="wm-dawn" d="M1117.7,273.01v44.73h-25.67v43.27h-10.45v44.73h10.45v-44.73h25.67v132.6h25.81v-220.74h-25.81v.13Z"/>
+        <path class="wm-dawn" d="M1009.06,361.14v-43.27h-25.67v-44.73h-25.81v220.74h25.81v-132.6h25.67v44.73h10.45v-44.73h-10.45v-.13Z"/>
+        <path class="wm-dawn" d="M1035.26,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1081.84,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1066.09,450.2h-30.83v43.67h30.83v-43.67h0Z"/>
+      </svg>
+
+      <div class="runway-arrows">
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+        <span class="runway-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <div class="hero-text-frame">
+        <p class="hero-tagline">
+          AI isn't software to command.<br>
+          It's a strange intelligence to navigate.<br>
+          Thoughtform teaches how.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT C: Compact integrated stack (logo, runway label, arrows, text)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="layout-container layout-c" id="layout-c">
+    <div class="hero-stack">
+      <svg class="wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1178.18 494.93">
+        <defs><style>.wm-dawn{fill:#ebe3d6}.wm-gold{fill:#caa554}</style></defs>
+        <path class="wm-dawn" d="M517.7,108.78c0,59.15-39.04,108.78-107.06,108.78s-107.06-49.63-107.06-108.78S342.62,0,410.64,0s107.06,49.63,107.06,108.78ZM491.63,108.78c0-56.24-28.32-103.49-80.86-103.49s-80.86,47.38-80.86,103.49,28.32,103.49,80.86,103.49,80.86-47.38,80.86-103.49Z"/>
+        <path class="wm-gold" d="M421.49,374.38l-2.51,8.47h-93.83l-1.19,6.62h-8.87l-20.38,105.47h-11.38l18.26-97.13h-4.23l1.46-8.34h-9.93l1.19-6.62H0l2.51-8.47h294.31l1.19-6.62h8.87l18.39-97.93h11.38l-16.28,89.59h4.23l-1.46,8.34h9.93l-1.19,6.62h89.72-.13Z"/>
+        <path class="wm-dawn" d="M598.29,273.54v9.93h-106.93v210.02h-25.94v-219.94h133-.13Z"/>
+        <path class="wm-dawn" d="M557,373.58h-70.27v9.93h70.27v-9.93Z"/>
+        <path class="wm-dawn" d="M734.59,483.95h-89.72v9.79h89.72v-9.79Z"/>
+        <path class="wm-dawn" d="M618.54,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M786.47,316.94h-25.94v133.39h25.94v-133.39h0Z"/>
+        <path class="wm-dawn" d="M734.59,283.46v-9.53h-89.99v9.53h-25.94v33.48h25.94v-33.22h89.99v33.22h25.94v-33.48h-25.94Z"/>
+        <path class="wm-dawn" d="M644.87,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M760.53,450.47h-25.94v33.48h25.94v-33.48Z"/>
+        <path class="wm-dawn" d="M912.58,283.46v100.31h-85.09v-100.31h85.09v-10.45h-111.16v220.74h26.07v-99.25h40.89v33.48h25.28v44.07h25.94v-44.07h-25.94v-33.48h18.92v-10.85h21.84v-100.31h-21.84v.13Z"/>
+        <path class="wm-dawn" d="M930.98,472.17h-11.38v21.7h11.38v-21.7Z"/>
+        <path class="wm-dawn" d="M1117.7,273.01v44.73h-25.67v43.27h-10.45v44.73h10.45v-44.73h25.67v132.6h25.81v-220.74h-25.81v.13Z"/>
+        <path class="wm-dawn" d="M1009.06,361.14v-43.27h-25.67v-44.73h-25.81v220.74h25.81v-132.6h25.67v44.73h10.45v-44.73h-10.45v-.13Z"/>
+        <path class="wm-dawn" d="M1035.26,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1081.84,405.87h-15.75v44.33h15.75v-44.33h0Z"/>
+        <path class="wm-dawn" d="M1066.09,450.2h-30.83v43.67h30.83v-43.67h0Z"/>
+      </svg>
+
+      <div class="runway-row">
+        <span class="runway-label">Navigate →</span>
+        <div class="runway-arrows">
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+          <span class="runway-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="hero-text-frame">
+        <p class="hero-tagline">
+          AI isn't software to command.<br>
+          It's a strange intelligence to navigate.<br>
+          Thoughtform teaches how.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <h3>Layout Options</h3>
+    <div class="control-group">
+      <label>
+        <input type="radio" name="layout" value="a" checked>
+        <span>A: Logo top, arrows center, text bottom</span>
+      </label>
+      <label>
+        <input type="radio" name="layout" value="b">
+        <span>B: Logo + arrows stacked center</span>
+      </label>
+      <label>
+        <input type="radio" name="layout" value="c">
+        <span>C: Compact unified stack</span>
+      </label>
+    </div>
+  </div>
+
+  <script>
+    // Layout switching
+    document.querySelectorAll('input[name="layout"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        document.querySelectorAll('.layout-container').forEach(c => c.classList.remove('active'));
+        document.getElementById(`layout-${e.target.value}`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+
+

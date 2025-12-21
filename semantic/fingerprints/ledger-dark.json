@@ -1,0 +1,55 @@
+{
+  "platform": "ledger-dark",
+  "version": "2.0.0",
+  
+  "identity": {
+    "short": "Green phosphor screens in dim offices. Money flows as particle streams.",
+    "extended": "Financial terminal for the night shift analyst. Late capitalism's control room. Finding pattern in the endless transaction stream. Terminal warmth in corporate cold. The satisfaction of signal emerging from noise.",
+    "navigates": "Financial data, transactions, patterns → spending topology, era detection, anomalies"
+  },
+  
+  "anchor_weights": {
+    "NAVIGATION": 0.6,
+    "INSTRUMENT": 0.9,
+    "LIVING_GEOMETRY": 0.5,
+    "GRADIENT": 0.7,
+    "THRESHOLD": 0.3,
+    "SIGNAL": 0.9
+  },
+  
+  "aesthetic": {
+    "mode": "dark",
+    "accent": "verde",
+    "metaphor_domain": ["terminal", "CRT", "financial", "data stream", "vigilance"],
+    "particle_behavior": "horizontal-flow",
+    "references_resonate": [
+      "Blade Runner corporate terminals",
+      "Bloomberg Terminal interfaces",
+      "1980s CRT monitors with green phosphor",
+      "Stock trading floor screens",
+      "Air traffic control radar",
+      "Submarine sonar displays"
+    ]
+  },
+  
+  "tokens": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "verde"
+  },
+  
+  "effects": {
+    "scanlines": true,
+    "phosphor_glow": true
+  },
+  
+  "keywords": [
+    "terminal", "financial", "transaction", "money", "CRT",
+    "green", "phosphor", "scanline", "data stream", "pattern",
+    "signal", "noise", "vigilance", "night shift"
+  ],
+  
+  "embedding_text": "Ledger Dark is a financial terminal with Blade Runner CRT aesthetics. Verde/green phosphor glow represents signal emerging from transaction noise. Particles flow horizontally like money movement through the system. Scanlines are baseline, not exception. The operator maintains focused vigilance, finding patterns in endless data streams. Primary anchors are INSTRUMENT and SIGNAL, representing the terminal as tool for making financial patterns perceptible. Dense data displays with warm blacks, not cold."
+}
+
+

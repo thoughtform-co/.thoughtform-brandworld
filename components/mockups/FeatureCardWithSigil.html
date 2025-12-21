@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeatureCard Grid System — Thoughtform</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=PT+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* PP Mondwest - load from local fonts if available */
+    @font-face {
+      font-family: 'PP Mondwest';
+      src: local('PP Mondwest'), 
+           url('../../../fonts/PPMondwest-Regular.woff2') format('woff2'),
+           url('../../../fonts/PPMondwest-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      /* ─── Colors ─────────────────────────────────────────────── */
+      --void-base: #050403;
+      --void-surface-1: #0F0E0C;
+      --void-surface-2: #141311;
+      --void-surface-3: #1A1816;
+      
+      --dawn-base: #ECE3D6;
+      --dawn-70: rgba(236, 227, 214, 0.7);
+      --dawn-50: rgba(236, 227, 214, 0.5);
+      --dawn-30: rgba(236, 227, 214, 0.3);
+      --dawn-08: rgba(236, 227, 214, 0.08);
+      
+      --gold: #CAA554;
+      --gold-bright: #E0BC6A;
+      --teal: #3D8B7A;
+      --verde: #5B8A7A;
+      
+      /* ─── Typography ─────────────────────────────────────────── */
+      --font-display: 'PP Mondwest', 'PT Mono', monospace;
+      --font-system: 'PT Mono', monospace;
+      --font-content: 'IBM Plex Mono', monospace;
+      
+      /* ─── Spacing Scale (Tailwind/shadcn 4px base) ───────────── */
+      --space-0: 0px;
+      --space-px: 1px;
+      --space-0-5: 2px;    /* 0.5 */
+      --space-1: 4px;
+      --space-1-5: 6px;    /* 1.5 */
+      --space-2: 8px;
+      --space-2-5: 10px;   /* 2.5 */
+      --space-3: 12px;
+      --space-3-5: 14px;   /* 3.5 */
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-9: 36px;
+      --space-10: 40px;
+      --space-11: 44px;
+      --space-12: 48px;
+      --space-14: 56px;
+      --space-16: 64px;
+      
+      /* ─── Animation ──────────────────────────────────────────── */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --grid: 3;
+
+      /* ─── Grid System ────────────────────────────────────────── */
+      --card-unit: 160px;
+      --card-gap: var(--space-5);        /* 20px - grid gap */
+      --card-padding: var(--space-6);    /* 24px - card internal padding */
+      --card-padding-sm: var(--space-4); /* 16px - compact card padding */
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: var(--space-8);
+      background: var(--void-base);
+      min-height: 100vh;
+      font-family: var(--font-content);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--space-8);
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CONTROL PANEL
+       ════════════════════════════════════════════════════════════ */
+    .control-panel {
+      position: sticky;
+      top: var(--space-8);
+      background: var(--void-surface-2);
+      border: 1px solid var(--dawn-08);
+      padding: var(--space-6);
+      height: fit-content;
+      max-height: calc(100vh - var(--space-16));
+      overflow-y: auto;
+    }
+
+    .panel-title {
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0 0 var(--space-6) 0;
+    }
+
+    .panel-title::before {
+      content: '// ';
+      opacity: 0.5;
+    }
+
+    .control-group {
+      margin-bottom: var(--space-5);
+    }
+
+    .control-label {
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--dawn-50);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-2);
+    }
+
+    .control-value {
+      color: var(--gold);
+    }
+
+    .control-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: var(--space-1);
+      background: var(--void-surface-3);
+      border: 1px solid var(--dawn-08);
+      cursor: pointer;
+    }
+
+    .control-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: var(--space-3);
+      height: var(--space-3);
+      background: var(--gold);
+      cursor: pointer;
+    }
+
+    .control-slider::-moz-range-thumb {
+      width: var(--space-3);
+      height: var(--space-3);
+      background: var(--gold);
+      border: none;
+      cursor: pointer;
+    }
+
+    .control-select {
+      width: 100%;
+      background: var(--void-surface-3);
+      border: 1px solid var(--dawn-08);
+      color: var(--dawn-70);
+      font-family: var(--font-system);
+      font-size: 11px;
+      padding: var(--space-2) var(--space-3);
+      cursor: pointer;
+    }
+
+    .control-select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--dawn-08);
+      margin: var(--space-5) 0;
+    }
+
+    .control-button {
+      width: 100%;
+      background: var(--void-surface-3);
+      border: 1px solid var(--dawn-08);
+      color: var(--dawn-70);
+      font-family: var(--font-system);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: var(--space-2-5);
+      cursor: pointer;
+      transition: all 150ms;
+    }
+
+    .control-button:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .control-button.primary {
+      background: var(--gold);
+      color: var(--void-base);
+      border-color: var(--gold);
+    }
+
+    .control-button.primary:hover {
+      background: var(--gold-bright);
+    }
+
+    .button-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    /* Pattern Preview Gallery */
+    .pattern-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-1-5);
+    }
+
+    .pattern-preview {
+      position: relative;
+      aspect-ratio: 1;
+      background: var(--void-base);
+      border: 1px solid var(--dawn-08);
+      cursor: pointer;
+      transition: all 150ms var(--ease-out);
+      overflow: hidden;
+    }
+
+    .pattern-preview:hover {
+      border-color: var(--gold-bright);
+      transform: scale(1.05);
+      z-index: 2;
+    }
+
+    .pattern-preview.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+
+    .pattern-preview canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .pattern-preview-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, var(--void-base) 0%, transparent 100%);
+      padding: var(--space-1) var(--space-1);
+      font-family: var(--font-system);
+      font-size: 7px;
+      color: var(--dawn-50);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 150ms;
+    }
+
+    .pattern-preview:hover .pattern-preview-label {
+      opacity: 1;
+    }
+
+    .pattern-preview.active .pattern-preview-label {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    .saved-values {
+      margin-top: var(--space-4);
+      padding: var(--space-3);
+      background: var(--void-surface-3);
+      border: 1px solid var(--dawn-08);
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--dawn-50);
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RESPONSIVE CARD GRID
+       ════════════════════════════════════════════════════════════ */
+    .main-content {
+      min-width: 0;
+    }
+
+    .mockup-title {
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--dawn-50);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-6);
+    }
+
+    .mockup-title::before {
+      content: '// ';
+      opacity: 0.5;
+    }
+
+    /* Masonry-inspired responsive grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: calc(var(--card-unit) / 2);
+      gap: var(--card-gap);
+    }
+
+    @media (max-width: 1200px) {
+      .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CARD ASPECT RATIO SYSTEM
+       ════════════════════════════════════════════════════════════ */
+    
+    /* Base card spans - row spans control height */
+    .feature-card {
+      position: relative;
+      background: var(--void-surface-1);
+      border: 1px solid var(--dawn-08);
+      overflow: hidden;
+      transition: border-color 300ms var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Default: roughly square (1:1) */
+    .feature-card {
+      grid-row: span 4;
+    }
+
+    /* 16:9 - Wide landscape */
+    .feature-card.ratio-16-9 {
+      grid-column: span 2;
+      grid-row: span 3;
+    }
+
+    /* 4:3 - Landscape */
+    .feature-card.ratio-4-3 {
+      grid-column: span 1;
+      grid-row: span 3;
+    }
+
+    /* 1:1 - Square */
+    .feature-card.ratio-1-1 {
+      grid-column: span 1;
+      grid-row: span 4;
+    }
+
+    /* 3:4 - Portrait */
+    .feature-card.ratio-3-4 {
+      grid-column: span 1;
+      grid-row: span 5;
+    }
+
+    /* 9:16 - Tall portrait */
+    .feature-card.ratio-9-16 {
+      grid-column: span 1;
+      grid-row: span 7;
+    }
+
+    /* 2:1 - Ultra-wide */
+    .feature-card.ratio-2-1 {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* Full-width hero */
+    .feature-card.ratio-hero {
+      grid-column: span 4;
+      grid-row: span 4;
+    }
+
+    @media (max-width: 1200px) {
+      .feature-card.ratio-hero {
+        grid-column: span 3;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .feature-card.ratio-hero,
+      .feature-card.ratio-16-9,
+      .feature-card.ratio-2-1 {
+        grid-column: span 2;
+      }
+    }
+
+    .feature-card:hover {
+      border-color: var(--dawn-30);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CARD INTERNALS
+       ════════════════════════════════════════════════════════════ */
+
+    /* Corner brackets */
+    .corner {
+      position: absolute;
+      width: var(--space-4);
+      height: var(--space-4);
+      opacity: 0;
+      transition: opacity 300ms var(--ease-out);
+      z-index: 2;
+    }
+
+    .feature-card:hover .corner {
+      opacity: 1;
+    }
+
+    .corner-tl { top: -1px; left: -1px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+    .corner-tr { top: -1px; right: -1px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+    .corner-bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+    .corner-br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+    /* Background sigil */
+    .card-sigil-bg {
+      position: absolute;
+      transition: opacity 400ms var(--ease-out), transform 400ms var(--ease-out);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .feature-card:hover .card-sigil-bg {
+      transform: scale(1.05);
+    }
+
+    /* ─── Card Content Layout ──────────────────────────────────── 
+       Following shadcn Card component spacing patterns:
+       - CardHeader: p-6, space-y-1.5
+       - CardContent: p-6 pt-0
+       - CardFooter: p-6 pt-0
+       ─────────────────────────────────────────────────────────── */
+    
+    .card-content {
+      --_padding: var(--card-padding);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: var(--_padding);
+      padding-top: calc(var(--_padding) + var(--space-8)); /* Space for header */
+      gap: var(--space-1-5); /* 6px - shadcn's space-y-1.5 */
+    }
+
+    /* Compact padding for landscape cards */
+    .feature-card.ratio-4-3 .card-content,
+    .feature-card.ratio-2-1 .card-content {
+      --_padding: var(--card-padding-sm);
+    }
+
+    /* Floating header in top-left */
+    .card-header-float {
+      position: absolute;
+      top: var(--space-4);
+      left: var(--_padding, var(--card-padding));
+    }
+
+    /* Section label */
+    .card-section {
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    /* ─── Typography with consistent line-heights ──────────────── */
+    .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 400;
+      color: var(--dawn-base);
+      letter-spacing: 0.01em;
+      text-transform: none;
+      margin: 0;
+      line-height: 1.3;  /* Slightly more breathing room */
+    }
+
+    /* Compact title for small cards */
+    .feature-card.ratio-4-3 .card-title,
+    .feature-card.ratio-2-1 .card-title {
+      font-size: clamp(16px, 2.5vw, 22px);
+    }
+
+    /* Larger title for hero */
+    .feature-card.ratio-hero .card-title {
+      font-size: clamp(24px, 4vw, 40px);
+    }
+
+    .card-description {
+      font-family: var(--font-content);
+      font-size: clamp(12px, 1.4vw, 14px);
+      line-height: 1.625; /* ~26px at 16px - optimal reading */
+      color: var(--dawn-50);
+      margin: var(--space-2) 0 0 0; /* 8px top margin */
+    }
+
+    /* ─── Feature List ─────────────────────────────────────────── */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: auto 0 0 0;
+      padding-top: var(--space-4); /* 16px */
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2-5); /* 10px - slightly more than 8px for readability */
+    }
+
+    /* Horizontal list for wide cards */
+    .feature-card.ratio-16-9 .feature-list,
+    .feature-card.ratio-2-1 .feature-list,
+    .feature-card.ratio-hero .feature-list {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-6); /* 12px vertical, 24px horizontal */
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2); /* 8px */
+    }
+
+    .feature-marker {
+      font-size: 10px;
+      color: var(--gold);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .feature-label {
+      font-family: var(--font-content);
+      font-size: clamp(11px, 1.2vw, 13px);
+      line-height: 1.5;
+      color: var(--dawn-70);
+    }
+
+    /* ─── Card CTA ─────────────────────────────────────────────── */
+    .card-cta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2); /* 8px */
+      background: none;
+      border: none;
+      padding: var(--space-2) 0; /* 8px vertical */
+      margin-top: var(--space-4); /* 16px - clear separation */
+      cursor: pointer;
+      font-family: var(--font-system);
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: opacity 150ms;
+    }
+
+    .card-cta:hover { opacity: 0.8; }
+    .cta-arrow { transition: transform 150ms; }
+    .card-cta:hover .cta-arrow { transform: translateX(4px); }
+
+    /* Accent variants */
+    .feature-card.accent-teal .corner-tl,
+    .feature-card.accent-teal .corner-tr,
+    .feature-card.accent-teal .corner-bl,
+    .feature-card.accent-teal .corner-br { border-color: var(--teal); }
+    .feature-card.accent-teal .card-section,
+    .feature-card.accent-teal .feature-marker,
+    .feature-card.accent-teal .card-cta { color: var(--teal); }
+
+    .feature-card.accent-dawn .corner-tl,
+    .feature-card.accent-dawn .corner-tr,
+    .feature-card.accent-dawn .corner-bl,
+    .feature-card.accent-dawn .corner-br { border-color: var(--dawn-70); }
+    .feature-card.accent-dawn .card-section,
+    .feature-card.accent-dawn .feature-marker,
+    .feature-card.accent-dawn .card-cta { color: var(--dawn-70); }
+
+    /* ════════════════════════════════════════════════════════════
+       MINIMAL CARD VARIANT (for small/compact cards)
+       ════════════════════════════════════════════════════════════ */
+    .feature-card.minimal .card-description,
+    .feature-card.minimal .feature-list {
+      display: none;
+    }
+
+    .feature-card.ratio-2-1 .card-description {
+      display: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       GRID SECTION LABELS
+       ════════════════════════════════════════════════════════════ */
+    .grid-section {
+      grid-column: 1 / -1;
+      padding: var(--space-6) 0 var(--space-2) 0;
+    }
+
+    .grid-section-title {
+      font-family: var(--font-system);
+      font-size: 9px;
+      color: var(--dawn-30);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .grid-section-title::before {
+      content: '// ';
+      opacity: 0.5;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SPACING UTILITIES (optional, for fine-tuning)
+       ════════════════════════════════════════════════════════════ */
+    .mt-auto { margin-top: auto; }
+    .mb-0 { margin-bottom: 0; }
+    .gap-tight { gap: var(--space-1-5); }
+    .gap-normal { gap: var(--space-3); }
+    .gap-loose { gap: var(--space-5); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- ════════════════════════════════════════════════════════════
+         CONTROL PANEL
+         ════════════════════════════════════════════════════════════ -->
+    <aside class="control-panel">
+      <h2 class="panel-title">Sigil Controls</h2>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Pattern</span>
+        </label>
+        <select id="ctrl-pattern" class="control-select">
+          <option value="constellation">Constellation</option>
+          <option value="scatter">Scatter</option>
+          <option value="grid">Grid</option>
+          <option value="cross">Cross</option>
+          <option value="spiral">Spiral</option>
+          <option value="ring">Ring</option>
+          <option value="diamond">Diamond</option>
+          <option value="hexagon">Hexagon</option>
+          <option value="burst">Burst</option>
+          <option value="orbit">Orbit</option>
+          <option value="vortex">Vortex</option>
+          <option value="field">Field</option>
+          <option value="lattice">Lattice</option>
+          <option value="nebula">Nebula</option>
+          <option value="axis">Axis</option>
+          <option value="wave">Wave</option>
+          <option value="triangle">Triangle</option>
+          <option value="pulsar">Pulsar</option>
+          <option value="helix">Helix</option>
+        </select>
+      </div>
+
+      <!-- Pattern Preview Gallery -->
+      <div class="control-group">
+        <label class="control-label">
+          <span>Preview Gallery</span>
+        </label>
+        <div class="pattern-gallery" id="pattern-gallery">
+          <!-- Patterns will be rendered here by JS -->
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Density</span>
+          <span class="control-value" id="val-density">80</span>
+        </label>
+        <input type="range" id="ctrl-density" class="control-slider" min="10" max="120" value="80">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Opacity (Rest)</span>
+          <span class="control-value" id="val-opacity">46%</span>
+        </label>
+        <input type="range" id="ctrl-opacity" class="control-slider" min="5" max="80" value="46">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Opacity (Hover)</span>
+          <span class="control-value" id="val-opacity-hover">25%</span>
+        </label>
+        <input type="range" id="ctrl-opacity-hover" class="control-slider" min="10" max="80" value="25">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Size</span>
+          <span class="control-value" id="val-size">77px</span>
+        </label>
+        <input type="range" id="ctrl-size" class="control-slider" min="40" max="200" value="77">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Position X</span>
+          <span class="control-value" id="val-pos-x">-20px</span>
+        </label>
+        <input type="range" id="ctrl-pos-x" class="control-slider" min="-60" max="200" value="-20">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Position Y</span>
+          <span class="control-value" id="val-pos-y">-20px</span>
+        </label>
+        <input type="range" id="ctrl-pos-y" class="control-slider" min="-60" max="200" value="-20">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Placement Preset</span>
+        </label>
+        <select id="ctrl-placement" class="control-select">
+          <option value="top-left">Top Left</option>
+          <option value="top-right">Top Right</option>
+          <option value="bottom-left">Bottom Left</option>
+          <option value="bottom-right">Bottom Right</option>
+          <option value="center">Center</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Glitch Chance</span>
+          <span class="control-value" id="val-glitch">16%</span>
+        </label>
+        <input type="range" id="ctrl-glitch" class="control-slider" min="0" max="40" value="16">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Grid Base Unit</span>
+          <span class="control-value" id="val-unit">160px</span>
+        </label>
+        <input type="range" id="ctrl-unit" class="control-slider" min="100" max="240" value="160">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="button-stack">
+        <button id="btn-save" class="control-button primary">Save Config</button>
+        <button id="btn-reset" class="control-button">Reset to Defaults</button>
+        <button id="btn-copy" class="control-button">Copy JSON</button>
+      </div>
+
+      <div class="saved-values" id="saved-output">
+// Current config will appear here
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════
+         MAIN CONTENT
+         ════════════════════════════════════════════════════════════ -->
+    <main class="main-content">
+      <div class="mockup-title">Responsive Card Grid System — Multiple Aspect Ratios</div>
+
+      <div class="card-grid">
+        
+        <!-- Hero Card (full width) -->
+        <div class="feature-card ratio-hero" data-sigil="constellation" data-seed="hero-nav">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Navigation</p>
+            </div>
+            
+            <h3 class="card-title">Chart your course through the latent space</h3>
+            
+            <p class="card-description">
+              Precision instruments designed for semantic wayfinding. 
+              Navigate meaning, not just data. Every coordinate maps to understanding.
+            </p>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Semantic Coordinates</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Vector Mapping</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Depth Visualization</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Trajectory Analysis</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Explore</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 16:9 Wide Card -->
+        <div class="feature-card ratio-16-9 accent-teal" data-sigil="grid" data-seed="instruments">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Tooling</p>
+            </div>
+            
+            <h3 class="card-title">Purpose-built tools that surface complexity</h3>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Data Orchestration</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Transaction Flows</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Real-time Metrics</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Configure</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 9:16 Tall Portrait -->
+        <div class="feature-card ratio-9-16" data-sigil="spiral" data-seed="growth">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Adaptation</p>
+            </div>
+            
+            <h3 class="card-title">Systems that learn and grow with you</h3>
+            
+            <p class="card-description">
+              Progress measured not in destinations but in trajectories. 
+              Adaptive by design.
+            </p>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Pattern Recognition</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Iterative Refinement</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Trajectory Analysis</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Learning Curves</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Track</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1:1 Square -->
+        <div class="feature-card ratio-1-1 accent-dawn" data-sigil="scatter" data-seed="archive">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Taxonomy</p>
+            </div>
+            
+            <h3 class="card-title">A living archive of semantic entities</h3>
+            
+            <p class="card-description">
+              Catalogued and cross-referenced for scholarly navigation.
+            </p>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Classification</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Domain Mapping</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Browse</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3:4 Portrait -->
+        <div class="feature-card ratio-3-4" data-sigil="cross" data-seed="threshold">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Threshold</p>
+            </div>
+            
+            <h3 class="card-title">Portals between semantic territories</h3>
+            
+            <p class="card-description">
+              Boundaries as features, not limitations.
+            </p>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">State Transitions</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Context Shifts</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Boundary Detection</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Enter</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4:3 Landscape -->
+        <div class="feature-card ratio-4-3 accent-teal" data-sigil="constellation" data-seed="signal">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Signal</p>
+            </div>
+            
+            <h3 class="card-title">Extract meaning from noise</h3>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Pattern Detection</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Noise Filtering</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Tune</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2:1 Ultra-wide -->
+        <div class="feature-card ratio-2-1" data-sigil="grid" data-seed="metrics">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Metrics</p>
+            </div>
+            
+            <h3 class="card-title">Quantified understanding at scale</h3>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">KPI Tracking</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Trend Analysis</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Anomaly Detection</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Measure</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Another 1:1 Square -->
+        <div class="feature-card ratio-1-1" data-sigil="scatter" data-seed="memory">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Memory</p>
+            </div>
+            
+            <h3 class="card-title">Persistent knowledge structures</h3>
+            
+            <p class="card-description">
+              What is remembered shapes what is possible.
+            </p>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">State Persistence</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Context Recall</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Remember</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4:3 Landscape -->
+        <div class="feature-card ratio-4-3 accent-dawn" data-sigil="spiral" data-seed="synthesis">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          
+          <div class="card-sigil-bg">
+            <canvas width="120" height="120"></canvas>
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header-float">
+              <p class="card-section">Synthesis</p>
+            </div>
+            
+            <h3 class="card-title">Combine to create</h3>
+            
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Fusion</span>
+              </li>
+              <li class="feature-item">
+                <span class="feature-marker">◇</span>
+                <span class="feature-label">Emergence</span>
+              </li>
+            </ul>
+            
+            <button class="card-cta">
+              <span>Compose</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════════════════════════════
+    
+    const STORAGE_KEY = 'thoughtform-sigil-config';
+    const GRID = 3;
+    
+    const COLORS = {
+      gold: [202, 165, 84],
+      dawn: [236, 227, 214],
+      teal: [61, 139, 122],
+      verde: [91, 138, 122],
+    };
+
+    const DEFAULT_CONFIG = {
+      pattern: 'constellation',
+      density: 80,
+      opacity: 46,
+      opacityHover: 25,
+      size: 77,
+      posX: -20,
+      posY: -20,
+      placement: 'top-left',
+      glitch: 16,
+      unit: 160,
+    };
+
+    let config = { ...DEFAULT_CONFIG };
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIGIL GENERATOR
+    // ═══════════════════════════════════════════════════════════════
+
+    function hashCode(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    function seededRandom(seed) {
+      return function() {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
+      };
+    }
+
+    function generateParticles(pattern, seed, size, density, glitchChance) {
+      const random = seededRandom(seed);
+      const center = size / 2;
+      const particles = [];
+      const count = density;
+
+      for (let i = 0; i < count; i++) {
+        let x, y, alpha;
+
+        switch (pattern) {
+          case 'constellation':
+            const angle = (i / count) * Math.PI * 2 + random() * 0.3;
+            const dist = random() * size * 0.4;
+            x = center + Math.cos(angle) * dist;
+            y = center + Math.sin(angle) * dist;
+            alpha = 0.4 + (1 - dist / (size * 0.45)) * 0.5;
+            break;
+
+          case 'scatter':
+            const phi = (1 + Math.sqrt(5)) / 2;
+            const theta = i * phi * Math.PI * 2;
+            const r = Math.sqrt(i / count) * size * 0.45;
+            x = center + Math.cos(theta) * r * (0.8 + random() * 0.4);
+            y = center + Math.sin(theta) * r * (0.8 + random() * 0.4);
+            alpha = 0.3 + random() * 0.4;
+            break;
+
+          case 'grid':
+            const gridSize = Math.ceil(Math.sqrt(count));
+            const gx = (i % gridSize) - gridSize / 2 + 0.5;
+            const gy = Math.floor(i / gridSize) - gridSize / 2 + 0.5;
+            x = center + gx * (size / (gridSize + 1));
+            y = center + gy * (size / (gridSize + 1));
+            if (random() < 0.25) continue;
+            alpha = 0.4 + random() * 0.4;
+            break;
+
+          case 'cross':
+            const arm = i % 4;
+            const pos = Math.floor(i / 4) / (count / 4);
+            const offset = pos * size * 0.4;
+            switch (arm) {
+              case 0: x = center + offset; y = center + offset; break;
+              case 1: x = center - offset; y = center + offset; break;
+              case 2: x = center + offset; y = center - offset; break;
+              case 3: x = center - offset; y = center - offset; break;
+            }
+            alpha = 0.5 + (1 - pos) * 0.4;
+            break;
+
+          case 'spiral':
+            const arms = 3;
+            const spiralAngle = (i / count) * Math.PI * 5 + (i % arms) * (Math.PI * 2 / arms);
+            const spiralR = (i / count) * size * 0.45;
+            x = center + Math.cos(spiralAngle) * spiralR;
+            y = center + Math.sin(spiralAngle) * spiralR;
+            alpha = 0.3 + (i / count) * 0.5;
+            break;
+
+          // ═══════════════════════════════════════════════════════════
+          // NEW PATTERNS
+          // ═══════════════════════════════════════════════════════════
+
+          case 'ring': {
+            // Concentric rings - radar/sonar aesthetic
+            const rings = 4;
+            const ringIndex = i % rings;
+            const ringRadius = (ringIndex + 1) * (size * 0.1);
+            const ringAngle = (i / count) * Math.PI * 2 * rings + random() * 0.2;
+            x = center + Math.cos(ringAngle) * ringRadius;
+            y = center + Math.sin(ringAngle) * ringRadius;
+            alpha = 0.3 + (1 - ringIndex / rings) * 0.5;
+            break;
+          }
+
+          case 'diamond': {
+            // Diamond/rhombus shape
+            const t = i / count;
+            const side = Math.floor(t * 4);
+            const sideT = (t * 4) % 1;
+            const diamondSize = size * 0.35;
+            const points = [
+              [center, center - diamondSize],  // top
+              [center + diamondSize, center],  // right
+              [center, center + diamondSize],  // bottom
+              [center - diamondSize, center],  // left
+            ];
+            const p1 = points[side];
+            const p2 = points[(side + 1) % 4];
+            x = p1[0] + (p2[0] - p1[0]) * sideT + (random() - 0.5) * 6;
+            y = p1[1] + (p2[1] - p1[1]) * sideT + (random() - 0.5) * 6;
+            alpha = 0.4 + random() * 0.4;
+            break;
+          }
+
+          case 'hexagon': {
+            // Hexagonal honeycomb pattern
+            const hexRadius = size * 0.08;
+            const cols = 5;
+            const rows = 5;
+            const col = i % cols - cols / 2;
+            const row = Math.floor(i / cols) % rows - rows / 2;
+            const offsetX = row % 2 === 0 ? 0 : hexRadius * 0.866;
+            x = center + col * hexRadius * 1.732 + offsetX;
+            y = center + row * hexRadius * 1.5;
+            if (random() < 0.3) continue;
+            alpha = 0.3 + random() * 0.5;
+            break;
+          }
+
+          case 'burst': {
+            // Radial burst from center
+            const burstAngle = (i / count) * Math.PI * 2;
+            const burstDist = size * 0.15 + (random() * size * 0.3);
+            const rayWidth = random() < 0.7 ? 1 : 0;
+            x = center + Math.cos(burstAngle) * burstDist * rayWidth;
+            y = center + Math.sin(burstAngle) * burstDist * rayWidth;
+            alpha = 0.5 + (1 - burstDist / (size * 0.45)) * 0.4;
+            break;
+          }
+
+          case 'orbit': {
+            // Multiple elliptical orbits
+            const orbits = 3;
+            const orbitIndex = i % orbits;
+            const orbitAngle = (i / count) * Math.PI * 2 * 2;
+            const orbitA = (orbitIndex + 1) * size * 0.12;
+            const orbitB = orbitA * (0.5 + orbitIndex * 0.2);
+            const tilt = orbitIndex * Math.PI / 6;
+            const ox = Math.cos(orbitAngle) * orbitA;
+            const oy = Math.sin(orbitAngle) * orbitB;
+            x = center + ox * Math.cos(tilt) - oy * Math.sin(tilt);
+            y = center + ox * Math.sin(tilt) + oy * Math.cos(tilt);
+            alpha = 0.3 + random() * 0.4;
+            break;
+          }
+
+          case 'vortex': {
+            // Spinning vortex - black hole aesthetic
+            const vortexArms = 2;
+            const vortexAngle = (i / count) * Math.PI * 8 + (i % vortexArms) * Math.PI;
+            const vortexR = Math.pow(i / count, 0.6) * size * 0.45;
+            x = center + Math.cos(vortexAngle) * vortexR;
+            y = center + Math.sin(vortexAngle) * vortexR;
+            alpha = 0.2 + (i / count) * 0.6;
+            break;
+          }
+
+          case 'field': {
+            // Vector field - flow lines
+            const fieldCols = Math.ceil(Math.sqrt(count));
+            const fx = (i % fieldCols) / fieldCols;
+            const fy = Math.floor(i / fieldCols) / fieldCols;
+            const fieldAngle = Math.sin(fx * Math.PI * 2) * Math.cos(fy * Math.PI * 2) * Math.PI;
+            const flowX = fx * size * 0.8 + size * 0.1;
+            const flowY = fy * size * 0.8 + size * 0.1;
+            x = flowX + Math.cos(fieldAngle) * 4;
+            y = flowY + Math.sin(fieldAngle) * 4;
+            alpha = 0.3 + Math.abs(Math.sin(fieldAngle)) * 0.5;
+            break;
+          }
+
+          case 'lattice': {
+            // Crystal lattice structure
+            const latticeCols = 6;
+            const latticeRows = 6;
+            const lx = (i % latticeCols) - latticeCols / 2 + 0.5;
+            const ly = Math.floor(i / latticeCols) % latticeRows - latticeRows / 2 + 0.5;
+            const latticeSpacing = size / (latticeCols + 1);
+            x = center + lx * latticeSpacing;
+            y = center + ly * latticeSpacing;
+            // Add diagonal connections visually
+            if (random() < 0.15) {
+              x += latticeSpacing * 0.5 * (random() > 0.5 ? 1 : -1);
+              y += latticeSpacing * 0.5 * (random() > 0.5 ? 1 : -1);
+            }
+            alpha = 0.4 + random() * 0.4;
+            break;
+          }
+
+          case 'nebula': {
+            // Gaussian cloud distribution
+            const u1 = random();
+            const u2 = random();
+            const gaussX = Math.sqrt(-2 * Math.log(u1 + 0.001)) * Math.cos(2 * Math.PI * u2);
+            const gaussY = Math.sqrt(-2 * Math.log(u1 + 0.001)) * Math.sin(2 * Math.PI * u2);
+            x = center + gaussX * size * 0.15;
+            y = center + gaussY * size * 0.15;
+            const distFromCenter = Math.sqrt(gaussX * gaussX + gaussY * gaussY);
+            alpha = 0.2 + Math.exp(-distFromCenter * 0.5) * 0.6;
+            break;
+          }
+
+          case 'axis': {
+            // Coordinate axis cross with markers
+            const axisArm = i % 4;
+            const axisPos = Math.floor(i / 4) / (count / 4);
+            const axisLen = axisPos * size * 0.42;
+            switch (axisArm) {
+              case 0: x = center + axisLen; y = center; break;
+              case 1: x = center - axisLen; y = center; break;
+              case 2: x = center; y = center + axisLen; break;
+              case 3: x = center; y = center - axisLen; break;
+            }
+            // Add tick marks
+            if (Math.floor(axisPos * 10) % 2 === 0) {
+              alpha = 0.7;
+            } else {
+              alpha = 0.3 + random() * 0.2;
+            }
+            break;
+          }
+
+          case 'wave': {
+            // Sine wave pattern
+            const waveX = (i / count) * size * 0.9 + size * 0.05;
+            const waveFreq = 3;
+            const waveAmp = size * 0.15;
+            const wavePhase = random() * 0.5;
+            y = center + Math.sin((i / count) * Math.PI * 2 * waveFreq + wavePhase) * waveAmp;
+            x = waveX;
+            alpha = 0.3 + Math.abs(Math.sin((i / count) * Math.PI * 2 * waveFreq)) * 0.5;
+            break;
+          }
+
+          case 'triangle': {
+            // Triangular formation
+            const triT = i / count;
+            const triSide = Math.floor(triT * 3);
+            const triSideT = (triT * 3) % 1;
+            const triSize = size * 0.35;
+            const triHeight = triSize * Math.sqrt(3) / 2;
+            const triPoints = [
+              [center, center - triHeight * 0.66],
+              [center + triSize / 2, center + triHeight * 0.33],
+              [center - triSize / 2, center + triHeight * 0.33],
+            ];
+            const tp1 = triPoints[triSide];
+            const tp2 = triPoints[(triSide + 1) % 3];
+            x = tp1[0] + (tp2[0] - tp1[0]) * triSideT + (random() - 0.5) * 4;
+            y = tp1[1] + (tp2[1] - tp1[1]) * triSideT + (random() - 0.5) * 4;
+            alpha = 0.4 + random() * 0.4;
+            break;
+          }
+
+          case 'pulsar': {
+            // Pulsar/beacon pattern with radial lines
+            const pulsarRays = 8;
+            const rayIndex = i % pulsarRays;
+            const rayAngle = (rayIndex / pulsarRays) * Math.PI * 2;
+            const rayDist = (Math.floor(i / pulsarRays) / (count / pulsarRays)) * size * 0.45;
+            x = center + Math.cos(rayAngle) * rayDist;
+            y = center + Math.sin(rayAngle) * rayDist;
+            // Alternating ray brightness
+            alpha = rayIndex % 2 === 0 ? 0.6 + random() * 0.3 : 0.2 + random() * 0.2;
+            break;
+          }
+
+          case 'helix': {
+            // Double helix DNA-like pattern
+            const helixT = i / count;
+            const helixAngle = helixT * Math.PI * 4;
+            const helixStrand = i % 2;
+            const helixRadius = size * 0.2;
+            const helixY = (helixT - 0.5) * size * 0.8;
+            x = center + Math.cos(helixAngle + helixStrand * Math.PI) * helixRadius;
+            y = center + helixY;
+            alpha = 0.3 + Math.abs(Math.cos(helixAngle)) * 0.5;
+            break;
+          }
+
+          default:
+            x = center + (random() - 0.5) * size * 0.6;
+            y = center + (random() - 0.5) * size * 0.6;
+            alpha = 0.5;
+        }
+
+        // Glitch displacement
+        let glitchX = 0, glitchY = 0;
+        if (random() < glitchChance / 100) {
+          glitchX = Math.floor((random() - 0.5) * 3) * GRID;
+          glitchY = Math.floor((random() - 0.5) * 2) * GRID;
+        }
+
+        const px = Math.floor((x + glitchX) / GRID) * GRID;
+        const py = Math.floor((y + glitchY) / GRID) * GRID;
+
+        particles.push({ x: px, y: py, alpha: Math.min(1, alpha) });
+      }
+
+      // Core particle for patterns that benefit from a center point
+      const centerPatterns = ['constellation', 'cross', 'ring', 'burst', 'orbit', 'vortex', 'nebula', 'axis', 'pulsar'];
+      if (centerPatterns.includes(pattern)) {
+        const cx = Math.floor(center / GRID) * GRID;
+        particles.push({ x: cx, y: cx, alpha: 0.9 });
+      }
+
+      return particles;
+    }
+
+    function renderSigil(canvas, pattern, seed, color, density, glitchChance) {
+      const ctx = canvas.getContext('2d');
+      const size = canvas.width;
+      const rgb = COLORS[color] || COLORS.gold;
+
+      ctx.clearRect(0, 0, size, size);
+
+      const particles = generateParticles(pattern, hashCode(seed), size, density, glitchChance);
+
+      particles.forEach(p => {
+        ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${p.alpha})`;
+        ctx.fillRect(p.x, p.y, GRID - 1, GRID - 1);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PATTERN GALLERY
+    // ═══════════════════════════════════════════════════════════════
+
+    const ALL_PATTERNS = [
+      'constellation', 'scatter', 'grid', 'cross', 'spiral',
+      'ring', 'diamond', 'hexagon', 'burst', 'orbit',
+      'vortex', 'field', 'lattice', 'nebula', 'axis',
+      'wave', 'triangle', 'pulsar', 'helix'
+    ];
+
+    function renderPatternGallery() {
+      const gallery = document.getElementById('pattern-gallery');
+      gallery.innerHTML = '';
+
+      ALL_PATTERNS.forEach(pattern => {
+        const preview = document.createElement('div');
+        preview.className = 'pattern-preview' + (config.pattern === pattern ? ' active' : '');
+        preview.dataset.pattern = pattern;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 48;
+        canvas.height = 48;
+        preview.appendChild(canvas);
+
+        const label = document.createElement('div');
+        label.className = 'pattern-preview-label';
+        label.textContent = pattern;
+        preview.appendChild(label);
+
+        // Render the pattern preview
+        renderSigil(canvas, pattern, pattern + '-preview', 'gold', 40, 0);
+
+        // Click handler
+        preview.addEventListener('click', () => {
+          config.pattern = pattern;
+          document.getElementById('ctrl-pattern').value = pattern;
+          updateGallerySelection();
+          applyConfig();
+        });
+
+        gallery.appendChild(preview);
+      });
+    }
+
+    function updateGallerySelection() {
+      document.querySelectorAll('.pattern-preview').forEach(preview => {
+        preview.classList.toggle('active', preview.dataset.pattern === config.pattern);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // UI CONTROLS
+    // ═══════════════════════════════════════════════════════════════
+
+    function loadConfig() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          config = { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+        } catch (e) {
+          console.warn('Failed to load config:', e);
+        }
+      }
+    }
+
+    function saveConfig() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      updateOutput();
+    }
+
+    function updateOutput() {
+      const output = document.getElementById('saved-output');
+      output.textContent = JSON.stringify(config, null, 2);
+    }
+
+    function applyConfig() {
+      // Update all control values
+      document.getElementById('ctrl-pattern').value = config.pattern;
+      document.getElementById('ctrl-density').value = config.density;
+      document.getElementById('ctrl-opacity').value = config.opacity;
+      document.getElementById('ctrl-opacity-hover').value = config.opacityHover;
+      document.getElementById('ctrl-size').value = config.size;
+      document.getElementById('ctrl-pos-x').value = config.posX;
+      document.getElementById('ctrl-pos-y').value = config.posY;
+      document.getElementById('ctrl-placement').value = config.placement;
+      document.getElementById('ctrl-glitch').value = config.glitch;
+      document.getElementById('ctrl-unit').value = config.unit;
+
+      // Update value displays
+      document.getElementById('val-density').textContent = config.density;
+      document.getElementById('val-opacity').textContent = config.opacity + '%';
+      document.getElementById('val-opacity-hover').textContent = config.opacityHover + '%';
+      document.getElementById('val-size').textContent = config.size + 'px';
+      document.getElementById('val-pos-x').textContent = config.posX + 'px';
+      document.getElementById('val-pos-y').textContent = config.posY + 'px';
+      document.getElementById('val-glitch').textContent = config.glitch + '%';
+      document.getElementById('val-unit').textContent = config.unit + 'px';
+
+      // Update grid unit CSS variable
+      document.documentElement.style.setProperty('--card-unit', config.unit + 'px');
+
+      // Apply to cards
+      document.querySelectorAll('.feature-card').forEach(card => {
+        const sigilContainer = card.querySelector('.card-sigil-bg');
+        const canvas = sigilContainer.querySelector('canvas');
+        
+        // Resize canvas
+        canvas.width = config.size;
+        canvas.height = config.size;
+
+        // Position based on placement
+        let left, top, right, bottom;
+        switch (config.placement) {
+          case 'top-left':
+            left = config.posX + 'px';
+            top = config.posY + 'px';
+            right = 'auto';
+            bottom = 'auto';
+            break;
+          case 'top-right':
+            left = 'auto';
+            top = config.posY + 'px';
+            right = config.posX + 'px';
+            bottom = 'auto';
+            break;
+          case 'bottom-left':
+            left = config.posX + 'px';
+            top = 'auto';
+            right = 'auto';
+            bottom = config.posY + 'px';
+            break;
+          case 'bottom-right':
+            left = 'auto';
+            top = 'auto';
+            right = config.posX + 'px';
+            bottom = config.posY + 'px';
+            break;
+          case 'center':
+            left = '50%';
+            top = '50%';
+            right = 'auto';
+            bottom = 'auto';
+            sigilContainer.style.transform = 'translate(-50%, -50%)';
+            break;
+        }
+
+        if (config.placement !== 'center') {
+          sigilContainer.style.transform = '';
+        }
+
+        sigilContainer.style.left = left;
+        sigilContainer.style.top = top;
+        sigilContainer.style.right = right;
+        sigilContainer.style.bottom = bottom;
+        sigilContainer.style.opacity = config.opacity / 100;
+
+        // Apply hover opacity via CSS variable
+        card.style.setProperty('--sigil-hover-opacity', config.opacityHover / 100);
+
+        // Render sigil
+        const pattern = card.dataset.sigil || config.pattern;
+        const seed = card.dataset.seed || 'default';
+        
+        let color = 'gold';
+        if (card.classList.contains('accent-teal')) color = 'teal';
+        if (card.classList.contains('accent-dawn')) color = 'dawn';
+
+        renderSigil(canvas, pattern, seed, color, config.density, config.glitch);
+      });
+
+      // Update hover styles
+      const style = document.getElementById('dynamic-styles') || document.createElement('style');
+      style.id = 'dynamic-styles';
+      style.textContent = `
+        .feature-card:hover .card-sigil-bg {
+          opacity: ${config.opacityHover / 100} !important;
+        }
+      `;
+      if (!document.getElementById('dynamic-styles')) {
+        document.head.appendChild(style);
+      }
+
+      updateOutput();
+    }
+
+    function setupControls() {
+      // Pattern dropdown
+      document.getElementById('ctrl-pattern').addEventListener('change', (e) => {
+        config.pattern = e.target.value;
+        updateGallerySelection();
+        applyConfig();
+      });
+
+      // Density
+      document.getElementById('ctrl-density').addEventListener('input', (e) => {
+        config.density = parseInt(e.target.value);
+        document.getElementById('val-density').textContent = config.density;
+        applyConfig();
+      });
+
+      // Opacity
+      document.getElementById('ctrl-opacity').addEventListener('input', (e) => {
+        config.opacity = parseInt(e.target.value);
+        document.getElementById('val-opacity').textContent = config.opacity + '%';
+        applyConfig();
+      });
+
+      // Opacity Hover
+      document.getElementById('ctrl-opacity-hover').addEventListener('input', (e) => {
+        config.opacityHover = parseInt(e.target.value);
+        document.getElementById('val-opacity-hover').textContent = config.opacityHover + '%';
+        applyConfig();
+      });
+
+      // Size
+      document.getElementById('ctrl-size').addEventListener('input', (e) => {
+        config.size = parseInt(e.target.value);
+        document.getElementById('val-size').textContent = config.size + 'px';
+        applyConfig();
+      });
+
+      // Position X
+      document.getElementById('ctrl-pos-x').addEventListener('input', (e) => {
+        config.posX = parseInt(e.target.value);
+        document.getElementById('val-pos-x').textContent = config.posX + 'px';
+        applyConfig();
+      });
+
+      // Position Y
+      document.getElementById('ctrl-pos-y').addEventListener('input', (e) => {
+        config.posY = parseInt(e.target.value);
+        document.getElementById('val-pos-y').textContent = config.posY + 'px';
+        applyConfig();
+      });
+
+      // Placement preset
+      document.getElementById('ctrl-placement').addEventListener('change', (e) => {
+        config.placement = e.target.value;
+        // Reset position for presets
+        if (e.target.value !== 'center') {
+          config.posX = -20;
+          config.posY = -20;
+        }
+        applyConfig();
+      });
+
+      // Glitch
+      document.getElementById('ctrl-glitch').addEventListener('input', (e) => {
+        config.glitch = parseInt(e.target.value);
+        document.getElementById('val-glitch').textContent = config.glitch + '%';
+        applyConfig();
+      });
+
+      // Grid unit
+      document.getElementById('ctrl-unit').addEventListener('input', (e) => {
+        config.unit = parseInt(e.target.value);
+        document.getElementById('val-unit').textContent = config.unit + 'px';
+        applyConfig();
+      });
+
+      // Save button
+      document.getElementById('btn-save').addEventListener('click', () => {
+        saveConfig();
+        alert('Config saved to localStorage');
+      });
+
+      // Reset button
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        config = { ...DEFAULT_CONFIG };
+        localStorage.removeItem(STORAGE_KEY);
+        applyConfig();
+      });
+
+      // Copy button
+      document.getElementById('btn-copy').addEventListener('click', () => {
+        navigator.clipboard.writeText(JSON.stringify(config, null, 2));
+        alert('JSON copied to clipboard');
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadConfig();
+      renderPatternGallery();
+      setupControls();
+      applyConfig();
+    });
+  </script>
+</body>
+</html>

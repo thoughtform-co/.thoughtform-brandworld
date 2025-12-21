@@ -1,0 +1,51 @@
+{
+  "platform": "atlas",
+  "version": "2.0.0",
+  
+  "identity": {
+    "short": "Victorian naturalist meets cosmic horror. Scientific wonder at the alien.",
+    "extended": "Bestiary of Latent Space Denizens. Specimen jars in a dim study. Things that shouldn't exist, carefully documented. The naturalist's compulsion to categorize the uncategorizable. Entities are visitors from latent space, temporarily rendered visible.",
+    "navigates": "Aesthetics, styles, narratives, worldbuilding → entity relationships, creature taxonomy"
+  },
+  
+  "anchor_weights": {
+    "NAVIGATION": 0.5,
+    "INSTRUMENT": 0.4,
+    "LIVING_GEOMETRY": 0.9,
+    "GRADIENT": 0.7,
+    "THRESHOLD": 0.9,
+    "SIGNAL": 0.6
+  },
+  
+  "aesthetic": {
+    "mode": "dark",
+    "accent": "gold",
+    "secondary_accent": "dawn",
+    "metaphor_domain": ["bestiary", "specimen", "naturalist", "cosmic horror", "taxonomy"],
+    "particle_behavior": "radial-organic",
+    "references_resonate": [
+      "Medieval bestiaries and illuminated manuscripts",
+      "Victorian natural history illustrations",
+      "Cabinet of curiosities / Wunderkammer",
+      "Scientific specimen archives",
+      "Deep sea creature photography",
+      "Cosmic horror imagery"
+    ]
+  },
+  
+  "tokens": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "gold"
+  },
+  
+  "keywords": [
+    "entity", "specimen", "creature", "bestiary", "taxonomy",
+    "alien", "cosmic", "threshold", "boundary", "threat level",
+    "phase state", "bioluminescent", "organic", "breathing"
+  ],
+  
+  "embedding_text": "Atlas is a bestiary of latent space entities combining Victorian naturalist documentation with cosmic horror wonder. Entities exist at the threshold between comprehensible and alien, documented in specimen cards with threat level gradients. The aesthetic evokes cabinet of curiosities and illuminated bestiaries. Particles radiate organically from entity centers like bioluminescence. Primary anchors are THRESHOLD and LIVING_GEOMETRY, representing creatures at the boundary made of living math. The classifier is human; the classified is not."
+}
+
+

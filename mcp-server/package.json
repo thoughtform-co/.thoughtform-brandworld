@@ -1,16 +1,19 @@
 {
   "name": "thoughtform-design-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for Thoughtform design system - serves tokens, philosophy, and platform specs",
+  "version": "2.1.0",
+  "description": "MCP server for Thoughtform design system - tokens, philosophy, semantic search (Voyage AI)",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "embed": "tsx ../scripts/embed-corpus-local.ts",
+    "validate": "tsx ../scripts/validate-design.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.5.0"
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

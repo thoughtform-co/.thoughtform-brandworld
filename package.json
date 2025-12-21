@@ -14,5 +14,8 @@
   ],
   "author": "Thoughtform",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }

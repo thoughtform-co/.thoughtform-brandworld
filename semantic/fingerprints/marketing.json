@@ -1,0 +1,51 @@
+{
+  "platform": "marketing",
+  "version": "1.0.0",
+  
+  "identity": {
+    "short": "Invitation to the portal. Threshold seen from outside.",
+    "extended": "The public face of Thoughtform. Where other platforms are immersive (you're inside the instrument), Marketing is invitational (you're approaching the portal). The Gateway symbol is literal here—come through. Intrigue and invitation.",
+    "navigates": "Thoughtform offerings, philosophy, services → understanding, engagement, conversion"
+  },
+  
+  "anchor_weights": {
+    "NAVIGATION": 0.8,
+    "INSTRUMENT": 0.4,
+    "LIVING_GEOMETRY": 0.7,
+    "GRADIENT": 0.4,
+    "THRESHOLD": 0.9,
+    "SIGNAL": 0.6
+  },
+  
+  "aesthetic": {
+    "mode": "mixed",
+    "primary_mode": "dark",
+    "accent": "gold",
+    "metaphor_domain": ["portal", "threshold", "invitation", "gateway", "dramatic"],
+    "particle_behavior": "scattered-gathering",
+    "references_resonate": [
+      "2001: A Space Odyssey monolith/portal",
+      "Arrival (film) visual language",
+      "Museum exhibition entrances",
+      "Observatory public spaces",
+      "Luxury brand minimal websites",
+      "TED talk stage design"
+    ]
+  },
+  
+  "tokens": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "gold"
+  },
+  
+  "keywords": [
+    "portal", "gateway", "threshold", "invitation", "dramatic",
+    "scroll", "reveal", "manifesto", "mysterious", "intrigue",
+    "symbols", "gathering", "crystallize", "wonder"
+  ],
+  
+  "embedding_text": "Marketing is Thoughtform's public invitation, the threshold seen from outside. The Gateway symbol is literal—come through the portal. Dramatic scroll-triggered reveals build intensity. Particles appear as scattered mathematical symbols (π, Σ, ∂, Ψ) that gather toward focal points, representing meaning crystallizing from chaos. Primary anchors are THRESHOLD and NAVIGATION, creating wayfinding through offerings while emphasizing the liminal moment before crossing. Mysterious but not obscure, inviting but not selling."
+}
+
+

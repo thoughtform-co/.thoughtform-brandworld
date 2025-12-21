@@ -1,0 +1,153 @@
+{
+  "axes": [
+    {
+      "id": "terminal_organic",
+      "name": "Terminal ↔ Organic",
+      "negative": {
+        "label": "Terminal",
+        "tokens": [
+          "--verde",
+          "--ink",
+          "monospace"
+        ],
+        "patterns": [
+          "scanlines",
+          "gridSnapping"
+        ]
+      },
+      "positive": {
+        "label": "Organic",
+        "tokens": [
+          "--dawn",
+          "--gold",
+          "serif-accent"
+        ],
+        "patterns": [
+          "breathing",
+          "particleSystem"
+        ]
+      }
+    },
+    {
+      "id": "minimal_dense",
+      "name": "Minimal ↔ Dense",
+      "negative": {
+        "label": "Minimal",
+        "tokens": [
+          "--void",
+          "space-large"
+        ],
+        "patterns": []
+      },
+      "positive": {
+        "label": "Dense",
+        "tokens": [
+          "--surface-1",
+          "space-tight"
+        ],
+        "patterns": [
+          "glassmorphism",
+          "cornerBrackets"
+        ]
+      }
+    },
+    {
+      "id": "cool_warm",
+      "name": "Cool ↔ Warm",
+      "negative": {
+        "label": "Cool",
+        "tokens": [
+          "--verde",
+          "--teal",
+          "--ink"
+        ],
+        "patterns": []
+      },
+      "positive": {
+        "label": "Warm",
+        "tokens": [
+          "--gold",
+          "--dawn",
+          "--signal"
+        ],
+        "patterns": []
+      }
+    },
+    {
+      "id": "static_animated",
+      "name": "Static ↔ Animated",
+      "negative": {
+        "label": "Static",
+        "tokens": [],
+        "patterns": []
+      },
+      "positive": {
+        "label": "Animated",
+        "tokens": [],
+        "patterns": [
+          "particleSystem",
+          "breathing",
+          "scanlines"
+        ]
+      }
+    }
+  ],
+  "platforms": [
+    {
+      "id": "atlas",
+      "position": {
+        "terminal_organic": 0.6,
+        "minimal_dense": 0.3,
+        "cool_warm": 0.5,
+        "static_animated": 0.4
+      },
+      "primaryTokens": [
+        "--dawn",
+        "--void",
+        "--gold"
+      ]
+    },
+    {
+      "id": "ledger",
+      "position": {
+        "terminal_organic": -0.6,
+        "minimal_dense": 0.4,
+        "cool_warm": -0.4,
+        "static_animated": 0.2
+      },
+      "primaryTokens": [
+        "--verde",
+        "--void",
+        "--ink"
+      ]
+    },
+    {
+      "id": "astrolabe",
+      "position": {
+        "terminal_organic": 0.2,
+        "minimal_dense": 0.2,
+        "cool_warm": 0.6,
+        "static_animated": 0.5
+      },
+      "primaryTokens": [
+        "--gold",
+        "--void",
+        "--dawn"
+      ]
+    },
+    {
+      "id": "marketing",
+      "position": {
+        "terminal_organic": 0.3,
+        "minimal_dense": -0.2,
+        "cool_warm": 0.4,
+        "static_animated": 0.6
+      },
+      "primaryTokens": [
+        "--gold",
+        "--void",
+        "--dawn"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "platform": "astrolabe",
+  "version": "2.0.0",
+  
+  "identity": {
+    "short": "Brass sextant against night sky. The navigator's study at 3am.",
+    "extended": "Knowledge navigation instrument. Warm precision. Candle glow on brass instruments. Where documents become coordinates and reading becomes wayfinding. The operator interface to vast semantic territory.",
+    "navigates": "Papers, articles, research → interpolated insights, arcs, keynotes"
+  },
+  
+  "anchor_weights": {
+    "NAVIGATION": 0.9,
+    "INSTRUMENT": 0.9,
+    "LIVING_GEOMETRY": 0.7,
+    "GRADIENT": 0.6,
+    "THRESHOLD": 0.4,
+    "SIGNAL": 0.5
+  },
+  
+  "aesthetic": {
+    "mode": "dark",
+    "accent": "gold",
+    "metaphor_domain": ["instrument", "scholarly", "celestial", "maritime"],
+    "particle_behavior": "axis-flow",
+    "references_resonate": [
+      "1970s NASA mission control",
+      "antique orreries and astrolabes",
+      "maritime navigation instruments",
+      "observatory control rooms",
+      "air traffic control interfaces"
+    ]
+  },
+  
+  "tokens": {
+    "background": "void",
+    "text": "dawn",
+    "accent": "gold"
+  },
+  
+  "keywords": [
+    "navigation", "knowledge", "documents", "semantic", "coordinates",
+    "wayfinding", "scholarly", "brass", "celestial", "precision",
+    "instrument", "cardinal fields", "warm", "contemplative"
+  ],
+  
+  "embedding_text": "Astrolabe is a knowledge navigation instrument with warm precision, like a brass sextant against a night sky. It transforms documents into semantic coordinates and reading into wayfinding. The aesthetic combines 1970s NASA mission control with antique celestial instruments. Gold accents on void backgrounds create contemplative focus. Particles flow along cardinal axes, representing navigable semantic space. Primary anchors are NAVIGATION and INSTRUMENT, with secondary activation of LIVING_GEOMETRY for breathing document clusters."
+}
+
+

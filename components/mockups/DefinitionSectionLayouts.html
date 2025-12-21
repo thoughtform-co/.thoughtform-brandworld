@@ -1,0 +1,980 @@
+ k,<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Definition Section Layout Options — Thoughtform</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       THOUGHTFORM DESIGN TOKENS
+       ═══════════════════════════════════════════════════════════════ */
+    @font-face {
+      font-family: 'PP Mondwest';
+      src: local('PP Mondwest'), 
+           url('../../../fonts/PPMondwest-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    :root {
+      --void: #0a0908;
+      --void-deep: #050504;
+      --surface-1: #0D0B07;
+      --surface-2: #141210;
+      
+      --dawn: #ebe3d6;
+      --dawn-90: rgba(235, 227, 214, 0.9);
+      --dawn-70: rgba(235, 227, 214, 0.7);
+      --dawn-50: rgba(235, 227, 214, 0.5);
+      --dawn-30: rgba(235, 227, 214, 0.3);
+      --dawn-15: rgba(235, 227, 214, 0.15);
+      --dawn-08: rgba(235, 227, 214, 0.08);
+      
+      --gold: #caa554;
+      --gold-70: rgba(202, 165, 84, 0.7);
+      --gold-50: rgba(202, 165, 84, 0.5);
+      --gold-30: rgba(202, 165, 84, 0.3);
+      --gold-15: rgba(202, 165, 84, 0.15);
+      
+      --font-display: 'PP Mondwest', serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-data: 'IBM Plex Mono', monospace;
+      
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 96px;
+      
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--void);
+      color: var(--dawn);
+      line-height: 1.6;
+      padding: var(--space-2xl);
+    }
+
+    /* Layout selector */
+    .layout-nav {
+      position: fixed;
+      top: var(--space-lg);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: var(--space-sm);
+      z-index: 100;
+      background: var(--surface-1);
+      padding: var(--space-sm);
+      border: 1px solid var(--dawn-08);
+    }
+
+    .layout-nav button {
+      font-family: var(--font-data);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--dawn-15);
+      color: var(--dawn-50);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .layout-nav button:hover {
+      border-color: var(--gold-50);
+      color: var(--dawn);
+    }
+
+    .layout-nav button.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--void);
+    }
+
+    /* Layout sections */
+    .layout-section {
+      min-height: 100vh;
+      display: none;
+      padding-top: var(--space-4xl);
+    }
+
+    .layout-section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-data);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-2xl);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--dawn-08);
+    }
+
+    .section-title::before {
+      content: '// ';
+      opacity: 0.5;
+    }
+
+    /* Sigil placeholder */
+    .sigil-placeholder {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle at center, var(--gold-30) 0%, transparent 70%);
+      border: 1px dashed var(--gold-30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-data);
+      font-size: 9px;
+      color: var(--gold-50);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .sigil-placeholder.large {
+      width: 240px;
+      height: 240px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT A: DICTIONARY ENTRY (Scholarly, Linear)
+       Inspired by dictionary definitions with pronunciation
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-dictionary {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .dict-entry {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-3xl);
+      align-items: start;
+    }
+
+    .dict-main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    /* Headword + Pronunciation */
+    .dict-headword-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    .dict-headword {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--dawn);
+      line-height: 1;
+    }
+
+    .dict-pronunciation {
+      font-family: var(--font-data);
+      font-size: 14px;
+      color: var(--dawn-50);
+      letter-spacing: 0.02em;
+    }
+
+    .dict-pronunciation .ipa {
+      color: var(--dawn-70);
+    }
+
+    .dict-pronunciation .phonetic {
+      color: var(--dawn-50);
+      margin-left: var(--space-sm);
+    }
+
+    /* Part of speech / category */
+    .dict-pos {
+      font-family: var(--font-data);
+      font-size: 11px;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    /* Definition intro */
+    .dict-definition-intro {
+      font-family: var(--font-body);
+      font-size: clamp(18px, 2vw, 22px);
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--dawn-70);
+      max-width: 480px;
+    }
+
+    /* Numbered definitions (pillars) */
+    .dict-definitions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding-left: var(--space-lg);
+      border-left: 1px solid var(--dawn-08);
+    }
+
+    .dict-def-item {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .dict-def-number {
+      font-family: var(--font-data);
+      font-size: 11px;
+      color: var(--gold);
+      min-width: 20px;
+      padding-top: 2px;
+    }
+
+    .dict-def-text {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--dawn);
+      line-height: 1.5;
+    }
+
+    .dict-def-text em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* Sigil as margin illustration */
+    .dict-sigil {
+      position: sticky;
+      top: var(--space-4xl);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT B: ASYMMETRIC SPLIT (Sigil dominant, content secondary)
+       Large sigil on left, definition flows on right
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4xl);
+      min-height: 80vh;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .split-sigil-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Decorative frame around sigil */
+    .split-sigil-frame {
+      position: relative;
+      padding: var(--space-2xl);
+    }
+
+    .split-sigil-frame::before,
+    .split-sigil-frame::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-color: var(--gold-30);
+      border-style: solid;
+      border-width: 0;
+    }
+
+    .split-sigil-frame::before {
+      top: 0;
+      left: 0;
+      border-top-width: 1px;
+      border-left-width: 1px;
+    }
+
+    .split-sigil-frame::after {
+      bottom: 0;
+      right: 0;
+      border-bottom-width: 1px;
+      border-right-width: 1px;
+    }
+
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    .split-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .split-wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--dawn);
+      line-height: 1;
+      text-decoration: underline;
+      text-decoration-color: var(--gold-30);
+      text-underline-offset: 8px;
+    }
+
+    .split-pronunciation {
+      font-family: var(--font-data);
+      font-size: 13px;
+      color: var(--dawn-50);
+    }
+
+    .split-intro {
+      font-family: var(--font-body);
+      font-size: clamp(17px, 1.8vw, 20px);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--dawn-70);
+    }
+
+    .split-intro strong {
+      color: var(--dawn);
+      font-weight: 400;
+    }
+
+    /* Pillar cards */
+    .split-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .pillar-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      background: var(--surface-1);
+      border: 1px solid var(--dawn-08);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .pillar-card:hover {
+      border-color: var(--dawn-15);
+      transform: translateX(4px);
+    }
+
+    .pillar-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--dawn-08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pillar-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--dawn-50);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .pillar-text {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--dawn);
+      line-height: 1.4;
+    }
+
+    .pillar-text em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT C: VERTICAL HERO (Sigil as centerpiece, content below)
+       Sigil commands center, definition radiates below
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-vertical {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3xl);
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .vert-sigil-area {
+      position: relative;
+    }
+
+    /* Decorative orbital lines */
+    .vert-sigil-area::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 320px;
+      border: 1px solid var(--dawn-08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .vert-definition {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+
+    .vert-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .vert-wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--dawn);
+    }
+
+    .vert-pronunciation {
+      font-family: var(--font-data);
+      font-size: 12px;
+      color: var(--dawn-50);
+    }
+
+    .vert-intro {
+      font-family: var(--font-body);
+      font-size: clamp(16px, 1.6vw, 19px);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--dawn-70);
+      max-width: 500px;
+    }
+
+    /* Horizontal pillars */
+    .vert-pillars {
+      display: flex;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .vert-pillar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-xl);
+      background: var(--surface-1);
+      border: 1px solid var(--dawn-08);
+      min-width: 200px;
+      max-width: 240px;
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .vert-pillar:hover {
+      border-color: var(--gold-30);
+    }
+
+    .vert-pillar-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vert-pillar-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .vert-pillar-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dawn);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT D: ASYMMETRIC STAGGER (Modern, Dynamic)
+       Staggered content with floating sigil
+       ═══════════════════════════════════════════════════════════════ */
+    .layout-stagger {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: var(--space-4xl);
+      min-height: 80vh;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .stagger-left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    .stagger-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .stagger-label {
+      font-family: var(--font-data);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .stagger-label::before {
+      content: '◇ ';
+    }
+
+    .stagger-wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      color: var(--dawn);
+      line-height: 0.95;
+    }
+
+    .stagger-pronunciation {
+      font-family: var(--font-data);
+      font-size: 14px;
+      color: var(--dawn-50);
+      padding-left: var(--space-xs);
+    }
+
+    .stagger-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    .stagger-sigil-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-xl);
+    }
+
+    .stagger-intro {
+      font-family: var(--font-body);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--dawn);
+      max-width: 400px;
+    }
+
+    .stagger-intro em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* Staggered pillars with numbers */
+    .stagger-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .stagger-pillar {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: var(--space-md);
+      align-items: center;
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--surface-1);
+      border-left: 2px solid var(--dawn-08);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .stagger-pillar:hover {
+      border-left-color: var(--gold);
+      background: var(--surface-2);
+    }
+
+    .stagger-pillar-num {
+      font-family: var(--font-data);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--gold-50);
+    }
+
+    .stagger-pillar-text {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--dawn);
+      line-height: 1.4;
+    }
+
+    .stagger-pillar-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+    }
+
+    .stagger-pillar-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--dawn-50);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       DESIGN NOTES
+       ═══════════════════════════════════════════════════════════════ */
+    .design-notes {
+      margin-top: var(--space-4xl);
+      padding: var(--space-xl);
+      background: var(--surface-1);
+      border: 1px solid var(--dawn-08);
+    }
+
+    .notes-title {
+      font-family: var(--font-data);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-lg);
+    }
+
+    .notes-list {
+      font-family: var(--font-data);
+      font-size: 12px;
+      color: var(--dawn-50);
+      line-height: 1.8;
+      list-style: none;
+    }
+
+    .notes-list li::before {
+      content: '→ ';
+      color: var(--gold-50);
+    }
+  </style>
+</head>
+<body>
+  <!-- Layout Navigation -->
+  <nav class="layout-nav">
+    <button class="active" onclick="showLayout('dictionary')">A: Dictionary</button>
+    <button onclick="showLayout('split')">B: Split</button>
+    <button onclick="showLayout('vertical')">C: Vertical</button>
+    <button onclick="showLayout('stagger')">D: Stagger</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT A: DICTIONARY ENTRY
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="layout-section active" id="layout-dictionary">
+    <div class="section-title">Layout A — Dictionary Entry</div>
+    
+    <div class="layout-dictionary">
+      <article class="dict-entry">
+        <div class="dict-main">
+          <!-- Headword + Pronunciation -->
+          <div class="dict-headword-row">
+            <h1 class="dict-headword">Thoughtform</h1>
+            <span class="dict-pronunciation">
+              <span class="ipa">/θɔːtfɔːrm/</span>
+              <span class="phonetic">THAWT-form</span>
+            </span>
+          </div>
+
+          <!-- Part of speech -->
+          <p class="dict-pos">noun · practice · methodology</p>
+
+          <!-- Definition intro -->
+          <p class="dict-definition-intro">
+            the practice of intuitive human-AI collaboration where you
+          </p>
+
+          <!-- Numbered definitions -->
+          <div class="dict-definitions">
+            <div class="dict-def-item">
+              <span class="dict-def-number">1.</span>
+              <p class="dict-def-text"><em>navigate</em> its intelligence</p>
+            </div>
+            <div class="dict-def-item">
+              <span class="dict-def-number">2.</span>
+              <p class="dict-def-text"><em>steer</em> it away from mediocrity</p>
+            </div>
+            <div class="dict-def-item">
+              <span class="dict-def-number">3.</span>
+              <p class="dict-def-text"><em>leverage</em> its hallucinations</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sigil as margin illustration -->
+        <aside class="dict-sigil">
+          <div class="sigil-placeholder large">
+            Particle<br>Sigil
+          </div>
+        </aside>
+      </article>
+
+      <div class="design-notes">
+        <h4 class="notes-title">Design Notes</h4>
+        <ul class="notes-list">
+          <li>Scholarly, lexicon-inspired layout</li>
+          <li>Clear hierarchy: headword → pronunciation → definition</li>
+          <li>Numbered pillars read like dictionary sub-definitions</li>
+          <li>Sigil acts as margin illustration (scholarly tradition)</li>
+          <li>Works well for scroll-based reveal</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT B: ASYMMETRIC SPLIT
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="layout-section" id="layout-split">
+    <div class="section-title">Layout B — Asymmetric Split</div>
+    
+    <div class="layout-split">
+      <!-- Left: Sigil -->
+      <div class="split-sigil-area">
+        <div class="split-sigil-frame">
+          <div class="sigil-placeholder large">
+            Particle<br>Sigil
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Definition -->
+      <div class="split-content">
+        <div class="split-header">
+          <h1 class="split-wordmark">Thoughtform</h1>
+          <span class="split-pronunciation">/θɔːtfɔːrm/ · THAWT-form</span>
+        </div>
+
+        <p class="split-intro">
+          <strong>the practice of intuitive human-AI collaboration</strong> where you
+        </p>
+
+        <div class="split-pillars">
+          <div class="pillar-card">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <p class="pillar-text"><em>navigate</em> its intelligence</p>
+          </div>
+          <div class="pillar-card">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <p class="pillar-text"><em>steer</em> it away from mediocrity</p>
+          </div>
+          <div class="pillar-card">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+            </div>
+            <p class="pillar-text"><em>leverage</em> its hallucinations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-notes">
+      <h4 class="notes-title">Design Notes</h4>
+      <ul class="notes-list">
+        <li>Sigil as dominant visual on left, content on right</li>
+        <li>Creates clear visual balance</li>
+        <li>Pillar cards provide interaction affordance</li>
+        <li>Works well for fixed sigil + scrolling content</li>
+        <li>Matches your existing two-column patterns</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT C: VERTICAL HERO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="layout-section" id="layout-vertical">
+    <div class="section-title">Layout C — Vertical Hero</div>
+    
+    <div class="layout-vertical">
+      <!-- Sigil as hero -->
+      <div class="vert-sigil-area">
+        <div class="sigil-placeholder large">
+          Particle<br>Sigil
+        </div>
+      </div>
+
+      <!-- Definition below -->
+      <div class="vert-definition">
+        <div class="vert-header">
+          <h1 class="vert-wordmark">Thoughtform</h1>
+          <span class="vert-pronunciation">/θɔːtfɔːrm/ · THAWT-form</span>
+        </div>
+
+        <p class="vert-intro">
+          the practice of intuitive human-AI collaboration where you
+        </p>
+
+        <div class="vert-pillars">
+          <div class="vert-pillar">
+            <div class="vert-pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <p class="vert-pillar-text">navigate its<br>intelligence</p>
+          </div>
+          <div class="vert-pillar">
+            <div class="vert-pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <p class="vert-pillar-text">steer it away<br>from mediocrity</p>
+          </div>
+          <div class="vert-pillar">
+            <div class="vert-pillar-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+            </div>
+            <p class="vert-pillar-text">leverage its<br>hallucinations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-notes">
+      <h4 class="notes-title">Design Notes</h4>
+      <ul class="notes-list">
+        <li>Sigil commands center attention</li>
+        <li>Content radiates below in centered layout</li>
+        <li>Pillars as horizontal cards work well on mobile</li>
+        <li>Good for immersive, full-screen experiences</li>
+        <li>Risk: can feel static, less dynamic</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LAYOUT D: ASYMMETRIC STAGGER
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="layout-section" id="layout-stagger">
+    <div class="section-title">Layout D — Asymmetric Stagger</div>
+    
+    <div class="layout-stagger">
+      <!-- Left: Header -->
+      <div class="stagger-left">
+        <div class="stagger-header">
+          <span class="stagger-label">Definition</span>
+          <h1 class="stagger-wordmark">Thought<br>form</h1>
+          <span class="stagger-pronunciation">/θɔːtfɔːrm/ · THAWT-form</span>
+        </div>
+      </div>
+
+      <!-- Right: Sigil + Pillars -->
+      <div class="stagger-right">
+        <div class="stagger-sigil-row">
+          <div class="sigil-placeholder">
+            Particle<br>Sigil
+          </div>
+          <p class="stagger-intro">
+            the practice of intuitive human-AI collaboration <em>where you</em>
+          </p>
+        </div>
+
+        <div class="stagger-pillars">
+          <div class="stagger-pillar">
+            <span class="stagger-pillar-num">01</span>
+            <p class="stagger-pillar-text">navigate its intelligence</p>
+            <div class="stagger-pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+          </div>
+          <div class="stagger-pillar">
+            <span class="stagger-pillar-num">02</span>
+            <p class="stagger-pillar-text">steer it away from mediocrity</p>
+            <div class="stagger-pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+          </div>
+          <div class="stagger-pillar">
+            <span class="stagger-pillar-num">03</span>
+            <p class="stagger-pillar-text">leverage its hallucinations</p>
+            <div class="stagger-pillar-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-notes">
+      <h4 class="notes-title">Design Notes</h4>
+      <ul class="notes-list">
+        <li>Large wordmark creates strong anchor point</li>
+        <li>Sigil positioned alongside intro text</li>
+        <li>Numbered pillars with left accent bar</li>
+        <li>Dynamic, modern feel with staggered layout</li>
+        <li>Great for scroll animations and reveals</li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    function showLayout(id) {
+      // Hide all
+      document.querySelectorAll('.layout-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.layout-nav button').forEach(b => b.classList.remove('active'));
+      
+      // Show selected
+      document.getElementById('layout-' + id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>
+

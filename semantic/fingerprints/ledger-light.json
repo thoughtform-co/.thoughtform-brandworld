@@ -1,0 +1,55 @@
+{
+  "platform": "ledger-light",
+  "version": "2.0.0",
+  
+  "identity": {
+    "short": "Blueprint precision. Hopeful green on warm paper. The architect's working view.",
+    "extended": "Financial topology in planning mode. Daytime counterpart to Ledger Dark. Where Dark is vigilance, Light is planning. Where Dark finds pattern in noise, Light designs the structure. Technical drawing aesthetic with warmth.",
+    "navigates": "Budgets, goals, projections → financial roadmap, planning, strategy"
+  },
+  
+  "anchor_weights": {
+    "NAVIGATION": 0.6,
+    "INSTRUMENT": 0.9,
+    "LIVING_GEOMETRY": 0.6,
+    "GRADIENT": 0.9,
+    "THRESHOLD": 0.3,
+    "SIGNAL": 0.4
+  },
+  
+  "aesthetic": {
+    "mode": "light",
+    "accent": "teal",
+    "metaphor_domain": ["blueprint", "schematic", "planning", "technical drawing", "architect"],
+    "particle_behavior": "clustered-topology",
+    "references_resonate": [
+      "Architectural blueprints",
+      "Technical drawings and schematics",
+      "Isometric grid paper",
+      "Engineering diagrams",
+      "Medical chart interfaces",
+      "Apple Health-style visualizations"
+    ]
+  },
+  
+  "tokens": {
+    "background": "paper",
+    "text": "ink",
+    "accent": "teal"
+  },
+  
+  "effects": {
+    "scanlines": false,
+    "grid_lines": true
+  },
+  
+  "keywords": [
+    "blueprint", "planning", "budget", "goals", "progress",
+    "schematic", "technical", "teal", "paper", "daylight",
+    "topology", "cluster", "hopeful", "clarity"
+  ],
+  
+  "embedding_text": "Ledger Light is financial topology in blueprint mode with hopeful teal accents on warm paper backgrounds. The aesthetic combines architectural drawings with technical schematics. Particles form breathing clusters with connection lines, representing spending categories as living topology. Primary anchors are INSTRUMENT and GRADIENT, emphasizing budget spectrums, goal progress, and continuous health indicators. Clean but not sterile, with generous whitespace. The planner is optimistic, focused on constructive analysis."
+}
+
+
