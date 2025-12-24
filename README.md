@@ -38,6 +38,11 @@ Reference → Anchor Scoring → Translation Selection → Physical Pattern → 
 
 ```
 .thoughtform-brandworld/
+├── .claude/                         # CLAUDE AGENT SKILLS
+│   └── skills/
+│       ├── semantic-design/         # Core design system skill
+│       └── context7/                # Library documentation fetcher
+│
 ├── semantic/                        # MEANING LAYER (stable)
 │   ├── anchors/                     # The six semantic anchors
 │   ├── translations/                # Anchor → Physical Pattern mappings
@@ -83,11 +88,47 @@ Reference → Anchor Scoring → Translation Selection → Physical Pattern → 
 │   ├── PRINCIPLES.md
 │   └── SEMANTIC-BRAND-VISION.md
 │
-├── skills/                          # CLAUDE SKILLS
+├── skills/                          # CLAUDE SKILLS (legacy)
 │   └── semantic-design/
 │
 └── mcp-server/                      # MCP SERVER
 ```
+
+## Claude Agent Skills
+
+The `.claude/skills/` folder contains reusable skills for Claude/Cursor AI agents:
+
+### Semantic Design Skill
+
+**Location:** `.claude/skills/semantic-design/`
+
+Core skill for working with the Thoughtform design system. Teaches Claude how to:
+- Interpret visual references through semantic anchors
+- Apply platform-specific tokens and dialects
+- Build components following Thoughtform patterns
+
+### Context7 Documentation Skill
+
+**Location:** `.claude/skills/context7/`
+
+Fetches up-to-date library documentation via the Context7 API. Useful when:
+- Working with libraries that update frequently (React, Next.js, Supabase)
+- Implementing features with unfamiliar APIs
+- Ensuring code uses current best practices, not deprecated patterns
+
+**Files:**
+- `SKILL.md` — Main skill definition
+- `LIBRARIES.md` — Common library IDs for Thoughtform stack
+- `fetch-docs.sh` — Bash helper script (macOS/Linux)
+- `fetch-docs.ps1` — PowerShell helper script (Windows)
+- `README.md` — Setup instructions for other repos
+
+**Adding Context7 to another repo:**
+1. Copy `.claude/skills/context7/` to your repo
+2. Edit `LIBRARIES.md` to list only that repo's dependencies
+3. Optionally add auto-invoke rules to `.cursorrules`
+
+---
 
 ## Quick Reference
 
@@ -260,6 +301,17 @@ effects to any component.
 ```
 Get the motion tokens and explain the timing curves available
 for animations.
+```
+
+**Using Context7 for Library Docs:**
+```
+Use Context7 to get the latest Next.js App Router documentation,
+then help me set up a new route handler.
+```
+
+```
+Fetch Supabase JS docs via Context7 and show me how to implement
+row-level security for user data.
 ```
 
 ### Manual Import
